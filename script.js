@@ -4,6 +4,27 @@
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---------------------------------------------------------------------
+     Theme toggle (dark / light) — persisted via localStorage
+  --------------------------------------------------------------------- */
+  const themeToggle = document.getElementById('themeToggle');
+  const root = document.documentElement;
+
+  const syncToggleState = () => {
+    const isLight = root.getAttribute('data-theme') === 'light';
+    if (themeToggle) themeToggle.setAttribute('aria-pressed', String(isLight));
+  };
+  syncToggleState(); // reflect the theme the inline head-script already applied
+
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('turbotech-theme', next); } catch (e) { /* storage unavailable */ }
+      syncToggleState();
+    });
+  }
+
+  /* ---------------------------------------------------------------------
      Footer year
   --------------------------------------------------------------------- */
   const yearEl = document.getElementById('year');
