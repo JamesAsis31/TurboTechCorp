@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery — Turbo Tech Synergies Inc.</title>
+<meta name="description" content="A look inside Turbo Tech Synergies Inc. — field operations, outage execution, crews and facilities across our Manila and Doha bases.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="site-header" id="siteHeader">
+  <div class="wrap header-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" class="rotor-icon"><g class="rotor-icon-blades">
+          <path d="M24 24 L24 4 A20 20 0 0 1 41.3 14 Z"></path>
+          <path d="M24 24 L41.3 14 A20 20 0 0 1 41.3 34 Z"></path>
+          <path d="M24 24 L41.3 34 A20 20 0 0 1 24 44 Z"></path>
+          <path d="M24 24 L24 44 A20 20 0 0 1 6.7 34 Z"></path>
+          <path d="M24 24 L6.7 34 A20 20 0 0 1 6.7 14 Z"></path>
+          <path d="M24 24 L6.7 14 A20 20 0 0 1 24 4 Z"></path>
+        </g><circle cx="24" cy="24" r="5.5" class="rotor-hub"></circle></svg>
+      </span>
+      <span class="brand-word">TURBO<span class="brand-word-accent">TECH</span><span class="brand-sub">SYNERGIES</span></span>
+    </a>
+
+    <nav class="main-nav" id="mainNav" aria-label="Primary">
+      <a href="index.html#services" class="nav-link">Services</a>
+      <a href="index.html#process" class="nav-link">Process</a>
+      <a href="index.html#locations" class="nav-link">Locations</a>
+      <a href="careers.html" class="nav-link">Careers</a>
+      <a href="gallery.html" class="nav-link is-active">Gallery</a>
+      <a href="index.html#contact" class="nav-link">Contact</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="tel:+639156443000" class="hotline-chip">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span class="hotline-text"><span class="hotline-label">24/7 Hotline</span><span class="hotline-number">+63 915 644 3000</span></span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ GALLERY HERO ============ -->
+  <section class="careers-hero">
+    <div class="wrap careers-hero-inner">
+      <p class="eyebrow"><span class="eyebrow-tag">ASSET&nbsp;TAG&nbsp;·&nbsp;GAL-01</span>INSIDE TURBOTECH</p>
+      <h1 class="hero-title reveal">
+        What it looks like<br>
+        <span class="hero-title-accent">on site and on the floor.</span>
+      </h1>
+      <p class="hero-sub reveal">
+        Field operations, outage crews, workshop facilities and the bases behind them —
+        a look at the people and equipment that keep rotating assets running.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ GALLERY GRID ============ -->
+  <section class="gallery-section">
+    <div class="wrap">
+      <div class="filter-bar reveal" role="group" aria-label="Filter gallery by category">
+        <button class="filter-chip is-active" data-filter="all">All photos</button>
+        <button class="filter-chip" data-filter="field">Field Operations</button>
+        <button class="filter-chip" data-filter="outage">Outage Execution</button>
+        <button class="filter-chip" data-filter="team">Crew &amp; Team</button>
+        <button class="filter-chip" data-filter="facility">Facilities</button>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid">
+
+        <figure class="gallery-card reveal gallery-card-tall" data-cat="field">
+          <img src="images/img1.jpg" alt="Field technicians working on rotating equipment" loading="lazy">
+          <figcaption>
+            <span class="gallery-cat">Field Operations</span>
+            <span class="gallery-title">On-site mechanical work</span>
+          </figcaption>
+        </figure>
+
+        <figure class="gallery-card reveal" data-cat="outage">
+          <img src="images/img2.jpg" alt="Crew executing a planned outage" loading="lazy">
+          <figcaption>
+            <span class="gallery-cat">Outage Execution</span>
+            <span class="gallery-title">Planned turnaround in progress</span>
+          </figcaption>
+        </figure>
+
+        <figure class="gallery-card reveal" data-cat="team">
+          <img src="images/img3.jpg" alt="Turbotech crew and team" loading="lazy">
+          <figcaption>
+            <span class="gallery-cat">Crew &amp; Team</span>
+            <span class="gallery-title">The team behind the tools</span>
+          </figcaption>
+        </figure>
+
+        <figure class="gallery-card reveal gallery-card-tall" data-cat="facility">
+          <img src="images/img10.jpg" alt="Turbotech workshop facility" loading="lazy">
+          <figcaption>
+            <span class="gallery-cat">Facilities</span>
+            <span class="gallery-title">Pampanga workshop floor</span>
+          </figcaption>
+        </figure>
+        <figure class="gallery-card reveal gallery-card-tall" data-cat="facility">
+          <img src="images/img11.jpg" alt="Turbotech workshop facility" loading="lazy">
+          <figcaption>
+            <span class="gallery-cat">Facilities</span>
+            <span class="gallery-title">Limay, Bataan</span>
+          </figcaption>
+        </figure>
+
+        <figure class="gallery-card reveal" data-cat="field">
+          <img src="images/img7.jpg" alt="Close-up of a rotor during balancing" loading="lazy">
+          <figcaption>
+            <span class="gallery-cat">Field Operations</span>
+            <span class="gallery-title">In-situ balancing close-up</span>
+          </figcaption>
+        </figure>
+
+        <figure class="gallery-card reveal" data-cat="team">
+          <img src="images/img6.jpg" alt="Team during a training session" loading="lazy">
+          <figcaption>
+            <span class="gallery-cat">Crew &amp; Team</span>
+            <span class="gallery-title">OEM-aligned training</span>
+          </figcaption>
+        </figure>
+
+        <figure class="gallery-card reveal" data-cat="facility">
+          <img src="images/img9.jpg" alt="Doha branch office" loading="lazy">
+          <figcaption>
+            <span class="gallery-cat">Facilities</span>
+            <span class="gallery-title">Doha, Qatar base</span>
+          </figcaption>
+        </figure>
+        <figure class="gallery-card reveal" data-cat="facility">
+          <img src="images/img13.jpg" alt="Doha branch office" loading="lazy">
+          <figcaption>
+            <span class="gallery-cat">Facilities</span>
+            <span class="gallery-title">Doha, Qatar base</span>
+          </figcaption>
+        </figure>
+
+        <figure class="gallery-card reveal gallery-card-tall" data-cat="outage">
+          <img src="images/img3.jpg" alt="Crew and tooling mobilization" loading="lazy">
+          <figcaption>
+            <span class="gallery-cat">Outage Execution</span>
+            <span class="gallery-title">Crew &amp; tooling mobilization</span>
+          </figcaption>
+        </figure>
+
+      </div>
+
+      <p class="no-results" id="galleryNoResults" hidden>No photos in this category yet.</p>
+    </div>
+  </section>
+
+  <!-- ============ CTA BANNER ============ -->
+  <section class="cta-banner reveal">
+    <div class="wrap cta-inner">
+      <div>
+        <p class="section-eyebrow section-eyebrow-light">Want to see it firsthand?</p>
+        <h2>Talk to us about your next outage window.</h2>
+      </div>
+      <a href="index.html#contact" class="btn btn-primary btn-large">Get in touch</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ LIGHTBOX ============ -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close photo viewer">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+  </button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous photo">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M14 4l-8 7 8 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <figure class="lightbox-figure">
+    <img id="lightboxImg" src="" alt="">
+    <figcaption>
+      <span class="gallery-cat" id="lightboxCat"></span>
+      <span class="gallery-title" id="lightboxTitle"></span>
+    </figcaption>
+  </figure>
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next photo">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M8 4l8 7-8 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" class="rotor-icon rotor-icon-static">
+          <g class="rotor-icon-blades">
+            <path d="M24 24 L24 4 A20 20 0 0 1 41.3 14 Z"></path>
+            <path d="M24 24 L41.3 14 A20 20 0 0 1 41.3 34 Z"></path>
+            <path d="M24 24 L41.3 34 A20 20 0 0 1 24 44 Z"></path>
+            <path d="M24 24 L24 44 A20 20 0 0 1 6.7 34 Z"></path>
+            <path d="M24 24 L6.7 34 A20 20 0 0 1 6.7 14 Z"></path>
+            <path d="M24 24 L6.7 14 A20 20 0 0 1 24 4 Z"></path>
+          </g><circle cx="24" cy="24" r="5.5" class="rotor-hub"></circle>
+        </svg>
+      </span>
+      <p>Turbo Tech Synergies Inc.<br><span class="mono footer-tagline">MRO &amp; Outage Execution for Rotating Equipment</span></p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#process">Process</a>
+      <a href="index.html#locations">Locations</a>
+      <a href="careers.html">Careers</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Manila</h4>
+      <a href="tel:+639156443000" class="mono">+63 915 644 3000</a>
+      <a href="mailto:tech@turbotechcorp.com" class="mono">tech@turbotechcorp.com</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Doha, Qatar</h4>
+      <a href="tel:+639156443000" class="mono">+63 915 644 3000</a>
+      <a href="mailto:info.qatar@turbotechcorp.com" class="mono">info.qatar@turbotechcorp.com</a>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <p>© <span id="year"></span> Turbo Tech Synergies Inc. All rights reserved.</p>
+    <p class="mono">www.turbotechcorp.com</p>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top">
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 14V3M4 8l5-5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<script src="script.js"></script>
+</body>
+</html>
