@@ -112,10 +112,12 @@
 *,*::before,*::after{ box-sizing:border-box; }
 html{
   scroll-behavior:smooth; -webkit-text-size-adjust:100%;
+  /* Horizontal containment lives on <html>, never on <body>. On <body> it makes
+     the body a scroll container, so position:sticky children (the header) anchor
+     to the body box and scroll away instead of pinning to the viewport.
+     `clip` is preferred over `hidden` as it does not create a scroll container
+     at all, which also keeps fixed overlays centred on mobile. */
   overflow-x:hidden;
-  /* `clip` beats `hidden` here: `hidden` makes the element a scroll container,
-     which on mobile widens the layout viewport and drags position:fixed
-     overlays (the preloader, nav drawer) off-centre. `clip` just clips. */
   overflow-x:clip;
 }
 
@@ -127,8 +129,6 @@ body{
   font-size:16px;
   line-height:1.65;
   -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-  overflow-x:clip;
   overflow-wrap:break-word;
   transition:background-color .5s ease, color .5s ease;
 }

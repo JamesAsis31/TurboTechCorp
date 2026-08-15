@@ -363,9 +363,10 @@
   window.addEventListener('resize', () => { if (window.innerWidth > 760) closeNav(); });
 
   /* =====================================================================
-     Custom cursor (fine pointers only)
+     Cursor ring — follows the mouse, and on touch appears under the finger
+     then fades out a second after the last contact.
   ===================================================================== */
-  if (fine && !reduce) {
+  if (!reduce) {
     const dot  = document.createElement('div');
     const ring = document.createElement('div');
     dot.className = 'cursor-dot';
@@ -374,28 +375,79 @@
     ring.setAttribute('aria-hidden', 'true');
     document.body.append(dot, ring);
 
+    const TOUCH_LINGER = 1000;
     let mx = 0, my = 0, rx = 0, ry = 0;
-
-    window.addEventListener('mousemove', (e) => {
-      mx = e.clientX; my = e.clientY;
-      dot.style.transform = `translate(${mx}px, ${my}px)`;
-      dot.classList.add('is-on');
-      ring.classList.add('is-on');
-    }, { passive: true });
+    let raf = null, shown = false, hideTimer = null, lastTouch = 0;
 
     const loop = () => {
       rx += (mx - rx) * 0.16;
       ry += (my - ry) * 0.16;
       ring.style.transform = `translate(${rx.toFixed(2)}px, ${ry.toFixed(2)}px)`;
-      requestAnimationFrame(loop);
+      raf = requestAnimationFrame(loop);
     };
-    loop();
 
-    document.addEventListener('mouseleave', () => {
+    const show = () => {
+      if (shown) return;
+      shown = true;
+      dot.classList.add('is-on');
+      ring.classList.add('is-on');
+      if (raf === null) loop();          // only animate while actually visible
+    };
+
+    const hide = () => {
+      shown = false;
       dot.classList.remove('is-on');
       ring.classList.remove('is-on');
-    });
+      if (raf !== null) { cancelAnimationFrame(raf); raf = null; }
+    };
 
+    const moveTo = (x, y) => {
+      mx = x; my = y;
+      dot.style.transform = `translate(${x}px, ${y}px)`;
+    };
+
+    /* --- mouse: follows continuously, hides when the pointer leaves --- */
+    window.addEventListener('mousemove', (e) => {
+      // touching also emits synthetic mouse events; ignore those so they
+      // cannot cancel the touch fade-out below
+      if (Date.now() - lastTouch < 700) return;
+      clearTimeout(hideTimer);
+      moveTo(e.clientX, e.clientY);
+      show();
+    }, { passive: true });
+
+    document.addEventListener('mouseleave', hide);
+
+    /* --- touch: show under the finger, then linger for a second --- */
+    const fadeAfterTouch = () => {
+      lastTouch = Date.now();
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(hide, TOUCH_LINGER);
+    };
+
+    window.addEventListener('touchstart', (e) => {
+      const t = e.touches[0];
+      if (!t) return;
+      lastTouch = Date.now();
+      clearTimeout(hideTimer);
+      if (!shown) { rx = t.clientX; ry = t.clientY; }  // snap, don't fly in
+      moveTo(t.clientX, t.clientY);
+      show();
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      const t = e.touches[0];
+      if (!t) return;
+      lastTouch = Date.now();
+      clearTimeout(hideTimer);
+      moveTo(t.clientX, t.clientY);
+      show();
+    }, { passive: true });
+
+    window.addEventListener('touchend', fadeAfterTouch, { passive: true });
+    window.addEventListener('touchcancel', fadeAfterTouch, { passive: true });
+
+    /* --- grow over interactive targets (mouse only) --- */
     const hot = 'a, button, .gcard, .svc, .loc, .job, input, select, textarea, .filter-chip';
     document.addEventListener('mouseover', (e) => {
       if (e.target.closest(hot)) ring.classList.add('is-hot');
