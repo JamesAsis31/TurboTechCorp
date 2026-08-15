@@ -688,15 +688,51 @@
       return seg;
     });
 
-    // clicking a slide opens it in the lightbox, when there is one on the page
-    slides.forEach(slide => {
+    // clicking the centred card opens the lightbox (when there is one on the
+    // page); clicking any other card brings it to the centre instead
+    slides.forEach((slide, i) => {
       slide.addEventListener('click', () => {
+        if (i !== idx) { go(i, true); return; }
         if (!openLightbox) return;
         const src = slide.querySelector('img')?.src;
         const match = galleryCards.find(c => c.querySelector('img')?.src === src);
         if (match) openLightbox(match);
       });
     });
+
+    // Coverflow: every card's position is a function of its circular
+    // distance from the active index, so re-running this after idx changes
+    // moves the whole wheel at once — each card already has its own CSS
+    // transition, so nothing needs the reflow/no-anim tricks a linear
+    // slider would (there's no "off-stage" state to hide first).
+    const VISIBLE = 3; // cards beyond this distance fade to fully invisible
+    const layout = () => {
+      const total = slides.length;
+      slides.forEach((s, i) => {
+        let off = i - idx;
+        if (off > total / 2) off -= total;
+        if (off < -total / 2) off += total;
+
+        const dist = Math.abs(off);
+        const dir = Math.sign(off);
+        const reach = Math.min(dist, VISIBLE);
+
+        const scale = (1 - reach * 0.15).toFixed(3);
+        const tilt = dir * Math.min(dist, 2);            // rotation caps at ±2 slides out
+        const opacity = dist === 0 ? 1 : Math.max(0, 1 - dist * 0.34).toFixed(2);
+        const dim = Math.min(dist * 0.13, 0.5).toFixed(2);
+
+        s.style.transform =
+          `translate(-50%,-50%) translateX(calc(var(--ss-step) * ${off})) ` +
+          `rotateY(calc(var(--ss-tilt) * ${-tilt})) scale(${scale})`;
+        s.style.opacity = String(opacity);
+        s.style.zIndex = String(100 - reach);
+        s.style.filter = dist === 0 ? 'none' : `brightness(${1 - dim}) saturate(${1 - dim})`;
+        s.style.pointerEvents = dist > VISIBLE ? 'none' : '';
+        s.classList.toggle('is-active', off === 0);
+        s.setAttribute('aria-hidden', String(off !== 0));
+      });
+    };
 
     // rail fill, caption and counter — everything except the cards themselves
     const updateChrome = () => {
@@ -724,48 +760,10 @@
       }
     };
 
-    // card-by-card: the outgoing card slides out one side while the incoming
-    // card slides in from the other. Direction is whichever way is shorter
-    // around the loop, so clicking a rail segment several slides away still
-    // picks a sensible side rather than always going "forward".
     function go(newIdxRaw, manual) {
       const total = slides.length;
-      const newIdx = ((newIdxRaw % total) + total) % total;
-      if (newIdx === idx) { if (manual && playing) start(); return; }
-
-      const forwardDist  = (newIdx - idx + total) % total;
-      const backwardDist = (idx - newIdx + total) % total;
-      const forward = forwardDist <= backwardDist;
-
-      const oldSlide = slides[idx];
-      const newSlide = slides[newIdx];
-
-      // every other card is parked off-stage instantly — only the outgoing
-      // and incoming pair ever animate, so a multi-slide jump can't flash
-      // whatever sits between them across the frame
-      slides.forEach((s, i) => {
-        if (i === idx || i === newIdx) return;
-        s.classList.add('no-anim');
-        s.classList.remove('is-active', 'is-exit-left', 'is-exit-right');
-      });
-
-      // place the incoming card on its starting side before it can be seen
-      // there, then force a layout so that position is committed as a real
-      // frame before re-enabling the transition
-      newSlide.classList.add('no-anim');
-      newSlide.classList.remove('is-active', 'is-exit-left', 'is-exit-right');
-      newSlide.classList.add(forward ? 'is-exit-right' : 'is-exit-left');
-      void newSlide.offsetWidth;
-      newSlide.classList.remove('no-anim');
-
-      // now the actual slide: outgoing card exits one side, incoming card
-      // enters from the other
-      oldSlide.classList.remove('is-active');
-      oldSlide.classList.add(forward ? 'is-exit-left' : 'is-exit-right');
-      newSlide.classList.remove('is-exit-left', 'is-exit-right');
-      newSlide.classList.add('is-active');
-
-      idx = newIdx;
+      idx = ((newIdxRaw % total) + total) % total;
+      layout();
       updateChrome();
       if (manual && playing) start();
     }
@@ -802,6 +800,9 @@
       playBtn?.setAttribute('aria-label', 'Play slideshow');
     }
 
+    // no resize listener needed: --ss-step is a clamp() driven by vw, so the
+    // calc() expressions above re-resolve on their own as the viewport moves
+    layout();
     updateChrome();
     start();
   };

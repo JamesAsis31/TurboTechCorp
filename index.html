@@ -324,44 +324,49 @@
         <p class="section-sub">A look at the work behind the nameplate — on the floor, in the workshop and on site.</p>
       </div>
 
-      <div class="ss reveal-scale" data-slideshow data-interval="4800"
+      <div class="ss-carousel reveal-scale" data-slideshow data-interval="4800"
            aria-roledescription="carousel" aria-label="Field photos, auto-advancing">
-        <figure class="ss-slide is-active" data-cat="Field Operations" data-title="Turbine rotor overhaul">
-          <img src="images/img1.jpg" alt="Steam turbine rotor exposed during an overhaul in the workshop" loading="lazy">
-        </figure>
-        <figure class="ss-slide" data-cat="Outage Execution" data-title="Planned turnaround in progress">
-          <img src="images/img2.jpg" alt="Crew executing a planned outage on rotating equipment" loading="lazy">
-        </figure>
-        <figure class="ss-slide" data-cat="Rigging" data-title="Rotor rigging and lift">
-          <img src="images/img4.jpg" alt="Crew rigging a rotor with an overhead crane" loading="lazy">
-        </figure>
-        <figure class="ss-slide" data-cat="Crew &amp; Team" data-title="OEM-aligned training">
-          <img src="images/img6.jpg" alt="Turbotech crew during an OEM-aligned training session" loading="lazy">
-        </figure>
-        <figure class="ss-slide" data-cat="Field Operations" data-title="In-situ balancing close-up">
-          <img src="images/img7.jpg" alt="Close-up of a rotor during in-situ balancing" loading="lazy">
-        </figure>
-        <figure class="ss-slide" data-cat="Facilities" data-title="Pampanga workshop floor">
-          <img src="images/img10.jpg" alt="Turbotech workshop floor in Pampanga" loading="lazy">
-        </figure>
+        <div class="ss-stage">
+          <figure class="ss-slide is-active" data-cat="Field Operations" data-title="Turbine rotor overhaul">
+            <img src="images/img1.jpg" alt="Steam turbine rotor exposed during an overhaul in the workshop" loading="lazy">
+          </figure>
+          <figure class="ss-slide" data-cat="Outage Execution" data-title="Planned turnaround in progress">
+            <img src="images/img2.jpg" alt="Crew executing a planned outage on rotating equipment" loading="lazy">
+          </figure>
+          <figure class="ss-slide" data-cat="Rigging" data-title="Rotor rigging and lift">
+            <img src="images/img4.jpg" alt="Crew rigging a rotor with an overhead crane" loading="lazy">
+          </figure>
+          <figure class="ss-slide" data-cat="Crew &amp; Team" data-title="OEM-aligned training">
+            <img src="images/img6.jpg" alt="Turbotech crew during an OEM-aligned training session" loading="lazy">
+          </figure>
+          <figure class="ss-slide" data-cat="Field Operations" data-title="In-situ balancing close-up">
+            <img src="images/img7.jpg" alt="Close-up of a rotor during in-situ balancing" loading="lazy">
+          </figure>
+          <figure class="ss-slide" data-cat="Facilities" data-title="Pampanga workshop floor">
+            <img src="images/img10.jpg" alt="Turbotech workshop floor in Pampanga" loading="lazy">
+          </figure>
 
-        <div class="ss-shade" aria-hidden="true"></div>
-        <div class="ss-info" data-ss-info>
-          <span class="ss-cat" data-ss-cat></span>
-          <span class="ss-title" data-ss-title></span>
+          <button class="ss-btn ss-arrow ss-prev" data-ss-prev aria-label="Previous slide">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 3.5 5 9l6 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="ss-btn ss-arrow ss-next" data-ss-next aria-label="Next slide">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 3.5 13 9l-6 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
-        <div class="ss-count" aria-hidden="true"><b data-ss-index>01</b><span>/</span><i data-ss-total>06</i></div>
 
-        <button class="ss-btn ss-arrow ss-prev" data-ss-prev aria-label="Previous slide">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 3.5 5 9l6 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button class="ss-btn ss-arrow ss-next" data-ss-next aria-label="Next slide">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 3.5 13 9l-6 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button class="ss-btn ss-play" data-ss-toggle aria-label="Pause slideshow" aria-pressed="true">
-          <svg class="icon-pause" width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="3.5" y="2.5" width="3" height="11" rx="1" fill="currentColor"/><rect x="9.5" y="2.5" width="3" height="11" rx="1" fill="currentColor"/></svg>
-          <svg class="icon-play" width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4.5 2.8v10.4a.6.6 0 0 0 .92.5l8.2-5.2a.6.6 0 0 0 0-1l-8.2-5.2a.6.6 0 0 0-.92.5Z" fill="currentColor"/></svg>
-        </button>
+        <div class="ss-below">
+          <div class="ss-info" data-ss-info>
+            <span class="ss-cat" data-ss-cat></span>
+            <span class="ss-title" data-ss-title></span>
+          </div>
+          <div class="ss-controls">
+            <div class="ss-count" aria-hidden="true"><b data-ss-index>01</b><span>/</span><i data-ss-total>06</i></div>
+            <button class="ss-btn ss-play" data-ss-toggle aria-label="Pause slideshow" aria-pressed="true">
+              <svg class="icon-pause" width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="3.5" y="2.5" width="3" height="11" rx="1" fill="currentColor"/><rect x="9.5" y="2.5" width="3" height="11" rx="1" fill="currentColor"/></svg>
+              <svg class="icon-play" width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4.5 2.8v10.4a.6.6 0 0 0 .92.5l8.2-5.2a.6.6 0 0 0 0-1l-8.2-5.2a.6.6 0 0 0-.92.5Z" fill="currentColor"/></svg>
+            </button>
+          </div>
+        </div>
         <div class="ss-rail" data-ss-rail role="tablist" aria-label="Choose slide"></div>
       </div>
 
