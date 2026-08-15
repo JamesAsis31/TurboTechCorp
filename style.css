@@ -207,8 +207,9 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible{
 }
 .preloader.is-done{ opacity:0; visibility:hidden; }
 .preload-mark{ width:64px; height:64px; animation:spin 2.6s linear infinite; }
-.preload-mark .pl-blade{ fill:var(--brand); }
-.preload-mark .pl-hub{ fill:var(--surface-2); stroke:var(--brand); stroke-width:3; }
+.preload-mark .pl-blade{ fill:var(--brand); stroke:var(--brand-deep); stroke-width:2.5; }
+.preload-mark .pl-plate{ fill:var(--brand-deep); }
+.preload-mark .pl-boss{ fill:var(--brand); }
 .preload-bar{
   width:190px; height:2px; background:var(--border); overflow:hidden; border-radius:2px;
 }
@@ -341,12 +342,12 @@ svg.brand-wheel{
 }
 .site-header.is-scrolled svg.brand-wheel{ width:32px; height:32px; }
 .brand:hover svg.brand-wheel{ filter:drop-shadow(0 0 10px var(--brand-glow)); }
-.brand-wheel .bw-blade{ fill:var(--brand); }
-/* rim at the blade tips — this is what reads as a wheel rather than a sunburst */
-.brand-wheel .bw-rim{ fill:none; stroke:var(--brand-deep); stroke-width:22; }
-.brand-wheel .bw-plate{ fill:var(--surface-2); stroke:var(--brand-deep); stroke-width:2; }
-.brand-wheel .bw-bolt{ fill:var(--bg); }
-.brand-wheel .bw-hub{ fill:var(--surface); stroke:var(--brand); stroke-width:3; }
+/* same swept-blade turbine as the hero, in brand red and simplified for
+   legibility at ~32-38px: fewer blades, no fine machining detail */
+.brand-wheel .bw-blade{ fill:var(--brand); stroke:var(--brand-deep); stroke-width:2.5; }
+.brand-wheel .bw-plate{ fill:var(--brand-deep); }
+.brand-wheel .bw-boss{ fill:var(--brand); }
+.brand-wheel .bw-centre{ fill:var(--brand-deep); }
 .brand-wheel-spin{ transform-origin:200px 200px; animation:spin 9s linear infinite; }
 @keyframes spin{ to{ transform:rotate(360deg); } }
 
