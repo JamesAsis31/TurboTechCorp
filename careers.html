@@ -21,30 +21,85 @@
 </head>
 <body>
 
+<div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" id="scrollProgressBar"></div></div>
+
 <!-- ============ NAV ============ -->
 <header class="site-header" id="siteHeader">
   <div class="wrap header-inner">
     <a href="index.html" class="brand">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 48 48" class="rotor-icon"><g class="rotor-icon-blades">
-          <path d="M24 24 L24 4 A20 20 0 0 1 41.3 14 Z"></path>
-          <path d="M24 24 L41.3 14 A20 20 0 0 1 41.3 34 Z"></path>
-          <path d="M24 24 L41.3 34 A20 20 0 0 1 24 44 Z"></path>
-          <path d="M24 24 L24 44 A20 20 0 0 1 6.7 34 Z"></path>
-          <path d="M24 24 L6.7 34 A20 20 0 0 1 6.7 14 Z"></path>
-          <path d="M24 24 L6.7 14 A20 20 0 0 1 24 4 Z"></path>
-        </g><circle cx="24" cy="24" r="5.5" class="rotor-hub"></circle></svg>
+      <span class="brand-wordmark">
+        <span class="brand-word brand-word-turbo">TURBO</span>
+        <svg viewBox="0 0 400 400" class="brand-wheel rig-rotor" aria-hidden="true">
+          <circle cx="200" cy="200" r="150" class="rig-ring rig-ring-outer"></circle>
+          <circle cx="200" cy="200" r="118" class="rig-ring rig-ring-tick"></circle>
+          <g class="rig-blades">
+            <g class="rig-blade-group">
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(0 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(16.3636 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(32.7273 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(49.0909 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(65.4545 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(81.8182 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(98.1818 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(114.5455 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(130.9091 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(147.2727 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(163.6364 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(180 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(196.3636 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(212.7273 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(229.0909 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(245.4545 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(261.8182 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(278.1818 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(294.5455 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(310.9091 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(327.2727 200 200)"></path>
+              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(343.6364 200 200)"></path>
+            </g>
+          </g>
+          <circle cx="200" cy="200" r="57" class="rig-hub-plate"></circle>
+          <g class="rig-bolts">
+            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(0 200 200)"></circle>
+            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(45 200 200)"></circle>
+            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(90 200 200)"></circle>
+            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(135 200 200)"></circle>
+            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(180 200 200)"></circle>
+            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(225 200 200)"></circle>
+            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(270 200 200)"></circle>
+            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(315 200 200)"></circle>
+          </g>
+          <circle cx="200" cy="200" r="34" class="rig-hub"></circle>
+          <circle cx="200" cy="200" r="34" class="rig-hub-ring"></circle>
+        </svg>
+        <span class="brand-word brand-word-tech">TECH</span>
       </span>
-      <span class="brand-word">TURBO<span class="brand-word-accent">TECH</span><span class="brand-sub">SYNERGIES</span></span>
     </a>
 
+    <div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
+
     <nav class="main-nav" id="mainNav" aria-label="Primary">
+      <div class="main-nav-head">
+        <span class="main-nav-tag mono">NAVIGATION</span>
+        <button class="main-nav-close" id="mainNavClose" aria-label="Close menu">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 2.5l9 9M11.5 2.5l-9 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </div>
       <a href="index.html#services" class="nav-link">Services</a>
       <a href="index.html#process" class="nav-link">Process</a>
       <a href="index.html#locations" class="nav-link">Locations</a>
       <a href="careers.html" class="nav-link is-active">Careers</a>
       <a href="gallery.html" class="nav-link">Gallery</a>
       <a href="index.html#contact" class="nav-link">Contact</a>
+      <div class="main-nav-foot">
+        <a href="tel:+639156443000" class="main-nav-hotline">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          <span class="main-nav-hotline-copy">
+            <span class="main-nav-hotline-label">24/7 Hotline</span>
+            <span class="main-nav-hotline-number">+63 915 644 3000</span>
+          </span>
+        </a>
+      </div>
     </nav>
 
     <div class="header-actions">
@@ -402,6 +457,7 @@
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 14V3M4 8l5-5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
 </button>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
