@@ -141,16 +141,42 @@
       <div class="hero-visual reveal-scale" aria-hidden="true">
         <div class="hero-visual-glow"></div>
         <svg viewBox="0 0 400 400" class="rotor" data-parallax="18">
-          <circle cx="200" cy="200" r="176" class="rotor-ring"></circle>
-          <circle cx="200" cy="200" r="158" class="rotor-ring-dash"></circle>
-          <circle cx="200" cy="200" r="190" class="rotor-ring-arc" stroke-dasharray="150 1044"></circle>
+          <defs>
+            <!-- one directional light source across the whole wheel, so blades
+                 on the lit side read brighter than those in shadow -->
+            <linearGradient id="steelBlade" gradientUnits="userSpaceOnUse" x1="70" y1="40" x2="330" y2="360">
+              <stop offset="0%"   class="steel-hi"></stop>
+              <stop offset="48%"  class="steel-mid"></stop>
+              <stop offset="100%" class="steel-lo"></stop>
+            </linearGradient>
+            <radialGradient id="steelPlate" cx="40%" cy="32%" r="76%">
+              <stop offset="0%"   class="steel-hi"></stop>
+              <stop offset="58%"  class="steel-mid"></stop>
+              <stop offset="100%" class="steel-lo"></stop>
+            </radialGradient>
+            <radialGradient id="steelBoss" cx="38%" cy="30%" r="74%">
+              <stop offset="0%"   class="steel-hi"></stop>
+              <stop offset="62%"  class="steel-mid"></stop>
+              <stop offset="100%" class="steel-lo"></stop>
+            </radialGradient>
+          </defs>
+
+          <circle cx="200" cy="200" r="186" class="rotor-ring"></circle>
+          <circle cx="200" cy="200" r="172" class="rotor-ring-dash"></circle>
+          <circle cx="200" cy="200" r="194" class="rotor-ring-arc" stroke-dasharray="150 1066"></circle>
+
+          <!-- 24 swept, cambered blades — leading edge curves out, tip cut on an angle -->
           <g class="rotor-blades">
-            <g data-blades="24" data-blade="M191,152 L194.5,58 Q195,51 200,51 Q205,51 205.5,58 L209,152 Z"></g>
-            <circle cx="200" cy="200" r="150" class="rotor-rim"></circle>
+            <g data-blades="24" data-blade="M193,152 C185,116 195,74 227,44 L243,56 C224,86 213,118 209,152 Z"></g>
           </g>
+
+          <!-- hub disc covers the blade roots, with a machined step and centre boss -->
           <circle cx="200" cy="200" r="58" class="rotor-plate"></circle>
-          <g data-bolts="8" data-bolt-radius="42" data-bolt-size="4.6" class="rotor-bolt"></g>
-          <circle cx="200" cy="200" r="27" class="rotor-hub"></circle>
+          <circle cx="200" cy="200" r="50" class="rotor-plate-step"></circle>
+          <circle cx="200" cy="200" r="22" class="rotor-boss"></circle>
+          <circle cx="200" cy="200" r="13" class="rotor-boss-step"></circle>
+          <circle cx="200" cy="200" r="4"  class="rotor-boss-centre"></circle>
+
           <circle cx="200" cy="200" r="40" class="rotor-pulse"></circle>
         </svg>
         <div class="rotor-readout">

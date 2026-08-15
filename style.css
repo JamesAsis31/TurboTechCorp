@@ -44,6 +44,12 @@
   --caption-fade: rgba(4,6,9,.94);
   --lightbox-bg:  rgba(4,6,9,.97);
 
+  /* machined-steel palette for the hero turbine wheel */
+  --steel-hi:     #9BA5B1;
+  --steel-mid:    #5E6876;
+  --steel-lo:     #333B46;
+  --steel-edge:   #262D37;
+
   /* Type */
   --font-display: 'Oswald', Impact, sans-serif;
   --font-body:    'Inter', system-ui, sans-serif;
@@ -93,6 +99,11 @@
   --noise-op:     .02;
   --caption-fade: rgba(12,16,22,.90);
   --lightbox-bg:  rgba(20,26,34,.94);
+
+  --steel-hi:     #B4BDC8;
+  --steel-mid:    #6E7886;
+  --steel-lo:     #414954;
+  --steel-edge:   #2F363F;
 }
 
 /* ==========================================================================
@@ -530,17 +541,23 @@ section{ position:relative; padding:130px 0; }
   animation:spin 14s linear infinite;
 }
 .rotor-blades{ transform-origin:200px 200px; animation:spin 15s linear infinite; }
-.rotor-blades path{ fill:var(--brand); stroke:var(--brand-deep); stroke-width:1.2; }
-/* rim at the blade tips — this is what reads as a wheel rather than a sunburst */
-.rotor-rim{ fill:none; stroke:var(--brand-deep); stroke-width:13; }
-.rotor-plate{ fill:var(--surface-2); stroke:var(--brand-deep); stroke-width:1.5; }
-.rotor-bolt{ fill:var(--bg); stroke:var(--brand-deep); stroke-width:1.2; }
-.rotor-hub{ fill:var(--surface); stroke:var(--brand); stroke-width:2.5; }
+
+/* gradient stops are classed so the steel palette follows the theme */
+.steel-hi{ stop-color:var(--steel-hi); }
+.steel-mid{ stop-color:var(--steel-mid); }
+.steel-lo{ stop-color:var(--steel-lo); }
+
+.rotor-blades path{ fill:url(#steelBlade); stroke:var(--steel-edge); stroke-width:1; }
+.rotor-plate{ fill:url(#steelPlate); stroke:var(--steel-edge); stroke-width:1.5; }
+.rotor-plate-step{ fill:none; stroke:rgba(255,255,255,.10); stroke-width:1.5; }
+.rotor-boss{ fill:url(#steelBoss); stroke:var(--steel-edge); stroke-width:1.5; }
+.rotor-boss-step{ fill:none; stroke:rgba(0,0,0,.30); stroke-width:2; }
+.rotor-boss-centre{ fill:var(--steel-edge); }
 .rotor-pulse{
   fill:none; stroke:var(--brand); stroke-width:1; transform-origin:200px 200px;
   animation:pulse-ring 3s ease-out infinite;
 }
-@keyframes pulse-ring{ 0%{ r:40; opacity:.7; } 100%{ r:120; opacity:0; } }
+@keyframes pulse-ring{ 0%{ r:40; opacity:.4; } 100%{ r:150; opacity:0; } }
 
 .rotor-readout{
   position:absolute; bottom:4%; left:50%; transform:translateX(-50%); z-index:3;
