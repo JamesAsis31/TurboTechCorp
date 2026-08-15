@@ -698,9 +698,8 @@
       });
     });
 
-    const render = () => {
-      slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
-
+    // rail fill, caption and counter — everything except the cards themselves
+    const updateChrome = () => {
       segs.forEach((seg, i) => {
         const fill = seg.querySelector('i');
         seg.classList.toggle('is-active', i === idx);
@@ -725,9 +724,49 @@
       }
     };
 
-    function go(i, manual) {
-      idx = (i + slides.length) % slides.length;
-      render();
+    // card-by-card: the outgoing card slides out one side while the incoming
+    // card slides in from the other. Direction is whichever way is shorter
+    // around the loop, so clicking a rail segment several slides away still
+    // picks a sensible side rather than always going "forward".
+    function go(newIdxRaw, manual) {
+      const total = slides.length;
+      const newIdx = ((newIdxRaw % total) + total) % total;
+      if (newIdx === idx) { if (manual && playing) start(); return; }
+
+      const forwardDist  = (newIdx - idx + total) % total;
+      const backwardDist = (idx - newIdx + total) % total;
+      const forward = forwardDist <= backwardDist;
+
+      const oldSlide = slides[idx];
+      const newSlide = slides[newIdx];
+
+      // every other card is parked off-stage instantly — only the outgoing
+      // and incoming pair ever animate, so a multi-slide jump can't flash
+      // whatever sits between them across the frame
+      slides.forEach((s, i) => {
+        if (i === idx || i === newIdx) return;
+        s.classList.add('no-anim');
+        s.classList.remove('is-active', 'is-exit-left', 'is-exit-right');
+      });
+
+      // place the incoming card on its starting side before it can be seen
+      // there, then force a layout so that position is committed as a real
+      // frame before re-enabling the transition
+      newSlide.classList.add('no-anim');
+      newSlide.classList.remove('is-active', 'is-exit-left', 'is-exit-right');
+      newSlide.classList.add(forward ? 'is-exit-right' : 'is-exit-left');
+      void newSlide.offsetWidth;
+      newSlide.classList.remove('no-anim');
+
+      // now the actual slide: outgoing card exits one side, incoming card
+      // enters from the other
+      oldSlide.classList.remove('is-active');
+      oldSlide.classList.add(forward ? 'is-exit-left' : 'is-exit-right');
+      newSlide.classList.remove('is-exit-left', 'is-exit-right');
+      newSlide.classList.add('is-active');
+
+      idx = newIdx;
+      updateChrome();
       if (manual && playing) start();
     }
 
@@ -742,7 +781,7 @@
       playBtn.classList.toggle('is-paused', !playing);
       playBtn.setAttribute('aria-pressed', String(playing));
       playBtn.setAttribute('aria-label', playing ? 'Pause slideshow' : 'Play slideshow');
-      if (playing) { start(); render(); }
+      if (playing) { start(); updateChrome(); }
       else { stop(); segs.forEach(s => s.querySelector('i').classList.remove('is-running')); }
     });
 
@@ -763,7 +802,7 @@
       playBtn?.setAttribute('aria-label', 'Play slideshow');
     }
 
-    render();
+    updateChrome();
     start();
   };
 
