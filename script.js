@@ -278,7 +278,6 @@
   const timelineFill= $('#timelineFill');
   const steps       = $$('.step');
   const parallaxEls = $$('[data-parallax]');
-  const parallaxImgs= $$('[data-parallax-img]');
 
   let ticking = false;
 
@@ -301,13 +300,6 @@
         const amount = parseFloat(el.dataset.parallax) || 14;
         const mid = (r.top + r.height / 2 - window.innerHeight / 2) / window.innerHeight;
         el.style.transform = `translate3d(0, ${(-mid * amount).toFixed(2)}px, 0)`;
-      });
-
-      parallaxImgs.forEach(el => {
-        const r = el.getBoundingClientRect();
-        if (r.bottom < 0 || r.top > window.innerHeight) return;
-        const mid = (r.top + r.height / 2 - window.innerHeight / 2) / window.innerHeight;
-        el.style.setProperty('--py', `${(-mid * 16).toFixed(2)}px`);
       });
     }
 
@@ -607,31 +599,45 @@
   }
 
   /* =====================================================================
-     Gallery — auto slideshow
+     Slideshow — self-contained, so several can run on one page
   ===================================================================== */
-  const slideshow = $('#slideshow');
+  const initSlideshow = (root) => {
+    const slides = $$('.ss-slide', root);
+    if (!slides.length) return;
 
-  if (slideshow) {
-    const slides = $$('.slide', slideshow);
-    const dotsWrap = $('#slideshowDots');
-    const bar = $('#slideshowProgressBar');
-    const playBtn = $('#slideshowPlayPause');
-    const DURATION = 5200;
-    slideshow.style.setProperty('--ss-dur', (DURATION / 1000) + 's');
+    const rail    = $('[data-ss-rail]', root);
+    const info    = $('[data-ss-info]', root);
+    const catEl   = $('[data-ss-cat]', root);
+    const titleEl = $('[data-ss-title]', root);
+    const idxEl   = $('[data-ss-index]', root);
+    const totalEl = $('[data-ss-total]', root);
+    const playBtn = $('[data-ss-toggle]', root);
+
+    const duration = parseInt(root.dataset.interval, 10) || 5000;
+    root.style.setProperty('--ss-dur', (duration / 1000) + 's');
+
+    const pad = n => String(n).padStart(2, '0');
+    if (totalEl) totalEl.textContent = pad(slides.length);
 
     let idx = Math.max(0, slides.findIndex(s => s.classList.contains('is-active')));
     let timer = null;
     let playing = !reduce;
 
-    slides.forEach((slide, i) => {
-      const dot = document.createElement('button');
-      dot.className = 'ss-dot';
-      dot.type = 'button';
-      dot.setAttribute('role', 'tab');
-      dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
-      dot.addEventListener('click', () => go(i, true));
-      dotsWrap.appendChild(dot);
+    // one rail segment per slide
+    const segs = slides.map((_, i) => {
+      const seg = document.createElement('button');
+      seg.className = 'ss-seg';
+      seg.type = 'button';
+      seg.setAttribute('role', 'tab');
+      seg.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      seg.innerHTML = '<i></i>';
+      seg.addEventListener('click', () => go(i, true));
+      rail?.appendChild(seg);
+      return seg;
+    });
 
+    // clicking a slide opens it in the lightbox, when there is one on the page
+    slides.forEach(slide => {
       slide.addEventListener('click', () => {
         if (!openLightbox) return;
         const src = slide.querySelector('img')?.src;
@@ -639,19 +645,32 @@
         if (match) openLightbox(match);
       });
     });
-    const dots = Array.from(dotsWrap.children);
-
-    const restartBar = () => {
-      if (!bar) return;
-      bar.classList.remove('is-running');
-      void bar.offsetWidth;               // reflow so the CSS animation restarts
-      if (playing) bar.classList.add('is-running');
-    };
 
     const render = () => {
       slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
-      dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
-      restartBar();
+
+      segs.forEach((seg, i) => {
+        const fill = seg.querySelector('i');
+        seg.classList.toggle('is-active', i === idx);
+        seg.classList.toggle('is-done', i < idx);
+        seg.setAttribute('aria-selected', String(i === idx));
+        fill.classList.remove('is-running');
+        if (i === idx) {
+          void fill.offsetWidth;          // reflow so the fill animation restarts
+          if (playing) fill.classList.add('is-running');
+        }
+      });
+
+      const active = slides[idx];
+      if (catEl)   catEl.textContent   = active.dataset.cat || '';
+      if (titleEl) titleEl.textContent = active.dataset.title || '';
+      if (idxEl)   idxEl.textContent   = pad(idx + 1);
+
+      if (info) {                          // replay the caption entrance
+        info.classList.remove('is-swap');
+        void info.offsetWidth;
+        info.classList.add('is-swap');
+      }
     };
 
     function go(i, manual) {
@@ -660,29 +679,29 @@
       if (manual && playing) start();
     }
 
-    const start = () => { stop(); if (playing) timer = setInterval(() => go(idx + 1), DURATION); };
     const stop  = () => { if (timer) clearInterval(timer); timer = null; };
+    const start = () => { stop(); if (playing) timer = setInterval(() => go(idx + 1), duration); };
 
-    $('#slideshowPrev')?.addEventListener('click', () => go(idx - 1, true));
-    $('#slideshowNext')?.addEventListener('click', () => go(idx + 1, true));
+    $('[data-ss-prev]', root)?.addEventListener('click', () => go(idx - 1, true));
+    $('[data-ss-next]', root)?.addEventListener('click', () => go(idx + 1, true));
 
     playBtn?.addEventListener('click', () => {
       playing = !playing;
       playBtn.classList.toggle('is-paused', !playing);
       playBtn.setAttribute('aria-pressed', String(playing));
       playBtn.setAttribute('aria-label', playing ? 'Pause slideshow' : 'Play slideshow');
-      if (playing) { start(); restartBar(); }
-      else { stop(); bar?.classList.remove('is-running'); }
+      if (playing) { start(); render(); }
+      else { stop(); segs.forEach(s => s.querySelector('i').classList.remove('is-running')); }
     });
 
     ['mouseenter', 'focusin'].forEach(ev =>
-      slideshow.addEventListener(ev, () => slideshow.classList.add('is-paused')));
+      root.addEventListener(ev, () => root.classList.add('is-paused')));
     ['mouseleave', 'focusout'].forEach(ev =>
-      slideshow.addEventListener(ev, () => slideshow.classList.remove('is-paused')));
+      root.addEventListener(ev, () => root.classList.remove('is-paused')));
 
-    slideshow.setAttribute('tabindex', '0');
-    slideshow.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') go(idx - 1, true);
+    root.setAttribute('tabindex', '0');
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft')  go(idx - 1, true);
       if (e.key === 'ArrowRight') go(idx + 1, true);
     });
 
@@ -694,7 +713,9 @@
 
     render();
     start();
-  }
+  };
+
+  $$('[data-slideshow]').forEach(initSlideshow);
 
   /* =====================================================================
      Forms — validation + delivery
