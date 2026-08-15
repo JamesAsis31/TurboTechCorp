@@ -1003,6 +1003,14 @@ section{ position:relative; padding:130px 0; }
   position:relative;
   height:clamp(230px, 34vw, 400px);
   perspective:1500px;
+  /* the arced side cards are meant to poke out and clip at this frame's
+     edge — without this, they extend past it unclipped. On desktop that
+     stays inside .wrap by coincidence (step + card width fits), but on a
+     narrow phone it genuinely exceeds the viewport, which forces the
+     browser to widen its layout viewport to fit that unconstrained
+     content — the whole page then renders wider than the screen and
+     shifts/scales to compensate, which is what reads as "offset" */
+  overflow:hidden;
 }
 .ss-carousel-wide .ss-stage{ height:clamp(250px, 38vw, 440px); }
 
