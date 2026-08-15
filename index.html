@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Turbo Tech Synergies Inc. — Rotating Equipment MRO &amp; Outage Execution</title>
 <meta name="description" content="Turbo Tech Synergies Inc. delivers OEM-aligned MRO, outage execution and in-situ balancing for turbines, compressors and pumps across power generation, oil &amp; gas, marine and industrial sectors. Manila &amp; Doha.">
+<meta name="theme-color" content="#06080B">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -21,56 +22,38 @@
 </head>
 <body>
 
+<!-- ============ PRELOADER ============ -->
+<div class="preloader" id="preloader">
+  <svg class="preload-mark" viewBox="0 0 400 400" aria-hidden="true">
+    <g data-blades="15" data-blade="M190,152 L194,72 Q194.5,65 200,65 Q205.5,65 206,72 L210,152 Z" class="pl-blade"></g>
+    <circle cx="200" cy="200" r="58" class="pl-hub"></circle>
+  </svg>
+  <div class="preload-bar"><i id="preloadBar"></i></div>
+  <p class="preload-text">Spinning up</p>
+</div>
+
+<!-- ============ AMBIENT BACKGROUND ============ -->
+<div class="bg-layers" aria-hidden="true">
+  <div class="bg-aurora"><span></span><span></span><span></span></div>
+  <div class="bg-grid"></div>
+  <div class="bg-noise"></div>
+</div>
+
 <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" id="scrollProgressBar"></div></div>
 
-<!-- ============ NAV ============ -->
+<!-- ============ HEADER ============ -->
 <header class="site-header" id="siteHeader">
   <div class="wrap header-inner">
-    <a href="#top" class="brand">
+    <a href="#top" class="brand" aria-label="Turbo Tech Synergies — home">
       <span class="brand-wordmark">
         <span class="brand-word brand-word-turbo">TURBO</span>
-        <svg viewBox="0 0 400 400" class="brand-wheel rig-rotor" aria-hidden="true">
-          <circle cx="200" cy="200" r="150" class="rig-ring rig-ring-outer"></circle>
-          <circle cx="200" cy="200" r="118" class="rig-ring rig-ring-tick"></circle>
-          <g class="rig-blades">
-            <g class="rig-blade-group">
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(0 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(16.3636 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(32.7273 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(49.0909 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(65.4545 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(81.8182 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(98.1818 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(114.5455 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(130.9091 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(147.2727 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(163.6364 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(180 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(196.3636 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(212.7273 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(229.0909 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(245.4545 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(261.8182 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(278.1818 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(294.5455 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(310.9091 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(327.2727 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(343.6364 200 200)"></path>
-            </g>
+        <svg viewBox="0 0 400 400" class="brand-wheel" aria-hidden="true">
+          <g class="brand-wheel-spin">
+            <g data-blades="15" data-blade="M190,152 L194,72 Q194.5,65 200,65 Q205.5,65 206,72 L210,152 Z" class="bw-blade"></g>
+            <circle cx="200" cy="200" r="137" class="bw-rim"></circle><circle cx="200" cy="200" r="62" class="bw-plate"></circle>
+            <g data-bolts="8" data-bolt-radius="44" data-bolt-size="5.5" class="bw-bolt"></g>
+            <circle cx="200" cy="200" r="27" class="bw-hub"></circle>
           </g>
-          <circle cx="200" cy="200" r="57" class="rig-hub-plate"></circle>
-          <g class="rig-bolts">
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(0 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(45 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(90 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(135 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(180 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(225 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(270 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(315 200 200)"></circle>
-          </g>
-          <circle cx="200" cy="200" r="34" class="rig-hub"></circle>
-          <circle cx="200" cy="200" r="34" class="rig-hub-ring"></circle>
         </svg>
         <span class="brand-word brand-word-tech">TECH</span>
       </span>
@@ -80,17 +63,17 @@
 
     <nav class="main-nav" id="mainNav" aria-label="Primary">
       <div class="main-nav-head">
-        <span class="main-nav-tag mono">NAVIGATION</span>
+        <span class="main-nav-tag">Navigation</span>
         <button class="main-nav-close" id="mainNavClose" aria-label="Close menu">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 2.5l9 9M11.5 2.5l-9 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 2.5l9 9M11.5 2.5l-9 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         </button>
       </div>
-      <a href="#services" class="nav-link">Services</a>
-      <a href="#process" class="nav-link">Process</a>
-      <a href="#locations" class="nav-link">Locations</a>
-      <a href="careers.html" class="nav-link">Careers</a>
-      <a href="gallery.html" class="nav-link">Gallery</a>
-      <a href="#contact" class="nav-link">Contact</a>
+      <a href="#services" class="nav-link"><span>Services</span></a>
+      <a href="#process" class="nav-link"><span>Process</span></a>
+      <a href="#locations" class="nav-link"><span>Locations</span></a>
+      <a href="careers.html" class="nav-link"><span>Careers</span></a>
+      <a href="gallery.html" class="nav-link"><span>Gallery</span></a>
+      <a href="#contact" class="nav-link"><span>Contact</span></a>
       <div class="main-nav-foot">
         <a href="tel:+639156443000" class="main-nav-hotline">
           <span class="pulse-dot" aria-hidden="true"></span>
@@ -109,7 +92,10 @@
       </button>
       <a href="tel:+639156443000" class="hotline-chip">
         <span class="pulse-dot" aria-hidden="true"></span>
-        <span class="hotline-text"><span class="hotline-label">24/7 Hotline</span><span class="hotline-number">+63 915 644 3000</span></span>
+        <span class="hotline-text">
+          <span class="hotline-label">24/7 Hotline</span>
+          <span class="hotline-number">+63 915 644 3000</span>
+        </span>
       </a>
       <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Toggle menu">
         <span></span><span></span><span></span>
@@ -124,99 +110,105 @@
   <section class="hero">
     <div class="wrap hero-inner">
       <div class="hero-copy">
-        <p class="eyebrow"><span class="eyebrow-tag">ASSET&nbsp;TAG&nbsp;·&nbsp;MRO-01</span>MRO &amp; OUTAGE EXECUTION — ROTATING EQUIPMENT SPECIALIST</p>
-        <h1 class="hero-title reveal">
-          Executing critical outages.<br>
-          Restoring rotating assets.<br>
-          <span class="hero-title-accent">Powering plants back online.</span>
+        <div class="hero-status reveal">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          <span data-scramble>Crews mobilizing · Manila &amp; Doha</span>
+        </div>
+        <h1 class="hero-title reveal" data-split>
+          We put rotating<br>
+          assets <em>back online.</em>
         </h1>
         <p class="hero-sub reveal">
           Turbo Tech Synergies Inc. is a field-proven rotating equipment MRO and outage
-          execution specialist, delivering OEM-aligned manpower, tooling and mechanical
-          discipline — from minor interventions to full-scope major outages.
+          execution specialist — delivering OEM-aligned manpower, tooling and mechanical
+          discipline from minor interventions to full-scope major outages.
         </p>
         <div class="hero-actions reveal">
-          <a href="#contact" class="btn btn-primary">Book an outage team</a>
-          <a href="tel:+639156443000" class="btn btn-ghost">
-            Call the hotline
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <a href="#contact" class="btn btn-primary" data-magnetic>
+            <span>Book an outage team</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
+          <a href="tel:+639156443000" class="btn btn-ghost" data-magnetic>
+            <span>Call the 24/7 hotline</span>
+          </a>
+        </div>
+        <div class="scroll-cue reveal">
+          <span class="scroll-cue-track" aria-hidden="true"></span>
+          <span>Scroll to explore</span>
         </div>
       </div>
 
-      <div class="hero-rig" aria-hidden="true">
-        <div class="rig-glow"></div>
-        <svg viewBox="0 0 400 400" class="rig-rotor">
-          <circle cx="200" cy="200" r="150" class="rig-ring rig-ring-outer"></circle>
-          <circle cx="200" cy="200" r="118" class="rig-ring rig-ring-tick"></circle>
-          <g class="rig-blades">
-            <g class="rig-blade-group">
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(0 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(16.3636 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(32.7273 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(49.0909 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(65.4545 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(81.8182 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(98.1818 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(114.5455 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(130.9091 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(147.2727 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(163.6364 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(180 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(196.3636 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(212.7273 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(229.0909 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(245.4545 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(261.8182 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(278.1818 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(294.5455 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(310.9091 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(327.2727 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(343.6364 200 200)"></path>
-            </g>
+      <div class="hero-visual reveal-scale" aria-hidden="true">
+        <div class="hero-visual-glow"></div>
+        <svg viewBox="0 0 400 400" class="rotor" data-parallax="18">
+          <circle cx="200" cy="200" r="176" class="rotor-ring"></circle>
+          <circle cx="200" cy="200" r="158" class="rotor-ring-dash"></circle>
+          <circle cx="200" cy="200" r="190" class="rotor-ring-arc" stroke-dasharray="150 1044"></circle>
+          <g class="rotor-blades">
+            <g data-blades="24" data-blade="M191,152 L194.5,58 Q195,51 200,51 Q205,51 205.5,58 L209,152 Z"></g>
+            <circle cx="200" cy="200" r="150" class="rotor-rim"></circle>
           </g>
-          <circle cx="200" cy="200" r="57" class="rig-hub-plate"></circle>
-          <g class="rig-bolts">
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(0 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(45 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(90 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(135 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(180 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(225 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(270 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(315 200 200)"></circle>
-          </g>
-          <circle cx="200" cy="200" r="34" class="rig-hub"></circle>
-          <circle cx="200" cy="200" r="34" class="rig-hub-ring"></circle>
+          <circle cx="200" cy="200" r="58" class="rotor-plate"></circle>
+          <g data-bolts="8" data-bolt-radius="42" data-bolt-size="4.6" class="rotor-bolt"></g>
+          <circle cx="200" cy="200" r="27" class="rotor-hub"></circle>
+          <circle cx="200" cy="200" r="40" class="rotor-pulse"></circle>
         </svg>
-        <div class="rig-readout">
-          <span class="rig-readout-label">ROTOR STATUS</span>
-          <span class="rig-readout-value">ONLINE</span>
+        <div class="rotor-readout">
+          <span class="pulse-dot"></span>
+          <span class="rotor-readout-label">Rotor status</span>
+          <span class="rotor-readout-value">ONLINE</span>
         </div>
+        <div class="hero-spec hero-spec-1">Balancing <b>Multi-ton</b></div>
+        <div class="hero-spec hero-spec-2">Tooling <b>OEM-aligned</b></div>
+        <div class="hero-spec hero-spec-3">Response <b>24/7</b></div>
       </div>
     </div>
 
-    <div class="hud-strip reveal">
-      <div class="wrap hud-inner">
-        <div class="hud-item">
-          <span class="hud-value" data-count="24" data-suffix="/7">0</span>
-          <span class="hud-label">Hotline Response</span>
+    <div class="hero-stats reveal">
+      <div class="wrap">
+        <div class="hero-stats-inner">
+          <div class="stat">
+            <div class="stat-value"><span data-count="24">0</span><em>/7</em></div>
+            <div class="stat-label">Hotline response, every day of the year</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value"><span data-count="2">0</span><em>+</em></div>
+            <div class="stat-label">Regional bases — Philippines &amp; Qatar</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value"><em>OEM</em></div>
+            <div class="stat-label">Aligned manpower, method &amp; tooling</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value"><span data-count="4">0</span></div>
+            <div class="stat-label">Sectors: power, oil &amp; gas, marine, industrial</div>
+          </div>
         </div>
-        <div class="hud-divider" aria-hidden="true"></div>
-        <div class="hud-item">
-          <span class="hud-value" data-count="2">0</span>
-          <span class="hud-label">Regional Bases — PH &amp; Qatar</span>
-        </div>
-        <div class="hud-divider" aria-hidden="true"></div>
-        <div class="hud-item">
-          <span class="hud-value hud-value-text">OEM</span>
-          <span class="hud-label">Aligned Manpower &amp; Tooling</span>
-        </div>
-        <div class="hud-divider" aria-hidden="true"></div>
-        <div class="hud-item">
-          <span class="hud-value hud-value-text">4</span>
-          <span class="hud-label">Sectors: Power · Oil&amp;Gas · Marine · Industrial</span>
-        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MARQUEE ============ -->
+  <section class="marquee-band" aria-label="Sectors served">
+    <div class="marquee" data-marquee>
+      <div class="marquee-track">
+        <span>Power Generation</span><i>◆</i>
+        <span><b>Oil &amp; Gas</b></span><i>◆</i>
+        <span>Marine</span><i>◆</i>
+        <span><b>Industrial</b></span><i>◆</i>
+        <span>Turbines</span><i>◆</i>
+        <span><b>Compressors</b></span><i>◆</i>
+        <span>Pumps</span><i>◆</i>
+      </div>
+    </div>
+    <div class="marquee marquee-rev" data-marquee>
+      <div class="marquee-track">
+        <span>In-Situ Balancing</span><i>◆</i>
+        <span><b>Major Outages</b></span><i>◆</i>
+        <span>Overhaul</span><i>◆</i>
+        <span><b>Turnarounds</b></span><i>◆</i>
+        <span>Vibration Analysis</span><i>◆</i>
+        <span><b>Shutdown Crews</b></span><i>◆</i>
       </div>
     </div>
   </section>
@@ -225,50 +217,70 @@
   <section class="services" id="services">
     <div class="wrap">
       <div class="section-head reveal">
-        <p class="section-eyebrow">Capability Nameplate</p>
-        <h2 class="section-title">What we run into the field</h2>
+        <p class="eyebrow">Capability Nameplate</p>
+        <h2 class="section-title" data-split>What we run into the field</h2>
         <p class="section-sub">Every crew we mobilize is scoped, tooled and OEM-aligned before it ever reaches your gate.</p>
       </div>
 
-      <div class="service-grid">
-        <article class="service-card reveal">
-          <div class="service-tag">TAG&nbsp;/&nbsp;MRO-01</div>
+      <div class="bento">
+        <article class="svc svc-lg reveal" data-tilt>
+          <div class="svc-top">
+            <span class="svc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.9 4.9l2.9 2.9M16.2 16.2l2.9 2.9M19.1 4.9l-2.9 2.9M7.8 16.2l-2.9 2.9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </span>
+            <span class="tag">MRO-01</span>
+          </div>
           <h3>Rotating Equipment MRO</h3>
           <p>Maintenance, repair and overhaul for turbines, compressors and pumps — scoped for reliability, not just for restart.</p>
-          <ul class="service-list">
+          <ul class="svc-list">
             <li>Turbines &amp; compressors</li>
             <li>Pumps &amp; auxiliary rotating assets</li>
             <li>Condition-based repair scoping</li>
           </ul>
         </article>
 
-        <article class="service-card reveal">
-          <div class="service-tag">TAG&nbsp;/&nbsp;OUT-02</div>
+        <article class="svc reveal" data-tilt>
+          <div class="svc-top">
+            <span class="svc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 12h4l2.5-7 5 14L17 12h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="tag">OUT-02</span>
+          </div>
           <h3>Outage &amp; Turnaround Execution</h3>
           <p>From a single minor intervention to a full-scope major outage, we mobilize fast and integrate with your site team.</p>
-          <ul class="service-list">
+          <ul class="svc-list">
             <li>Minor interventions</li>
             <li>Full-scope major outages</li>
             <li>Shutdown &amp; turnaround crews</li>
           </ul>
         </article>
 
-        <article class="service-card reveal">
-          <div class="service-tag">TAG&nbsp;/&nbsp;BAL-03</div>
+        <article class="svc reveal" data-tilt>
+          <div class="svc-top">
+            <span class="svc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="tag">BAL-03</span>
+          </div>
           <h3>In-Situ Precision Balancing</h3>
           <p>Schenck SmartBalancer field balancing for small to large multi-ton rotating equipment — no dismantling required.</p>
-          <ul class="service-list">
+          <ul class="svc-list">
             <li>Vibration reduction</li>
             <li>Reliability improvement</li>
             <li>Multi-ton capacity, in place</li>
           </ul>
         </article>
 
-        <article class="service-card reveal">
-          <div class="service-tag">TAG&nbsp;/&nbsp;CRW-04</div>
+        <article class="svc svc-lg reveal" data-tilt>
+          <div class="svc-top">
+            <span class="svc-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 8a3 3 0 1 1 6 0 3 3 0 0 1-6 0Z" stroke="currentColor" stroke-width="1.6"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </span>
+            <span class="tag">CRW-04</span>
+          </div>
           <h3>OEM-Aligned Manpower &amp; Tooling</h3>
           <p>Scalable, disciplined crews and specialist tooling supplied to OEM standards for critical mechanical works.</p>
-          <ul class="service-list">
+          <ul class="svc-list">
             <li>Scalable crew sizing</li>
             <li>Specialist tooling supply</li>
             <li>Site-safety integration</li>
@@ -278,18 +290,51 @@
     </div>
   </section>
 
-  <!-- ============ SECTORS MARQUEE ============ -->
-  <section class="sectors" aria-label="Sectors served">
-    <div class="marquee">
-      <div class="marquee-track">
-        <span>POWER GENERATION</span><span class="dot">·</span>
-        <span>OIL &amp; GAS</span><span class="dot">·</span>
-        <span>MARINE</span><span class="dot">·</span>
-        <span>INDUSTRIAL</span><span class="dot">·</span>
-        <span>POWER GENERATION</span><span class="dot">·</span>
-        <span>OIL &amp; GAS</span><span class="dot">·</span>
-        <span>MARINE</span><span class="dot">·</span>
-        <span>INDUSTRIAL</span><span class="dot">·</span>
+  <!-- ============ SHOWCASE ============ -->
+  <section class="showcase">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">From the Field</p>
+        <h2 class="section-title" data-split>Real crews. Real assets. Real outages.</h2>
+        <p class="section-sub">A look at the work behind the nameplate — on the floor, in the workshop and on site.</p>
+      </div>
+
+      <div class="showcase-grid">
+        <figure class="shot shot-a reveal-mask" data-parallax-img>
+          <img src="images/img1.jpg" alt="Steam turbine rotor exposed during an overhaul in the workshop" loading="lazy">
+          <figcaption>
+            <span class="shot-cat">Field Operations</span>
+            <span class="shot-title">Turbine rotor overhaul</span>
+          </figcaption>
+        </figure>
+        <figure class="shot shot-b reveal-mask" data-parallax-img>
+          <img src="images/img2.jpg" alt="Crew executing a planned outage on rotating equipment" loading="lazy">
+          <figcaption>
+            <span class="shot-cat">Outage Execution</span>
+            <span class="shot-title">Planned turnaround in progress</span>
+          </figcaption>
+        </figure>
+        <figure class="shot shot-c reveal-mask" data-parallax-img>
+          <img src="images/img4.jpg" alt="Crew rigging a rotor with an overhead crane" loading="lazy">
+          <figcaption>
+            <span class="shot-cat">Rigging</span>
+            <span class="shot-title">Rotor lift</span>
+          </figcaption>
+        </figure>
+        <figure class="shot shot-d reveal-mask" data-parallax-img>
+          <img src="images/img6.jpg" alt="Turbotech crew during an OEM-aligned training session" loading="lazy">
+          <figcaption>
+            <span class="shot-cat">Crew</span>
+            <span class="shot-title">OEM training</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="reveal" style="margin-top:34px; display:flex; justify-content:center;">
+        <a href="gallery.html" class="btn btn-ghost" data-magnetic>
+          <span>View the full gallery</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
       </div>
     </div>
   </section>
@@ -298,41 +343,50 @@
   <section class="process" id="process">
     <div class="wrap">
       <div class="section-head reveal">
-        <p class="section-eyebrow">Outage Sequence</p>
-        <h2 class="section-title">How an outage team gets to your site</h2>
+        <p class="eyebrow">Outage Sequence</p>
+        <h2 class="section-title" data-split>How a crew reaches your site</h2>
         <p class="section-sub">A repeatable sequence, run the same way whether it's a two-day minor intervention or a full turnaround.</p>
       </div>
 
-      <ol class="process-steps">
-        <li class="process-step reveal">
-          <span class="process-num">01</span>
-          <div class="process-body">
+      <div class="timeline" id="timeline">
+        <div class="timeline-rail" aria-hidden="true"><i id="timelineFill"></i></div>
+
+        <div class="step reveal">
+          <div class="step-dot">01</div>
+          <div class="step-body">
             <h3>Contact &amp; scope the call</h3>
             <p>Reach the 24/7 hotline or send the outage details — asset type, symptoms, target dates. We confirm scope within hours, not days.</p>
+            <span class="step-meta">Response in hours</span>
           </div>
-        </li>
-        <li class="process-step reveal">
-          <span class="process-num">02</span>
-          <div class="process-body">
+        </div>
+
+        <div class="step reveal">
+          <div class="step-dot">02</div>
+          <div class="step-body">
             <h3>Mobilize crew &amp; tooling</h3>
             <p>We size the crew to the job, pull OEM-aligned tooling, and lock mobilization from our Manila or Doha base.</p>
+            <span class="step-meta">Manila · Pampanga · Doha</span>
           </div>
-        </li>
-        <li class="process-step reveal">
-          <span class="process-num">03</span>
-          <div class="process-body">
+        </div>
+
+        <div class="step reveal">
+          <div class="step-dot">03</div>
+          <div class="step-body">
             <h3>Execute on site</h3>
             <p>Mechanical discipline on the floor — repair, overhaul or in-situ balancing — integrated with your site safety and shift plan.</p>
+            <span class="step-meta">Safety-integrated</span>
           </div>
-        </li>
-        <li class="process-step reveal">
-          <span class="process-num">04</span>
-          <div class="process-body">
+        </div>
+
+        <div class="step reveal">
+          <div class="step-dot">04</div>
+          <div class="step-body">
             <h3>Restart &amp; handover</h3>
             <p>Asset restarted, readings verified, documentation handed over. Your rotating equipment, back online and accounted for.</p>
+            <span class="step-meta">Documented handover</span>
           </div>
-        </li>
-      </ol>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -340,77 +394,101 @@
   <section class="locations" id="locations">
     <div class="wrap">
       <div class="section-head reveal">
-        <p class="section-eyebrow">Regional Bases</p>
-        <h2 class="section-title">Positioned where the assets are</h2>
+        <p class="eyebrow">Regional Bases</p>
+        <h2 class="section-title" data-split>Positioned where the assets are</h2>
       </div>
 
-      <div class="location-grid">
-        <article class="location-card reveal">
-          <div class="location-head">
-            <span class="location-flag">PH</span>
+      <div class="loc-grid">
+        <article class="loc reveal" data-tilt>
+          <div class="loc-head">
+            <span class="loc-flag">PH</span>
             <h3>Manila Sales Office</h3>
           </div>
-          <p class="location-addr">Taft Avenue, Malate, Manila, Philippines</p>
-          <p class="location-addr location-addr-muted">Workshop — San Simon Industrial Park, Pampanga, Philippines</p>
-          <div class="location-contact">
-            <a href="tel:+639156443000">Globe: +63 915 644 3000</a>
-            <a href="tel:+639288909131">Smart: +63 928 890 9131</a>
-            <a href="mailto:tech@turbotechcorp.com">tech@turbotechcorp.com</a>
+          <p class="loc-addr">Taft Avenue, Malate, Manila, Philippines</p>
+          <p class="loc-addr loc-addr-sub">Workshop — San Simon Industrial Park, Pampanga, Philippines</p>
+          <div class="loc-links">
+            <a href="tel:+639156443000">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M5.2 2.5 6.6 5.3 5.3 6.6a8 8 0 0 0 4.1 4.1l1.3-1.3 2.8 1.4v2.4c0 .5-.4.9-.9.8A12.4 12.4 0 0 1 2 3.1c0-.5.3-.9.8-.9h2.4Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              Globe: +63 915 644 3000
+            </a>
+            <a href="tel:+639288909131">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M5.2 2.5 6.6 5.3 5.3 6.6a8 8 0 0 0 4.1 4.1l1.3-1.3 2.8 1.4v2.4c0 .5-.4.9-.9.8A12.4 12.4 0 0 1 2 3.1c0-.5.3-.9.8-.9h2.4Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              Smart: +63 928 890 9131
+            </a>
+            <a href="mailto:tech@turbotechcorp.com">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1.8" y="3.2" width="12.4" height="9.6" rx="1.4" stroke="currentColor" stroke-width="1.4"/><path d="m2.4 4.2 5.6 4 5.6-4" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              tech@turbotechcorp.com
+            </a>
           </div>
         </article>
 
-        <article class="location-card reveal">
-          <div class="location-head">
-            <span class="location-flag">QA</span>
+        <article class="loc reveal" data-tilt>
+          <div class="loc-head">
+            <span class="loc-flag">QA</span>
             <h3>Doha, Qatar Branch</h3>
           </div>
-          <p class="location-addr">Najma, Doha City, State of Qatar</p>
-          <div class="location-contact">
-            <a href="tel:+639156443000">24/7 Hotline: +63 915 644 3000</a>
-            <a href="mailto:info.qatar@turbotechcorp.com">info.qatar@turbotechcorp.com</a>
+          <p class="loc-addr">Najma, Doha City, State of Qatar</p>
+          <p class="loc-addr loc-addr-sub">Regional hub for Gulf outage and turnaround work</p>
+          <div class="loc-links">
+            <a href="tel:+639156443000">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M5.2 2.5 6.6 5.3 5.3 6.6a8 8 0 0 0 4.1 4.1l1.3-1.3 2.8 1.4v2.4c0 .5-.4.9-.9.8A12.4 12.4 0 0 1 2 3.1c0-.5.3-.9.8-.9h2.4Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              24/7 Hotline: +63 915 644 3000
+            </a>
+            <a href="mailto:info.qatar@turbotechcorp.com">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1.8" y="3.2" width="12.4" height="9.6" rx="1.4" stroke="currentColor" stroke-width="1.4"/><path d="m2.4 4.2 5.6 4 5.6-4" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              info.qatar@turbotechcorp.com
+            </a>
           </div>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- ============ CTA BANNER ============ -->
-  <section class="cta-banner reveal">
+  <!-- ============ CTA ============ -->
+  <section class="cta">
     <div class="wrap cta-inner">
-      <div>
-        <p class="section-eyebrow section-eyebrow-light">Stop downtime</p>
+      <div class="reveal">
+        <p class="eyebrow">Stop downtime</p>
         <h2>Secure the right team before the outage window closes.</h2>
       </div>
-      <a href="#contact" class="btn btn-primary btn-large">Book your outage team</a>
+      <a href="#contact" class="btn btn-large reveal" data-magnetic>
+        <span>Book your outage team</span>
+        <svg width="17" height="17" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
     </div>
   </section>
 
   <!-- ============ CONTACT ============ -->
   <section class="contact" id="contact">
     <div class="wrap contact-inner">
-      <div class="contact-info reveal">
-        <p class="section-eyebrow">Get in touch</p>
-        <h2 class="section-title">Tell us what's down</h2>
-        <p class="section-sub">The fastest path is the hotline — a form is here for the rest. We respond to every outage inquiry directly.</p>
+      <div class="reveal">
+        <p class="eyebrow">Get in touch</p>
+        <h2 class="section-title" data-split>Tell us what's down</h2>
+        <p class="section-sub" style="margin-bottom:34px;">The fastest path is the hotline — the form is here for everything else. We respond to every outage inquiry directly.</p>
 
-        <div class="contact-detail">
-          <span class="pulse-dot" aria-hidden="true"></span>
+        <div class="contact-card">
+          <span class="contact-card-icon">
+            <svg width="17" height="17" viewBox="0 0 16 16" fill="none"><path d="M5.2 2.5 6.6 5.3 5.3 6.6a8 8 0 0 0 4.1 4.1l1.3-1.3 2.8 1.4v2.4c0 .5-.4.9-.9.8A12.4 12.4 0 0 1 2 3.1c0-.5.3-.9.8-.9h2.4Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          </span>
           <div>
             <strong>24/7 Hotline</strong>
-            <div class="mono">Globe / WhatsApp / Viber: +63 915 644 3000</div>
-            <div class="mono">Smart: +63 928 890 9131</div>
+            <a class="mono" href="tel:+639156443000">Globe / WhatsApp / Viber: +63 915 644 3000</a>
+            <a class="mono" href="tel:+639288909131">Smart: +63 928 890 9131</a>
           </div>
         </div>
-        <div class="contact-detail">
+        <div class="contact-card">
+          <span class="contact-card-icon">
+            <svg width="17" height="17" viewBox="0 0 16 16" fill="none"><rect x="1.8" y="3.2" width="12.4" height="9.6" rx="1.4" stroke="currentColor" stroke-width="1.4"/><path d="m2.4 4.2 5.6 4 5.6-4" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          </span>
           <div>
             <strong>Email</strong>
-            <div class="mono">Manila — tech@turbotechcorp.com</div>
-            <div class="mono">Doha — info.qatar@turbotechcorp.com</div>
+            <a class="mono" href="mailto:tech@turbotechcorp.com">Manila — tech@turbotechcorp.com</a>
+            <a class="mono" href="mailto:info.qatar@turbotechcorp.com">Doha — info.qatar@turbotechcorp.com</a>
           </div>
         </div>
       </div>
 
-      <form class="contact-form reveal" id="contactForm" novalidate>
+      <form class="form reveal" id="contactForm" novalidate>
         <div class="form-row">
           <label for="fName">Name</label>
           <input type="text" id="fName" name="name" placeholder="Your full name" required>
@@ -463,19 +541,18 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div class="footer-brand">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 48 48" class="rotor-icon rotor-icon-static">
-          <g class="rotor-icon-blades">
-            <path d="M24 24 L24 4 A20 20 0 0 1 41.3 14 Z"></path>
-            <path d="M24 24 L41.3 14 A20 20 0 0 1 41.3 34 Z"></path>
-            <path d="M24 24 L41.3 34 A20 20 0 0 1 24 44 Z"></path>
-            <path d="M24 24 L24 44 A20 20 0 0 1 6.7 34 Z"></path>
-            <path d="M24 24 L6.7 34 A20 20 0 0 1 6.7 14 Z"></path>
-            <path d="M24 24 L6.7 14 A20 20 0 0 1 24 4 Z"></path>
-          </g><circle cx="24" cy="24" r="5.5" class="rotor-hub"></circle>
+      <span class="brand-wordmark">
+        <span class="brand-word brand-word-turbo">TURBO</span>
+        <svg viewBox="0 0 400 400" class="brand-wheel" aria-hidden="true">
+          <g>
+            <g data-blades="15" data-blade="M190,152 L194,72 Q194.5,65 200,65 Q205.5,65 206,72 L210,152 Z" class="bw-blade"></g>
+            <circle cx="200" cy="200" r="137" class="bw-rim"></circle><circle cx="200" cy="200" r="62" class="bw-plate"></circle>
+            <circle cx="200" cy="200" r="27" class="bw-hub"></circle>
+          </g>
         </svg>
+        <span class="brand-word brand-word-tech">TECH</span>
       </span>
-      <p>Turbo Tech Synergies Inc.<br><span class="mono footer-tagline">MRO &amp; Outage Execution for Rotating Equipment</span></p>
+      <p>Rotating equipment MRO, outage execution and in-situ precision balancing across power generation, oil &amp; gas, marine and industrial sectors.</p>
     </div>
 
     <div class="footer-col">
@@ -490,12 +567,15 @@
 
     <div class="footer-col">
       <h4>Manila</h4>
+      <span class="mono">Taft Ave, Malate</span>
       <a href="tel:+639156443000" class="mono">+63 915 644 3000</a>
+      <a href="tel:+639288909131" class="mono">+63 928 890 9131</a>
       <a href="mailto:tech@turbotechcorp.com" class="mono">tech@turbotechcorp.com</a>
     </div>
 
     <div class="footer-col">
       <h4>Doha, Qatar</h4>
+      <span class="mono">Najma, Doha City</span>
       <a href="tel:+639156443000" class="mono">+63 915 644 3000</a>
       <a href="mailto:info.qatar@turbotechcorp.com" class="mono">info.qatar@turbotechcorp.com</a>
     </div>
@@ -507,7 +587,7 @@
 </footer>
 
 <button class="back-to-top" id="backToTop" aria-label="Back to top">
-  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 14V3M4 8l5-5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 14V3M4 8l5-5 5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
 </button>
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>

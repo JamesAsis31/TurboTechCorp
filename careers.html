@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Careers — Turbo Tech Synergies Inc.</title>
-<meta name="description" content="Join Turbo Tech Synergies Inc. Field, engineering and support roles across our Manila and Doha bases, working on rotating equipment MRO and outage execution.">
+<meta name="description" content="Join Turbo Tech Synergies Inc. Field, engineering and support roles across our Manila, Pampanga and Doha bases, working on rotating equipment MRO and outage execution.">
+<meta name="theme-color" content="#06080B">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -21,56 +22,38 @@
 </head>
 <body>
 
+<!-- ============ PRELOADER ============ -->
+<div class="preloader" id="preloader">
+  <svg class="preload-mark" viewBox="0 0 400 400" aria-hidden="true">
+    <g data-blades="15" data-blade="M190,152 L194,72 Q194.5,65 200,65 Q205.5,65 206,72 L210,152 Z" class="pl-blade"></g>
+    <circle cx="200" cy="200" r="58" class="pl-hub"></circle>
+  </svg>
+  <div class="preload-bar"><i id="preloadBar"></i></div>
+  <p class="preload-text">Spinning up</p>
+</div>
+
+<!-- ============ AMBIENT BACKGROUND ============ -->
+<div class="bg-layers" aria-hidden="true">
+  <div class="bg-aurora"><span></span><span></span><span></span></div>
+  <div class="bg-grid"></div>
+  <div class="bg-noise"></div>
+</div>
+
 <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" id="scrollProgressBar"></div></div>
 
-<!-- ============ NAV ============ -->
+<!-- ============ HEADER ============ -->
 <header class="site-header" id="siteHeader">
   <div class="wrap header-inner">
-    <a href="index.html" class="brand">
+    <a href="index.html" class="brand" aria-label="Turbo Tech Synergies — home">
       <span class="brand-wordmark">
         <span class="brand-word brand-word-turbo">TURBO</span>
-        <svg viewBox="0 0 400 400" class="brand-wheel rig-rotor" aria-hidden="true">
-          <circle cx="200" cy="200" r="150" class="rig-ring rig-ring-outer"></circle>
-          <circle cx="200" cy="200" r="118" class="rig-ring rig-ring-tick"></circle>
-          <g class="rig-blades">
-            <g class="rig-blade-group">
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(0 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(16.3636 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(32.7273 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(49.0909 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(65.4545 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(81.8182 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(98.1818 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(114.5455 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(130.9091 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(147.2727 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(163.6364 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(180 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(196.3636 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(212.7273 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(229.0909 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(245.4545 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(261.8182 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(278.1818 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(294.5455 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(310.9091 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(327.2727 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(343.6364 200 200)"></path>
-            </g>
+        <svg viewBox="0 0 400 400" class="brand-wheel" aria-hidden="true">
+          <g class="brand-wheel-spin">
+            <g data-blades="15" data-blade="M190,152 L194,72 Q194.5,65 200,65 Q205.5,65 206,72 L210,152 Z" class="bw-blade"></g>
+            <circle cx="200" cy="200" r="137" class="bw-rim"></circle><circle cx="200" cy="200" r="62" class="bw-plate"></circle>
+            <g data-bolts="8" data-bolt-radius="44" data-bolt-size="5.5" class="bw-bolt"></g>
+            <circle cx="200" cy="200" r="27" class="bw-hub"></circle>
           </g>
-          <circle cx="200" cy="200" r="57" class="rig-hub-plate"></circle>
-          <g class="rig-bolts">
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(0 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(45 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(90 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(135 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(180 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(225 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(270 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(315 200 200)"></circle>
-          </g>
-          <circle cx="200" cy="200" r="34" class="rig-hub"></circle>
-          <circle cx="200" cy="200" r="34" class="rig-hub-ring"></circle>
         </svg>
         <span class="brand-word brand-word-tech">TECH</span>
       </span>
@@ -80,17 +63,17 @@
 
     <nav class="main-nav" id="mainNav" aria-label="Primary">
       <div class="main-nav-head">
-        <span class="main-nav-tag mono">NAVIGATION</span>
+        <span class="main-nav-tag">Navigation</span>
         <button class="main-nav-close" id="mainNavClose" aria-label="Close menu">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 2.5l9 9M11.5 2.5l-9 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 2.5l9 9M11.5 2.5l-9 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         </button>
       </div>
-      <a href="index.html#services" class="nav-link">Services</a>
-      <a href="index.html#process" class="nav-link">Process</a>
-      <a href="index.html#locations" class="nav-link">Locations</a>
-      <a href="careers.html" class="nav-link is-active">Careers</a>
-      <a href="gallery.html" class="nav-link">Gallery</a>
-      <a href="index.html#contact" class="nav-link">Contact</a>
+      <a href="index.html#services" class="nav-link"><span>Services</span></a>
+      <a href="index.html#process" class="nav-link"><span>Process</span></a>
+      <a href="index.html#locations" class="nav-link"><span>Locations</span></a>
+      <a href="careers.html" class="nav-link is-active"><span>Careers</span></a>
+      <a href="gallery.html" class="nav-link"><span>Gallery</span></a>
+      <a href="index.html#contact" class="nav-link"><span>Contact</span></a>
       <div class="main-nav-foot">
         <a href="tel:+639156443000" class="main-nav-hotline">
           <span class="pulse-dot" aria-hidden="true"></span>
@@ -109,7 +92,10 @@
       </button>
       <a href="tel:+639156443000" class="hotline-chip">
         <span class="pulse-dot" aria-hidden="true"></span>
-        <span class="hotline-text"><span class="hotline-label">24/7 Hotline</span><span class="hotline-number">+63 915 644 3000</span></span>
+        <span class="hotline-text">
+          <span class="hotline-label">24/7 Hotline</span>
+          <span class="hotline-number">+63 915 644 3000</span>
+        </span>
       </a>
       <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Toggle menu">
         <span></span><span></span><span></span>
@@ -120,81 +106,91 @@
 
 <main id="top">
 
-  <!-- ============ CAREERS HERO ============ -->
-  <section class="careers-hero">
-    <div class="wrap careers-hero-inner">
-      <p class="eyebrow"><span class="eyebrow-tag">ASSET&nbsp;TAG&nbsp;·&nbsp;HR-01</span>CAREERS AT TURBOTECH</p>
-      <h1 class="hero-title reveal">
+  <!-- ============ HERO ============ -->
+  <section class="page-hero">
+    <div class="wrap page-hero-inner">
+      <div class="hero-status reveal">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span data-scramble>Now hiring · Manila · Pampanga · Doha</span>
+      </div>
+      <h1 class="hero-title reveal" data-split>
         Crews who bring<br>
-        <span class="hero-title-accent">rotating assets back online.</span>
+        rotating assets <em>back online.</em>
       </h1>
       <p class="hero-sub reveal">
-        We hire for the floor as much as for the office — mechanics, engineers and
-        outage supervisors who work OEM-aligned, mobilize fast, and hold to mechanical
-        discipline under real time pressure. Manila, Pampanga and Doha.
+        We hire for the floor as much as for the office — mechanics, engineers and outage
+        supervisors who work OEM-aligned, mobilize fast, and hold to mechanical discipline
+        under real time pressure.
       </p>
       <div class="hero-actions reveal">
-        <a href="#openings" class="btn btn-primary">View open positions</a>
-        <a href="#apply" class="btn btn-ghost">
-          Submit a general application
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <a href="#openings" class="btn btn-primary" data-magnetic>
+          <span>View open positions</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#apply" class="btn btn-ghost" data-magnetic>
+          <span>Submit a general application</span>
         </a>
       </div>
     </div>
 
-    <div class="hud-strip reveal">
-      <div class="wrap hud-inner">
-        <div class="hud-item">
-          <span class="hud-value" data-count="3">0</span>
-          <span class="hud-label">Bases — Manila, Pampanga &amp; Doha</span>
-        </div>
-        <div class="hud-divider" aria-hidden="true"></div>
-        <div class="hud-item">
-          <span class="hud-value hud-value-text">OEM</span>
-          <span class="hud-label">Aligned Training &amp; Tooling</span>
-        </div>
-        <div class="hud-divider" aria-hidden="true"></div>
-        <div class="hud-item">
-          <span class="hud-value" data-count="24" data-suffix="/7">0</span>
-          <span class="hud-label">Outage-Ready Operations</span>
+    <div class="hero-stats reveal">
+      <div class="wrap">
+        <div class="hero-stats-inner">
+          <div class="stat">
+            <div class="stat-value"><span data-count="3">0</span></div>
+            <div class="stat-label">Bases — Manila, Pampanga &amp; Doha</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value"><em>OEM</em></div>
+            <div class="stat-label">Aligned training, method &amp; tooling</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value"><span data-count="24">0</span><em>/7</em></div>
+            <div class="stat-label">Outage-ready operations</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value"><span data-count="6">0</span></div>
+            <div class="stat-label">Open requisitions right now</div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ WHY WORK HERE ============ -->
-  <section class="why-us">
+  <!-- ============ WHY US ============ -->
+  <section class="showcase">
     <div class="wrap">
       <div class="section-head reveal">
-        <p class="section-eyebrow">On the Crew Roster</p>
-        <h2 class="section-title">What it's like on a Turbotech team</h2>
+        <p class="eyebrow">On the Crew Roster</p>
+        <h2 class="section-title" data-split>What it's like on a Turbotech team</h2>
       </div>
+
       <div class="why-grid">
-        <article class="why-card reveal">
-          <div class="why-icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2l7 3.5v6c0 5-3 8.5-7 9.5-4-1-7-4.5-7-9.5v-6L11 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 11l2 2 4-4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
+        <article class="why reveal" data-tilt>
+          <span class="why-icon">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2l7 3.5v6c0 5-3 8.5-7 9.5-4-1-7-4.5-7-9.5v-6L11 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 11l2 2 4-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
           <h3>Safety-first discipline</h3>
           <p>Every crew integrates with site safety protocols from day one — no shortcuts on a live plant floor.</p>
         </article>
-        <article class="why-card reveal">
-          <div class="why-icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8.5" stroke="currentColor" stroke-width="1.4"/><path d="M11 6.5v5l3.5 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
+        <article class="why reveal" data-tilt>
+          <span class="why-icon">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M11 6.5v5l3.5 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
           <h3>Real outage tempo</h3>
           <p>You'll mobilize on short notice and work scoped, time-critical outages — not routine desk maintenance.</p>
         </article>
-        <article class="why-card reveal">
-          <div class="why-icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 18V9l7-5 7 5v9" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 18v-6h4v6" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          </div>
+        <article class="why reveal" data-tilt>
+          <span class="why-icon">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M2.5 11h17M11 2.5c2.2 2.4 3.4 5.4 3.4 8.5S13.2 17.1 11 19.5c-2.2-2.4-3.4-5.4-3.4-8.5S8.8 4.9 11 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </span>
           <h3>Cross-border postings</h3>
           <p>Bases in Manila, Pampanga and Doha mean field roles can span regional and international deployments.</p>
         </article>
-        <article class="why-card reveal">
-          <div class="why-icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3v16M4 8l7-5 7 5M4 8v8l7 5 7-5V8" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          </div>
+        <article class="why reveal" data-tilt>
+          <span class="why-icon">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3v16M4 8l7-5 7 5M4 8v8l7 5 7-5V8" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </span>
           <h3>OEM-standard training</h3>
           <p>Work with OEM-aligned tooling and method — including field balancing systems like the Schenck SmartBalancer.</p>
         </article>
@@ -202,13 +198,13 @@
     </div>
   </section>
 
-  <!-- ============ OPEN POSITIONS ============ -->
+  <!-- ============ OPENINGS ============ -->
   <section class="openings" id="openings">
     <div class="wrap">
       <div class="section-head reveal">
-        <p class="section-eyebrow">Open Requisitions</p>
-        <h2 class="section-title">Current openings</h2>
-        <p class="section-sub">Sample roles we typically recruit for — filter by department, or apply generally if nothing matches yet.</p>
+        <p class="eyebrow">Open Requisitions</p>
+        <h2 class="section-title" data-split>Current openings</h2>
+        <p class="section-sub">Roles we typically recruit for — filter by department, or apply generally if nothing matches yet.</p>
       </div>
 
       <div class="filter-bar reveal" role="group" aria-label="Filter positions by department">
@@ -221,88 +217,88 @@
 
       <div class="job-list" id="jobList">
 
-        <article class="job-card reveal" data-dept="field">
-          <div class="job-tag">TAG&nbsp;/&nbsp;HR-101</div>
+        <article class="job job-card reveal" data-dept="field">
+          <span class="job-code">HR-101</span>
           <div class="job-main">
             <h3>Rotating Equipment Mechanic</h3>
             <div class="job-meta">
-              <span class="job-meta-item">Field &amp; Technical</span>
-              <span class="job-meta-item">Manila / Pampanga</span>
-              <span class="job-meta-item">Full-time</span>
+              <span>Field &amp; Technical</span>
+              <span>Manila / Pampanga</span>
+              <span>Full-time</span>
             </div>
             <p>Perform hands-on MRO on turbines, compressors and pumps during outages and scheduled interventions, working to OEM-aligned procedures.</p>
           </div>
-          <button class="btn btn-ghost job-apply-btn" data-position="Rotating Equipment Mechanic">Apply</button>
+          <button class="btn btn-ghost job-apply-btn" data-position="Rotating Equipment Mechanic"><span>Apply</span></button>
         </article>
 
-        <article class="job-card reveal" data-dept="field">
-          <div class="job-tag">TAG&nbsp;/&nbsp;HR-102</div>
+        <article class="job job-card reveal" data-dept="field">
+          <span class="job-code">HR-102</span>
           <div class="job-main">
             <h3>Field Balancing Technician</h3>
             <div class="job-meta">
-              <span class="job-meta-item">Field &amp; Technical</span>
-              <span class="job-meta-item">Manila / Doha</span>
-              <span class="job-meta-item">Full-time</span>
+              <span>Field &amp; Technical</span>
+              <span>Manila / Doha</span>
+              <span>Full-time</span>
             </div>
             <p>Operate in-situ balancing equipment (Schenck SmartBalancer) on multi-ton rotating assets without dismantling. Vibration diagnostics experience preferred.</p>
           </div>
-          <button class="btn btn-ghost job-apply-btn" data-position="Field Balancing Technician">Apply</button>
+          <button class="btn btn-ghost job-apply-btn" data-position="Field Balancing Technician"><span>Apply</span></button>
         </article>
 
-        <article class="job-card reveal" data-dept="engineering">
-          <div class="job-tag">TAG&nbsp;/&nbsp;HR-103</div>
+        <article class="job job-card reveal" data-dept="engineering">
+          <span class="job-code">HR-103</span>
           <div class="job-main">
             <h3>Mechanical Engineer — Rotating Equipment</h3>
             <div class="job-meta">
-              <span class="job-meta-item">Engineering</span>
-              <span class="job-meta-item">Manila</span>
-              <span class="job-meta-item">Full-time</span>
+              <span>Engineering</span>
+              <span>Manila</span>
+              <span>Full-time</span>
             </div>
             <p>Scope repair and overhaul work, review OEM technical documentation, and support outage planning for turbines, compressors and pumps.</p>
           </div>
-          <button class="btn btn-ghost job-apply-btn" data-position="Mechanical Engineer — Rotating Equipment">Apply</button>
+          <button class="btn btn-ghost job-apply-btn" data-position="Mechanical Engineer — Rotating Equipment"><span>Apply</span></button>
         </article>
 
-        <article class="job-card reveal" data-dept="supervision">
-          <div class="job-tag">TAG&nbsp;/&nbsp;HR-104</div>
+        <article class="job job-card reveal" data-dept="supervision">
+          <span class="job-code">HR-104</span>
           <div class="job-main">
             <h3>Outage Site Supervisor</h3>
             <div class="job-meta">
-              <span class="job-meta-item">Site Supervision</span>
-              <span class="job-meta-item">Doha, Qatar</span>
-              <span class="job-meta-item">Full-time</span>
+              <span>Site Supervision</span>
+              <span>Doha, Qatar</span>
+              <span>Full-time</span>
             </div>
             <p>Lead crews through full-scope major outages on site — schedule, safety integration, and client-facing progress reporting.</p>
           </div>
-          <button class="btn btn-ghost job-apply-btn" data-position="Outage Site Supervisor">Apply</button>
+          <button class="btn btn-ghost job-apply-btn" data-position="Outage Site Supervisor"><span>Apply</span></button>
         </article>
 
-        <article class="job-card reveal" data-dept="supervision">
-          <div class="job-tag">TAG&nbsp;/&nbsp;HR-105</div>
+        <article class="job job-card reveal" data-dept="supervision">
+          <span class="job-code">HR-105</span>
           <div class="job-main">
             <h3>HSE Officer</h3>
             <div class="job-meta">
-              <span class="job-meta-item">Site Supervision</span>
-              <span class="job-meta-item">Manila / Doha</span>
-              <span class="job-meta-item">Full-time</span>
+              <span>Site Supervision</span>
+              <span>Manila / Doha</span>
+              <span>Full-time</span>
             </div>
             <p>Own safety compliance across active outage sites, run toolbox talks, and enforce PPE and lockout-tagout discipline for rotating equipment work.</p>
           </div>
-          <button class="btn btn-ghost job-apply-btn" data-position="HSE Officer">Apply</button>
+          <button class="btn btn-ghost job-apply-btn" data-position="HSE Officer"><span>Apply</span></button>
         </article>
 
-        <article class="job-card reveal" data-dept="support">
-          <div class="job-tag">TAG&nbsp;/&nbsp;HR-106</div>
+        <article class="job job-card reveal" data-dept="support">
+          <span class="job-code">HR-106</span>
           <div class="job-main">
             <h3>Logistics &amp; Mobilization Coordinator</h3>
             <div class="job-meta">
-              <span class="job-meta-item">Admin &amp; Support</span>
-              <span class="job-meta-item">Manila</span>
-              <span class="job-meta-item">Full-time</span>
+              <span>Admin &amp; Support</span>
+              <span>Manila</span>
+              <span>Full-time</span>
             </div>
             <p>Coordinate crew and tooling mobilization between Manila, Pampanga and Doha bases ahead of scheduled and emergency outages.</p>
           </div>
-          <button class="btn btn-ghost job-apply-btn" data-position="Logistics &amp; Mobilization Coordinator">Apply</button>
+          <button class="btn btn-ghost job-apply-btn" data-position="Logistics &amp; Mobilization Coordinator"><span>Apply</span></button>
         </article>
 
       </div>
@@ -311,24 +307,27 @@
     </div>
   </section>
 
-  <!-- ============ APPLICATION FORM ============ -->
+  <!-- ============ APPLY ============ -->
   <section class="apply" id="apply">
     <div class="wrap apply-inner">
-      <div class="apply-info reveal">
-        <p class="section-eyebrow">Application</p>
-        <h2 class="section-title">Apply to join the crew</h2>
-        <p class="section-sub">Tell us where you'd fit. If a specific role isn't listed above, submit generally — we keep applications on file for the next mobilization.</p>
+      <div class="reveal">
+        <p class="eyebrow">Application</p>
+        <h2 class="section-title" data-split>Apply to join the crew</h2>
+        <p class="section-sub" style="margin-bottom:34px;">Tell us where you'd fit. If a specific role isn't listed above, submit generally — we keep applications on file for the next mobilization.</p>
 
-        <div class="contact-detail">
+        <div class="contact-card">
+          <span class="contact-card-icon">
+            <svg width="17" height="17" viewBox="0 0 16 16" fill="none"><rect x="1.8" y="3.2" width="12.4" height="9.6" rx="1.4" stroke="currentColor" stroke-width="1.4"/><path d="m2.4 4.2 5.6 4 5.6-4" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          </span>
           <div>
             <strong>HR &amp; Recruitment</strong>
-            <div class="mono">tech@turbotechcorp.com</div>
-            <div class="mono">+63 915 644 3000</div>
+            <a class="mono" href="mailto:tech@turbotechcorp.com">tech@turbotechcorp.com</a>
+            <a class="mono" href="tel:+639156443000">+63 915 644 3000</a>
           </div>
         </div>
       </div>
 
-      <form class="contact-form" id="applyForm" novalidate>
+      <form class="form" id="applyForm" novalidate>
         <div class="form-row-split">
           <div class="form-row">
             <label for="aName">Full name</label>
@@ -385,6 +384,7 @@
         <div class="form-row">
           <label for="aResume">Resume / CV</label>
           <div class="file-drop" id="fileDrop">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 12V3M5.5 6.5 9 3l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 11.5v2A1.5 1.5 0 0 0 4.5 15h9a1.5 1.5 0 0 0 1.5-1.5v-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             <input type="file" id="aResume" name="resume" accept=".pdf,.doc,.docx" required>
             <span class="file-drop-label" id="fileDropLabel">Choose file — PDF or Word, up to 10MB</span>
           </div>
@@ -410,19 +410,18 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div class="footer-brand">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 48 48" class="rotor-icon rotor-icon-static">
-          <g class="rotor-icon-blades">
-            <path d="M24 24 L24 4 A20 20 0 0 1 41.3 14 Z"></path>
-            <path d="M24 24 L41.3 14 A20 20 0 0 1 41.3 34 Z"></path>
-            <path d="M24 24 L41.3 34 A20 20 0 0 1 24 44 Z"></path>
-            <path d="M24 24 L24 44 A20 20 0 0 1 6.7 34 Z"></path>
-            <path d="M24 24 L6.7 34 A20 20 0 0 1 6.7 14 Z"></path>
-            <path d="M24 24 L6.7 14 A20 20 0 0 1 24 4 Z"></path>
-          </g><circle cx="24" cy="24" r="5.5" class="rotor-hub"></circle>
+      <span class="brand-wordmark">
+        <span class="brand-word brand-word-turbo">TURBO</span>
+        <svg viewBox="0 0 400 400" class="brand-wheel" aria-hidden="true">
+          <g>
+            <g data-blades="15" data-blade="M190,152 L194,72 Q194.5,65 200,65 Q205.5,65 206,72 L210,152 Z" class="bw-blade"></g>
+            <circle cx="200" cy="200" r="137" class="bw-rim"></circle><circle cx="200" cy="200" r="62" class="bw-plate"></circle>
+            <circle cx="200" cy="200" r="27" class="bw-hub"></circle>
+          </g>
         </svg>
+        <span class="brand-word brand-word-tech">TECH</span>
       </span>
-      <p>Turbo Tech Synergies Inc.<br><span class="mono footer-tagline">MRO &amp; Outage Execution for Rotating Equipment</span></p>
+      <p>Rotating equipment MRO, outage execution and in-situ precision balancing across power generation, oil &amp; gas, marine and industrial sectors.</p>
     </div>
 
     <div class="footer-col">
@@ -437,12 +436,15 @@
 
     <div class="footer-col">
       <h4>Manila</h4>
+      <span class="mono">Taft Ave, Malate</span>
       <a href="tel:+639156443000" class="mono">+63 915 644 3000</a>
+      <a href="tel:+639288909131" class="mono">+63 928 890 9131</a>
       <a href="mailto:tech@turbotechcorp.com" class="mono">tech@turbotechcorp.com</a>
     </div>
 
     <div class="footer-col">
       <h4>Doha, Qatar</h4>
+      <span class="mono">Najma, Doha City</span>
       <a href="tel:+639156443000" class="mono">+63 915 644 3000</a>
       <a href="mailto:info.qatar@turbotechcorp.com" class="mono">info.qatar@turbotechcorp.com</a>
     </div>
@@ -454,7 +456,7 @@
 </footer>
 
 <button class="back-to-top" id="backToTop" aria-label="Back to top">
-  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 14V3M4 8l5-5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 14V3M4 8l5-5 5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
 </button>
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>

@@ -1,10 +1,12 @@
 (() => {
   'use strict';
 
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine   = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const $  = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
 
-  /* ---------------------------------------------------------------------
+  /* =====================================================================
      EmailJS delivery — lets form submissions actually reach the admin.
 
      Setup (one-time, ~5 minutes):
@@ -22,7 +24,7 @@
      Until configured, submissions fall back to opening the visitor's own
      email client (mailto:) pre-filled with their message, so the admin
      still receives every inquiry without any setup.
-  --------------------------------------------------------------------- */
+  ===================================================================== */
   const EMAILJS_CONFIG = {
     publicKey: 'YOUR_EMAILJS_PUBLIC_KEY',
     serviceId: 'YOUR_EMAILJS_SERVICE_ID',
@@ -44,762 +46,798 @@
 
   const openMailtoFallback = (toAddress, subject, fields) => {
     const body = fields.map(([label, value]) => `${label}: ${value || '—'}`).join('\n');
-    const url = `mailto:${toAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = url;
+    window.location.href =
+      `mailto:${toAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
-  /* ---------------------------------------------------------------------
-     Theme toggle (dark / light) — persisted via localStorage
-  --------------------------------------------------------------------- */
-  const themeToggle = document.getElementById('themeToggle');
+  /* =====================================================================
+     SVG builders — turbine blades and bolt rings are generated so the
+     markup stays readable instead of repeating 22 near-identical paths.
+  ===================================================================== */
+  const NS = 'http://www.w3.org/2000/svg';
+
+  $$('[data-blades]').forEach(group => {
+    const count = parseInt(group.dataset.blades, 10) || 12;
+    const d = group.dataset.blade;
+    if (!d) return;
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < count; i++) {
+      const p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', d);
+      p.setAttribute('transform', `rotate(${(360 / count) * i} 200 200)`);
+      frag.appendChild(p);
+    }
+    group.appendChild(frag);
+  });
+
+  $$('[data-bolts]').forEach(group => {
+    const count = parseInt(group.dataset.bolts, 10) || 8;
+    const radius = parseFloat(group.dataset.boltRadius) || 42;
+    const size = parseFloat(group.dataset.boltSize) || 4.5;
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < count; i++) {
+      const c = document.createElementNS(NS, 'circle');
+      c.setAttribute('cx', '200');
+      c.setAttribute('cy', String(200 - radius));
+      c.setAttribute('r', String(size));
+      c.setAttribute('transform', `rotate(${(360 / count) * i} 200 200)`);
+      frag.appendChild(c);
+    }
+    group.appendChild(frag);
+  });
+
+  /* =====================================================================
+     Theme toggle — persisted via localStorage
+  ===================================================================== */
   const root = document.documentElement;
+  const themeToggle = $('#themeToggle');
 
-  const syncToggleState = () => {
-    const isLight = root.getAttribute('data-theme') === 'light';
-    if (themeToggle) themeToggle.setAttribute('aria-pressed', String(isLight));
+  const syncTheme = () => {
+    if (themeToggle) {
+      themeToggle.setAttribute('aria-pressed', String(root.getAttribute('data-theme') === 'light'));
+    }
   };
-  syncToggleState(); // reflect the theme the inline head-script already applied
+  syncTheme();
 
-  if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-      root.setAttribute('data-theme', next);
-      try { localStorage.setItem('turbotech-theme', next); } catch (e) { /* storage unavailable */ }
-      syncToggleState();
-    });
-  }
+  themeToggle?.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('turbotech-theme', next); } catch (e) { /* storage blocked */ }
+    syncTheme();
+  });
 
-  /* ---------------------------------------------------------------------
-     Footer year
-  --------------------------------------------------------------------- */
-  const yearEl = document.getElementById('year');
+  /* Footer year */
+  const yearEl = $('#year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  /* ---------------------------------------------------------------------
-     Sticky header shrink-on-scroll
-  --------------------------------------------------------------------- */
-  const header = document.getElementById('siteHeader');
-  const backToTop = document.getElementById('backToTop');
-
-  const onScroll = () => {
-    const y = window.scrollY;
-    header.classList.toggle('is-scrolled', y > 24);
-    backToTop.classList.toggle('is-visible', y > 700);
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  backToTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
-  });
-
-  /* ---------------------------------------------------------------------
-     Mobile nav toggle
-  --------------------------------------------------------------------- */
-  const navToggle = document.getElementById('navToggle');
-  const mainNav = document.getElementById('mainNav');
-  const navBackdrop = document.getElementById('navBackdrop');
-  const mainNavClose = document.getElementById('mainNavClose');
-
-  const closeNav = () => {
-    mainNav.classList.remove('is-open');
-    navBackdrop?.classList.remove('is-open');
-    navToggle.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  };
-  const openNav = () => {
-    mainNav.classList.add('is-open');
-    navBackdrop?.classList.add('is-open');
-    navToggle.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
-  };
-
-  navToggle.addEventListener('click', () => {
-    const isOpen = mainNav.classList.contains('is-open');
-    isOpen ? closeNav() : openNav();
-  });
-
-  mainNavClose?.addEventListener('click', closeNav);
-  navBackdrop?.addEventListener('click', closeNav);
-
-  mainNav.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', closeNav);
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeNav();
-  });
-
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 760) closeNav();
-  });
-
-  /* ---------------------------------------------------------------------
-     Scroll reveal (IntersectionObserver)
-  --------------------------------------------------------------------- */
-  const revealEls = document.querySelectorAll('.reveal');
-
-  if (prefersReducedMotion) {
-    revealEls.forEach(el => el.classList.add('is-visible'));
-  } else if ('IntersectionObserver' in window) {
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
-        if (entry.isIntersecting) {
-          const el = entry.target;
-          const delay = Math.min(Array.from(el.parentElement?.children || []).indexOf(el) * 60, 240);
-          setTimeout(() => el.classList.add('is-visible'), delay);
-          revealObserver.unobserve(el);
+  /* =====================================================================
+     Word splitter — wraps each word so headings can slide up behind a mask
+  ===================================================================== */
+  const splitWords = (rootEl) => {
+    const walk = (node) => {
+      Array.from(node.childNodes).forEach(child => {
+        if (child.nodeType === Node.TEXT_NODE) {
+          if (!child.textContent.trim()) return;
+          const frag = document.createDocumentFragment();
+          child.textContent.split(/(\s+)/).forEach(part => {
+            if (!part) return;
+            if (!part.trim()) { frag.appendChild(document.createTextNode(part)); return; }
+            const outer = document.createElement('span');
+            outer.className = 'w';
+            const inner = document.createElement('span');
+            inner.className = 'w-i';
+            inner.textContent = part;
+            outer.appendChild(inner);
+            frag.appendChild(outer);
+          });
+          child.replaceWith(frag);
+        } else if (child.nodeType === Node.ELEMENT_NODE && child.tagName !== 'BR') {
+          walk(child);
         }
       });
-    }, { threshold: 0.14, rootMargin: '0px 0px -40px 0px' });
+    };
+    walk(rootEl);
+    $$('.w-i', rootEl).forEach((el, i) => {
+      el.style.transitionDelay = `${Math.min(i * 55, 700)}ms`;
+    });
+  };
 
-    revealEls.forEach(el => revealObserver.observe(el));
-  } else {
-    revealEls.forEach(el => el.classList.add('is-visible'));
-  }
+  if (!reduce) $$('[data-split]').forEach(splitWords);
 
-  /* ---------------------------------------------------------------------
-     HUD counters — animate numeric values into view
-  --------------------------------------------------------------------- */
-  const hudValues = document.querySelectorAll('.hud-value[data-count]');
+  /* =====================================================================
+     Reveal on scroll
+  ===================================================================== */
+  const revealSelector = '.reveal, .reveal-mask, .reveal-scale';
 
-  const animateCount = (el) => {
-    const target = parseInt(el.getAttribute('data-count'), 10);
-    const suffix = el.getAttribute('data-suffix') || '';
-    if (isNaN(target)) return;
-
-    if (prefersReducedMotion) {
-      el.textContent = target + suffix;
+  const startReveals = () => {
+    const els = $$(revealSelector);
+    if (reduce || !('IntersectionObserver' in window)) {
+      els.forEach(el => el.classList.add('is-visible'));
       return;
     }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const siblings = Array.from(el.parentElement?.children || []);
+        const delay = Math.min(siblings.indexOf(el) * 90, 400);
+        setTimeout(() => el.classList.add('is-visible'), delay);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    els.forEach(el => io.observe(el));
+  };
 
-    const duration = 900;
-    const start = performance.now();
+  /* =====================================================================
+     Preloader
+  ===================================================================== */
+  const preloader = $('#preloader');
+  const preloadBar = $('#preloadBar');
 
-    const tick = (now) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const value = Math.round(target * eased);
-      el.textContent = value + suffix;
-      if (progress < 1) requestAnimationFrame(tick);
+  let loadFinished = false;
+  const finishLoading = () => {
+    if (loadFinished) return;          // `load` and the timeout ceiling can both fire
+    loadFinished = true;
+    if (preloadBar) preloadBar.style.width = '100%';
+    setTimeout(() => {
+      preloader?.classList.add('is-done');
+      document.body.classList.remove('is-locked');
+      startReveals();
+    }, 320);
+  };
+
+  if (preloader && !reduce) {
+    document.body.classList.add('is-locked');
+    let pct = 0;
+    const tick = setInterval(() => {
+      pct = Math.min(pct + Math.random() * 18, 88);
+      if (preloadBar) preloadBar.style.width = pct + '%';
+    }, 130);
+
+    const done = () => { clearInterval(tick); finishLoading(); };
+    if (document.readyState === 'complete') setTimeout(done, 420);
+    else window.addEventListener('load', () => setTimeout(done, 320));
+    setTimeout(done, 3600); // hard ceiling so a slow image never traps the page
+  } else {
+    preloader?.classList.add('is-done');
+    startReveals();
+  }
+
+  /* =====================================================================
+     Text scramble — settles technical labels into place
+  ===================================================================== */
+  const CHARS = '▚▞ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/\\<>·';
+
+  const scramble = (el) => {
+    const final = el.textContent;
+    let frame = 0;
+    const queue = final.split('').map((ch, i) => ({
+      ch, start: Math.floor(i * 1.6), end: Math.floor(i * 1.6) + 14
+    }));
+    const run = () => {
+      let out = '', done = 0;
+      queue.forEach(item => {
+        if (frame >= item.end) { out += item.ch; done++; }
+        else if (frame >= item.start && item.ch.trim()) {
+          out += CHARS[Math.floor(Math.random() * CHARS.length)];
+        } else { out += item.ch; }
+      });
+      el.textContent = out;
+      if (done < queue.length) { frame++; requestAnimationFrame(run); }
     };
-    requestAnimationFrame(tick);
+    run();
+  };
+
+  if (!reduce && 'IntersectionObserver' in window) {
+    const scrambleIo = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        setTimeout(() => scramble(entry.target), 500);
+        scrambleIo.unobserve(entry.target);
+      });
+    }, { threshold: 0.8 });
+    $$('[data-scramble]').forEach(el => scrambleIo.observe(el));
+  }
+
+  /* =====================================================================
+     Animated counters
+  ===================================================================== */
+  const runCount = (el) => {
+    const target = parseInt(el.dataset.count, 10);
+    if (isNaN(target)) return;
+    if (reduce) { el.textContent = String(target); return; }
+    const duration = 1400, start = performance.now();
+    const step = (now) => {
+      const p = Math.min((now - start) / duration, 1);
+      el.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 4))));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
   };
 
   if ('IntersectionObserver' in window) {
-    const hudObserver = new IntersectionObserver((entries) => {
+    const countIo = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateCount(entry.target);
-          hudObserver.unobserve(entry.target);
-        }
+        if (!entry.isIntersecting) return;
+        runCount(entry.target);
+        countIo.unobserve(entry.target);
       });
     }, { threshold: 0.6 });
-    hudValues.forEach(el => hudObserver.observe(el));
+    $$('[data-count]').forEach(el => countIo.observe(el));
   } else {
-    hudValues.forEach(animateCount);
+    $$('[data-count]').forEach(runCount);
   }
 
-  /* ---------------------------------------------------------------------
-     Active nav link on scroll
-  --------------------------------------------------------------------- */
-  const sections = ['services', 'process', 'locations', 'contact']
-    .map(id => document.getElementById(id))
-    .filter(Boolean);
-  const navLinks = document.querySelectorAll('.nav-link');
+  /* =====================================================================
+     Header state, scroll progress, back-to-top, parallax, timeline
+  ===================================================================== */
+  const header      = $('#siteHeader');
+  const backToTop   = $('#backToTop');
+  const progressBar = $('#scrollProgressBar');
+  const timeline    = $('#timeline');
+  const timelineFill= $('#timelineFill');
+  const steps       = $$('.step');
+  const parallaxEls = $$('[data-parallax]');
+  const parallaxImgs= $$('[data-parallax-img]');
 
-  if ('IntersectionObserver' in window && sections.length) {
-    const navObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const id = entry.target.id;
-        const link = document.querySelector(`.nav-link[href="#${id}"]`);
-        if (!link) return;
-        if (entry.isIntersecting) {
-          navLinks.forEach(l => l.style.color = '');
-          link.style.color = 'var(--text)';
-        }
-      });
-    }, { rootMargin: '-40% 0px -50% 0px' });
+  let ticking = false;
 
-    sections.forEach(sec => navObserver.observe(sec));
-  }
+  const onScroll = () => {
+    const y = window.scrollY;
+    const doc = document.documentElement;
 
-  /* ---------------------------------------------------------------------
-     Scroll progress bar
-  --------------------------------------------------------------------- */
-  const scrollProgressBar = document.getElementById('scrollProgressBar');
-  if (scrollProgressBar) {
-    const updateScrollProgress = () => {
-      const doc = document.documentElement;
+    header?.classList.toggle('is-scrolled', y > 20);
+    backToTop?.classList.toggle('is-visible', y > 640);
+
+    if (progressBar) {
       const max = doc.scrollHeight - doc.clientHeight;
-      const pct = max > 0 ? (doc.scrollTop / max) * 100 : 0;
-      scrollProgressBar.style.width = pct + '%';
-    };
-    window.addEventListener('scroll', updateScrollProgress, { passive: true });
-    window.addEventListener('resize', updateScrollProgress);
-    updateScrollProgress();
-  }
+      progressBar.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
+    }
 
-  /* ---------------------------------------------------------------------
-     Cursor spotlight glow (desktop pointer only)
-  --------------------------------------------------------------------- */
-  if (supportsHover && !prefersReducedMotion) {
-    const glow = document.createElement('div');
-    glow.className = 'cursor-glow';
-    glow.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(glow);
-
-    let glowRaf = null, mouseX = 0, mouseY = 0;
-    window.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX; mouseY = e.clientY;
-      glow.classList.add('is-active');
-      if (glowRaf) return;
-      glowRaf = requestAnimationFrame(() => {
-        glow.style.setProperty('--x', mouseX + 'px');
-        glow.style.setProperty('--y', mouseY + 'px');
-        glowRaf = null;
+    if (!reduce) {
+      parallaxEls.forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        const amount = parseFloat(el.dataset.parallax) || 14;
+        const mid = (r.top + r.height / 2 - window.innerHeight / 2) / window.innerHeight;
+        el.style.transform = `translate3d(0, ${(-mid * amount).toFixed(2)}px, 0)`;
       });
+
+      parallaxImgs.forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        const mid = (r.top + r.height / 2 - window.innerHeight / 2) / window.innerHeight;
+        el.style.setProperty('--py', `${(-mid * 16).toFixed(2)}px`);
+      });
+    }
+
+    if (timeline && timelineFill) {
+      const r = timeline.getBoundingClientRect();
+      const anchor = window.innerHeight * 0.55;
+      const p = Math.max(0, Math.min(1, (anchor - r.top) / r.height));
+      timelineFill.style.height = (p * 100) + '%';
+      steps.forEach(step => {
+        const dot = step.querySelector('.step-dot');
+        if (!dot) return;
+        const dr = dot.getBoundingClientRect();
+        step.classList.toggle('is-lit', dr.top + dr.height / 2 <= anchor);
+      });
+    }
+
+    ticking = false;
+  };
+
+  const requestScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(onScroll);
+  };
+
+  window.addEventListener('scroll', requestScroll, { passive: true });
+  window.addEventListener('resize', requestScroll);
+  onScroll();
+
+  backToTop?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  });
+
+  /* =====================================================================
+     Mobile navigation
+  ===================================================================== */
+  const navToggle   = $('#navToggle');
+  const mainNav     = $('#mainNav');
+  const navBackdrop = $('#navBackdrop');
+  const navClose    = $('#mainNavClose');
+
+  const closeNav = () => {
+    mainNav?.classList.remove('is-open');
+    navBackdrop?.classList.remove('is-open');
+    navToggle?.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('is-locked');
+  };
+  const openNav = () => {
+    mainNav?.classList.add('is-open');
+    navBackdrop?.classList.add('is-open');
+    navToggle?.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('is-locked');
+  };
+
+  navToggle?.addEventListener('click', () => {
+    mainNav?.classList.contains('is-open') ? closeNav() : openNav();
+  });
+  navClose?.addEventListener('click', closeNav);
+  navBackdrop?.addEventListener('click', closeNav);
+  $$('.nav-link', mainNav || document).forEach(a => a.addEventListener('click', closeNav));
+  window.addEventListener('resize', () => { if (window.innerWidth > 760) closeNav(); });
+
+  /* =====================================================================
+     Custom cursor (fine pointers only)
+  ===================================================================== */
+  if (fine && !reduce) {
+    const dot  = document.createElement('div');
+    const ring = document.createElement('div');
+    dot.className = 'cursor-dot';
+    ring.className = 'cursor-ring';
+    dot.setAttribute('aria-hidden', 'true');
+    ring.setAttribute('aria-hidden', 'true');
+    document.body.append(dot, ring);
+
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    window.addEventListener('mousemove', (e) => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = `translate(${mx}px, ${my}px)`;
+      dot.classList.add('is-on');
+      ring.classList.add('is-on');
     }, { passive: true });
-    document.addEventListener('mouseleave', () => glow.classList.remove('is-active'));
+
+    const loop = () => {
+      rx += (mx - rx) * 0.16;
+      ry += (my - ry) * 0.16;
+      ring.style.transform = `translate(${rx.toFixed(2)}px, ${ry.toFixed(2)}px)`;
+      requestAnimationFrame(loop);
+    };
+    loop();
+
+    document.addEventListener('mouseleave', () => {
+      dot.classList.remove('is-on');
+      ring.classList.remove('is-on');
+    });
+
+    const hot = 'a, button, .gcard, .svc, .loc, .job, input, select, textarea, .filter-chip';
+    document.addEventListener('mouseover', (e) => {
+      if (e.target.closest(hot)) ring.classList.add('is-hot');
+    });
+    document.addEventListener('mouseout', (e) => {
+      if (e.target.closest(hot)) ring.classList.remove('is-hot');
+    });
   }
 
-  /* ---------------------------------------------------------------------
-     Tilt / glare hover on cards
-  --------------------------------------------------------------------- */
-  if (supportsHover && !prefersReducedMotion) {
-    const tiltEls = document.querySelectorAll('.service-card, .job-card, .location-card, .why-card');
-    tiltEls.forEach(el => {
-      el.classList.add('tilt-card');
+  /* =====================================================================
+     Magnetic buttons + card tilt/glare
+  ===================================================================== */
+  if (fine && !reduce) {
+    $$('[data-magnetic]').forEach(el => {
+      el.addEventListener('mousemove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2;
+        const y = e.clientY - r.top - r.height / 2;
+        el.style.transform = `translate(${x * 0.22}px, ${y * 0.3}px)`;
+      });
+      el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+    });
+
+    $$('[data-tilt]').forEach(el => {
       el.addEventListener('mousemove', (e) => {
         const r = el.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width;
         const py = (e.clientY - r.top) / r.height;
-        el.style.setProperty('--rx', ((0.5 - py) * 5) + 'deg');
-        el.style.setProperty('--ry', ((px - 0.5) * 7) + 'deg');
         el.style.setProperty('--mx', (px * 100) + '%');
         el.style.setProperty('--my', (py * 100) + '%');
-      });
-      el.addEventListener('mouseleave', () => {
-        el.style.setProperty('--rx', '0deg');
-        el.style.setProperty('--ry', '0deg');
       });
     });
   }
 
-  /* ---------------------------------------------------------------------
-     Button / chip ripple on click
-  --------------------------------------------------------------------- */
-  if (!prefersReducedMotion) {
+  /* Ripple on buttons and chips */
+  if (!reduce) {
     document.addEventListener('click', (e) => {
-      const target = e.target.closest('.btn, .filter-chip');
-      if (!target) return;
-      const rect = target.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height) * 1.7;
+      const t = e.target.closest('.btn, .filter-chip');
+      if (!t) return;
+      const r = t.getBoundingClientRect();
+      const size = Math.max(r.width, r.height) * 1.8;
       const ripple = document.createElement('span');
       ripple.className = 'btn-ripple';
       ripple.style.width = ripple.style.height = size + 'px';
-      ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
-      ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
-      target.appendChild(ripple);
+      ripple.style.left = (e.clientX - r.left - size / 2) + 'px';
+      ripple.style.top  = (e.clientY - r.top  - size / 2) + 'px';
+      t.appendChild(ripple);
       ripple.addEventListener('animationend', () => ripple.remove());
     });
   }
 
-  /* ---------------------------------------------------------------------
-     Hero rig — mouse parallax
-  --------------------------------------------------------------------- */
-  const heroRig = document.querySelector('.hero-rig');
-  const heroSection = document.querySelector('.hero');
-  if (heroRig && heroSection && supportsHover && !prefersReducedMotion) {
-    heroSection.addEventListener('mousemove', (e) => {
-      const r = heroSection.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width - 0.5;
-      const py = (e.clientY - r.top) / r.height - 0.5;
-      heroRig.style.transform = `translate3d(${px * 16}px, ${py * 16}px, 0)`;
-    });
-    heroSection.addEventListener('mouseleave', () => { heroRig.style.transform = ''; });
-  }
+  /* =====================================================================
+     Marquee — duplicate each track so the loop is seamless
+  ===================================================================== */
+  $$('[data-marquee]').forEach(m => {
+    const track = m.querySelector('.marquee-track');
+    if (!track) return;
+    const copy = track.cloneNode(true);
+    copy.setAttribute('aria-hidden', 'true');
+    m.appendChild(copy);
+  });
 
-  /* ---------------------------------------------------------------------
+  /* =====================================================================
      Careers — department filter
-  --------------------------------------------------------------------- */
-  const filterChips = document.querySelectorAll('.filter-chip');
-  const jobCards = document.querySelectorAll('.job-card');
-  const noResults = document.getElementById('noResults');
+  ===================================================================== */
+  const jobCards = $$('.job-card');
+  const noResults = $('#noResults');
+  const jobChips = $('#jobList') ? $$('.filter-bar .filter-chip') : [];
 
-  if (filterChips.length && jobCards.length) {
-    filterChips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        filterChips.forEach(c => c.classList.remove('is-active'));
-        chip.classList.add('is-active');
-
-        const filter = chip.getAttribute('data-filter');
-        let visibleCount = 0;
-
-        jobCards.forEach(card => {
-          const match = filter === 'all' || card.getAttribute('data-dept') === filter;
-          card.classList.toggle('is-hidden', !match);
-          if (match) visibleCount++;
-        });
-
-        if (noResults) noResults.hidden = visibleCount !== 0;
+  jobChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      jobChips.forEach(c => c.classList.remove('is-active'));
+      chip.classList.add('is-active');
+      const filter = chip.dataset.filter;
+      let shown = 0;
+      jobCards.forEach(card => {
+        const match = filter === 'all' || card.dataset.dept === filter;
+        card.classList.toggle('is-hidden', !match);
+        if (match) shown++;
       });
+      if (noResults) noResults.hidden = shown !== 0;
     });
-  }
+  });
 
-  /* ---------------------------------------------------------------------
-     Careers — "Apply" button prefills and scrolls to application form
-  --------------------------------------------------------------------- */
-  const applyButtons = document.querySelectorAll('.job-apply-btn');
-  const positionSelect = document.getElementById('aPosition');
-
-  if (applyButtons.length && positionSelect) {
-    applyButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const position = btn.getAttribute('data-position');
-        const optionExists = Array.from(positionSelect.options).some(o => o.value === position || o.textContent === position);
-        if (optionExists) positionSelect.value = position;
-
-        const target = document.getElementById('apply');
-        if (target) {
-          target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
-        }
-        document.getElementById('aName')?.focus({ preventScroll: true });
-      });
-    });
-  }
-
-  /* ---------------------------------------------------------------------
-     Careers — resume file input feedback
-  --------------------------------------------------------------------- */
-  const resumeInput = document.getElementById('aResume');
-  const fileDrop = document.getElementById('fileDrop');
-  const fileDropLabel = document.getElementById('fileDropLabel');
-
-  if (resumeInput && fileDrop && fileDropLabel) {
-    resumeInput.addEventListener('change', () => {
-      const file = resumeInput.files && resumeInput.files[0];
-      if (file) {
-        fileDropLabel.textContent = file.name;
-        fileDrop.classList.add('has-file');
-      } else {
-        fileDropLabel.textContent = 'Choose file — PDF or Word, up to 10MB';
-        fileDrop.classList.remove('has-file');
+  /* Careers — "Apply" prefills the form and scrolls to it */
+  const positionSelect = $('#aPosition');
+  $$('.job-apply-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const position = btn.dataset.position;
+      if (positionSelect) {
+        const exists = Array.from(positionSelect.options)
+          .some(o => o.value === position || o.textContent === position);
+        if (exists) positionSelect.value = position;
       }
+      $('#apply')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      setTimeout(() => $('#aName')?.focus({ preventScroll: true }), reduce ? 0 : 600);
     });
-  }
+  });
 
-  /* ---------------------------------------------------------------------
-     Careers — application form validation + simulated submit
-  --------------------------------------------------------------------- */
-  const applyForm = document.getElementById('applyForm');
-  const applyFormNote = document.getElementById('applyFormNote');
+  /* Careers — resume file feedback */
+  const resumeInput = $('#aResume');
+  const fileDrop = $('#fileDrop');
+  const fileDropLabel = $('#fileDropLabel');
+  const RESUME_PLACEHOLDER = 'Choose file — PDF or Word, up to 10MB';
 
-  if (applyForm) {
-    const applyValidators = {
-      aName: v => v.trim().length > 1 || 'Enter your full name.',
-      aEmail: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) || 'Enter a valid email address.',
-      aPhone: v => v.trim().replace(/[^\d]/g, '').length >= 7 || 'Enter a valid phone number.',
-      aBase: v => v.trim().length > 0 || 'Select a preferred base.',
-      aPosition: v => v.trim().length > 0 || 'Select a position.',
-      aExp: v => v.trim().length > 0 && Number(v) >= 0 || 'Enter years of experience.',
-      aResume: () => (resumeInput && resumeInput.files && resumeInput.files.length > 0) || 'Attach your resume or CV.'
-    };
+  resumeInput?.addEventListener('change', () => {
+    const file = resumeInput.files && resumeInput.files[0];
+    if (fileDropLabel) fileDropLabel.textContent = file ? file.name : RESUME_PLACEHOLDER;
+    fileDrop?.classList.toggle('has-file', !!file);
+  });
 
-    const setApplyFieldError = (id, message) => {
-      const input = document.getElementById(id);
-      const row = input.closest('.form-row');
-      const errorEl = applyForm.querySelector(`.field-error[data-for="${id}"]`);
-      if (message) {
-        row.classList.add('has-error');
-        if (errorEl) errorEl.textContent = message;
-      } else {
-        row.classList.remove('has-error');
-        if (errorEl) errorEl.textContent = '';
-      }
-    };
-
-    Object.keys(applyValidators).forEach(id => {
-      const input = document.getElementById(id);
-      if (!input) return;
-      input.addEventListener(id === 'aResume' ? 'change' : 'blur', () => {
-        const result = applyValidators[id](input.value);
-        setApplyFieldError(id, result === true ? '' : result);
-      });
-    });
-
-    applyForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      let hasError = false;
-
-      Object.keys(applyValidators).forEach(id => {
-        const input = document.getElementById(id);
-        if (!input) return;
-        const result = applyValidators[id](input.value);
-        if (result !== true) {
-          setApplyFieldError(id, result);
-          hasError = true;
-        } else {
-          setApplyFieldError(id, '');
-        }
-      });
-
-      if (hasError) {
-        applyFormNote.textContent = 'Please fix the highlighted fields.';
-        applyFormNote.classList.add('is-error');
-        return;
-      }
-
-      applyFormNote.classList.remove('is-error');
-      const submitBtnWrap = applyForm.querySelector('button[type="submit"]');
-      const submitBtn = submitBtnWrap.querySelector('.btn-label');
-      const originalLabel = submitBtn.textContent;
-      submitBtn.textContent = 'Submitting…';
-      submitBtnWrap.disabled = true;
-
-      const finishSuccess = (message) => {
-        submitBtn.textContent = originalLabel;
-        submitBtnWrap.disabled = false;
-        submitBtnWrap.classList.add('is-success');
-        setTimeout(() => submitBtnWrap.classList.remove('is-success'), 1000);
-        applyFormNote.classList.remove('is-error');
-        applyFormNote.textContent = message;
-        applyForm.reset();
-        if (fileDrop && fileDropLabel) {
-          fileDrop.classList.remove('has-file');
-          fileDropLabel.textContent = 'Choose file — PDF or Word, up to 10MB';
-        }
-      };
-
-      const finishError = (message) => {
-        submitBtn.textContent = originalLabel;
-        submitBtnWrap.disabled = false;
-        applyFormNote.classList.add('is-error');
-        applyFormNote.textContent = message;
-      };
-
-      if (isEmailJsConfigured()) {
-        emailjs.sendForm(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.applyTemplateId, applyForm)
-          .then(() => finishSuccess('Application received — our HR team will reach out if there\'s a fit.'))
-          .catch(() => finishError('Something went wrong sending your application. Please email us directly at ' + ADMIN_EMAILS.apply + '.'));
-      } else {
-        openMailtoFallback(ADMIN_EMAILS.apply, `Job application — ${document.getElementById('aPosition').value}`, [
-          ['Name', document.getElementById('aName').value],
-          ['Email', document.getElementById('aEmail').value],
-          ['Phone', document.getElementById('aPhone').value],
-          ['Preferred base', document.getElementById('aBase').value],
-          ['Position', document.getElementById('aPosition').value],
-          ['Years of experience', document.getElementById('aExp').value],
-          ['Message', document.getElementById('aMsg').value]
-        ]);
-        finishSuccess('Your email app should now be open with your application pre-filled — attach your resume and hit send. (Resumes can\'t travel through mailto links.)');
-      }
-    });
-  }
-
-  /* ---------------------------------------------------------------------
+  /* =====================================================================
      Gallery — category filter
-  --------------------------------------------------------------------- */
-  const galleryGrid = document.getElementById('galleryGrid');
-  const galleryCards = document.querySelectorAll('.gallery-card');
-  const galleryFilterChips = galleryGrid
-    ? document.querySelectorAll('.filter-bar .filter-chip')
-    : [];
-  const galleryNoResults = document.getElementById('galleryNoResults');
+  ===================================================================== */
+  const galleryGrid = $('#galleryGrid');
+  const galleryCards = $$('.gallery-card');
+  const galleryNoResults = $('#galleryNoResults');
+  const galleryChips = galleryGrid ? $$('.filter-bar .filter-chip') : [];
 
-  if (galleryGrid && galleryCards.length) {
-    galleryFilterChips.forEach(chip => {
+  if (galleryGrid) {
+    galleryChips.forEach(chip => {
       chip.addEventListener('click', () => {
-        galleryFilterChips.forEach(c => c.classList.remove('is-active'));
+        galleryChips.forEach(c => c.classList.remove('is-active'));
         chip.classList.add('is-active');
-
-        const filter = chip.getAttribute('data-filter');
-        let visibleCount = 0;
-
+        const filter = chip.dataset.filter;
+        let shown = 0;
         galleryCards.forEach(card => {
-          const match = filter === 'all' || card.getAttribute('data-cat') === filter;
+          const match = filter === 'all' || card.dataset.cat === filter;
           card.classList.toggle('is-hidden', !match);
-          if (match) visibleCount++;
+          if (match) shown++;
         });
-
-        if (galleryNoResults) galleryNoResults.hidden = visibleCount !== 0;
+        if (galleryNoResults) galleryNoResults.hidden = shown !== 0;
       });
     });
   }
 
-  /* ---------------------------------------------------------------------
-     Gallery — lightbox viewer
-  --------------------------------------------------------------------- */
-  const lightbox = document.getElementById('lightbox');
+  /* =====================================================================
+     Gallery — lightbox
+  ===================================================================== */
+  const lightbox = $('#lightbox');
+  let openLightbox = null;
 
   if (lightbox && galleryCards.length) {
-    const lightboxImg = document.getElementById('lightboxImg');
-    const lightboxCat = document.getElementById('lightboxCat');
-    const lightboxTitle = document.getElementById('lightboxTitle');
-    const lightboxClose = document.getElementById('lightboxClose');
-    const lightboxPrev = document.getElementById('lightboxPrev');
-    const lightboxNext = document.getElementById('lightboxNext');
+    const lbImg   = $('#lightboxImg');
+    const lbCat   = $('#lightboxCat');
+    const lbTitle = $('#lightboxTitle');
+    const lbClose = $('#lightboxClose');
+    const lbPrev  = $('#lightboxPrev');
+    const lbNext  = $('#lightboxNext');
 
-    let currentIndex = 0;
-    let lastFocused = null;
+    let index = 0, lastFocused = null;
+    const visible = () => galleryCards.filter(c => !c.classList.contains('is-hidden'));
 
-    const visibleCards = () => Array.from(galleryCards).filter(c => !c.classList.contains('is-hidden'));
-
-    const renderSlide = (index) => {
-      const cards = visibleCards();
+    const render = (i) => {
+      const cards = visible();
       if (!cards.length) return;
-      currentIndex = (index + cards.length) % cards.length;
-      const card = cards[currentIndex];
+      index = (i + cards.length) % cards.length;
+      const card = cards[index];
       const img = card.querySelector('img');
-      const cat = card.querySelector('.gallery-cat');
-      const title = card.querySelector('.gallery-title');
-
-      lightboxImg.src = img.src;
-      lightboxImg.alt = img.alt;
-      lightboxCat.textContent = cat ? cat.textContent : '';
-      lightboxTitle.textContent = title ? title.textContent : '';
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lbCat.textContent   = card.querySelector('.shot-cat')?.textContent || '';
+      lbTitle.textContent = card.querySelector('.shot-title')?.textContent || '';
     };
 
-    const openLightbox = (card) => {
-      const cards = visibleCards();
-      const index = cards.indexOf(card);
+    openLightbox = (card) => {
+      const i = visible().indexOf(card);
       lastFocused = document.activeElement;
-      renderSlide(index === -1 ? 0 : index);
+      render(i === -1 ? 0 : i);
       lightbox.hidden = false;
-      document.body.style.overflow = 'hidden';
-      lightboxClose.focus();
+      document.body.classList.add('is-locked');
+      lbClose.focus();
     };
 
-    const closeLightbox = () => {
+    const close = () => {
       lightbox.hidden = true;
-      document.body.style.overflow = '';
-      if (lastFocused) lastFocused.focus();
+      document.body.classList.remove('is-locked');
+      lastFocused?.focus();
     };
 
     galleryCards.forEach(card => {
-      card.addEventListener('click', () => openLightbox(card));
       card.setAttribute('tabindex', '0');
       card.setAttribute('role', 'button');
+      card.addEventListener('click', () => openLightbox(card));
       card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          openLightbox(card);
-        }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(card); }
       });
     });
 
-    lightboxClose.addEventListener('click', closeLightbox);
-    lightboxPrev.addEventListener('click', () => renderSlide(currentIndex - 1));
-    lightboxNext.addEventListener('click', () => renderSlide(currentIndex + 1));
-
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
-    });
+    lbClose.addEventListener('click', close);
+    lbPrev.addEventListener('click', () => render(index - 1));
+    lbNext.addEventListener('click', () => render(index + 1));
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) close(); });
 
     document.addEventListener('keydown', (e) => {
       if (lightbox.hidden) return;
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') renderSlide(currentIndex - 1);
-      if (e.key === 'ArrowRight') renderSlide(currentIndex + 1);
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') render(index - 1);
+      if (e.key === 'ArrowRight') render(index + 1);
     });
-
-    /* ---------------------------------------------------------------------
-       Gallery — auto-playing featured slideshow
-    --------------------------------------------------------------------- */
-    const slideshow = document.getElementById('slideshow');
-    if (slideshow) {
-      const slides = Array.from(slideshow.querySelectorAll('.slide'));
-      const dotsWrap = document.getElementById('slideshowDots');
-      const progressBar = document.getElementById('slideshowProgressBar');
-      const playPauseBtn = document.getElementById('slideshowPlayPause');
-      const prevBtn = document.getElementById('slideshowPrev');
-      const nextBtn = document.getElementById('slideshowNext');
-      const SLIDE_DURATION = 5000;
-      slideshow.style.setProperty('--slide-duration', (SLIDE_DURATION / 1000) + 's');
-
-      let ssIndex = slides.findIndex(s => s.classList.contains('is-active'));
-      if (ssIndex < 0) ssIndex = 0;
-      let ssTimer = null;
-      let isPlaying = !prefersReducedMotion;
-
-      slides.forEach((slide, i) => {
-        const dot = document.createElement('button');
-        dot.className = 'slideshow-dot';
-        dot.setAttribute('role', 'tab');
-        dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
-        dot.addEventListener('click', () => goToSlide(i, true));
-        dotsWrap.appendChild(dot);
-
-        slide.addEventListener('click', () => {
-          const img = slide.querySelector('img');
-          const matchingCard = Array.from(galleryCards).find(c => c.querySelector('img').src === img.src);
-          if (matchingCard) openLightbox(matchingCard);
-        });
-      });
-      const dots = Array.from(dotsWrap.children);
-
-      const restartProgress = () => {
-        progressBar.classList.remove('is-running');
-        void progressBar.offsetWidth; // reflow to restart CSS animation
-        if (isPlaying) progressBar.classList.add('is-running');
-      };
-
-      const render = () => {
-        slides.forEach((s, i) => s.classList.toggle('is-active', i === ssIndex));
-        dots.forEach((d, i) => d.classList.toggle('is-active', i === ssIndex));
-        restartProgress();
-      };
-
-      const goToSlide = (index, manual) => {
-        ssIndex = (index + slides.length) % slides.length;
-        render();
-        if (manual) restartAutoplay();
-      };
-
-      const advance = () => goToSlide(ssIndex + 1);
-
-      const startAutoplay = () => {
-        stopAutoplay();
-        if (!isPlaying) return;
-        ssTimer = setInterval(advance, SLIDE_DURATION);
-      };
-      const stopAutoplay = () => {
-        if (ssTimer) clearInterval(ssTimer);
-        ssTimer = null;
-      };
-      const restartAutoplay = () => { startAutoplay(); };
-
-      prevBtn.addEventListener('click', () => goToSlide(ssIndex - 1, true));
-      nextBtn.addEventListener('click', () => goToSlide(ssIndex + 1, true));
-
-      playPauseBtn.addEventListener('click', () => {
-        isPlaying = !isPlaying;
-        playPauseBtn.classList.toggle('is-paused', !isPlaying);
-        playPauseBtn.setAttribute('aria-pressed', String(isPlaying));
-        playPauseBtn.setAttribute('aria-label', isPlaying ? 'Pause slideshow' : 'Play slideshow');
-        if (isPlaying) { startAutoplay(); restartProgress(); }
-        else { stopAutoplay(); progressBar.classList.remove('is-running'); }
-      });
-
-      slideshow.addEventListener('mouseenter', () => slideshow.classList.add('is-paused'));
-      slideshow.addEventListener('mouseleave', () => slideshow.classList.remove('is-paused'));
-      slideshow.addEventListener('focusin', () => slideshow.classList.add('is-paused'));
-      slideshow.addEventListener('focusout', () => slideshow.classList.remove('is-paused'));
-
-      slideshow.setAttribute('tabindex', '0');
-      slideshow.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') goToSlide(ssIndex - 1, true);
-        if (e.key === 'ArrowRight') goToSlide(ssIndex + 1, true);
-      });
-
-      if (prefersReducedMotion) {
-        playPauseBtn.classList.add('is-paused');
-        playPauseBtn.setAttribute('aria-pressed', 'false');
-        playPauseBtn.setAttribute('aria-label', 'Play slideshow');
-      }
-
-      render();
-      startAutoplay();
-    }
   }
 
-  /* ---------------------------------------------------------------------
-     Contact form — client-side validation + simulated submit
-  --------------------------------------------------------------------- */
-  const form = document.getElementById('contactForm');
-  const formNote = document.getElementById('formNote');
+  /* =====================================================================
+     Gallery — auto slideshow
+  ===================================================================== */
+  const slideshow = $('#slideshow');
 
-  const validators = {
-    fName: v => v.trim().length > 1 || 'Enter your name.',
-    fCompany: v => v.trim().length > 1 || 'Enter a company or site name.',
-    fEmail: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) || 'Enter a valid email address.',
-    fPhone: v => v.trim().replace(/[^\d]/g, '').length >= 7 || 'Enter a valid phone number.',
-    fAsset: v => v.trim().length > 0 || 'Select an equipment type.',
-    fMsg: v => v.trim().length > 8 || 'Give a few more details on the situation.'
-  };
+  if (slideshow) {
+    const slides = $$('.slide', slideshow);
+    const dotsWrap = $('#slideshowDots');
+    const bar = $('#slideshowProgressBar');
+    const playBtn = $('#slideshowPlayPause');
+    const DURATION = 5200;
+    slideshow.style.setProperty('--ss-dur', (DURATION / 1000) + 's');
 
-  const setFieldError = (id, message) => {
-    const input = document.getElementById(id);
-    const row = input.closest('.form-row');
-    const errorEl = form.querySelector(`.field-error[data-for="${id}"]`);
-    if (message) {
-      row.classList.add('has-error');
-      errorEl.textContent = message;
-    } else {
-      row.classList.remove('has-error');
-      errorEl.textContent = '';
+    let idx = Math.max(0, slides.findIndex(s => s.classList.contains('is-active')));
+    let timer = null;
+    let playing = !reduce;
+
+    slides.forEach((slide, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'ss-dot';
+      dot.type = 'button';
+      dot.setAttribute('role', 'tab');
+      dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      dot.addEventListener('click', () => go(i, true));
+      dotsWrap.appendChild(dot);
+
+      slide.addEventListener('click', () => {
+        if (!openLightbox) return;
+        const src = slide.querySelector('img')?.src;
+        const match = galleryCards.find(c => c.querySelector('img')?.src === src);
+        if (match) openLightbox(match);
+      });
+    });
+    const dots = Array.from(dotsWrap.children);
+
+    const restartBar = () => {
+      if (!bar) return;
+      bar.classList.remove('is-running');
+      void bar.offsetWidth;               // reflow so the CSS animation restarts
+      if (playing) bar.classList.add('is-running');
+    };
+
+    const render = () => {
+      slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+      restartBar();
+    };
+
+    function go(i, manual) {
+      idx = (i + slides.length) % slides.length;
+      render();
+      if (manual && playing) start();
     }
-  };
 
-  if (form) {
-    Object.keys(validators).forEach(id => {
+    const start = () => { stop(); if (playing) timer = setInterval(() => go(idx + 1), DURATION); };
+    const stop  = () => { if (timer) clearInterval(timer); timer = null; };
+
+    $('#slideshowPrev')?.addEventListener('click', () => go(idx - 1, true));
+    $('#slideshowNext')?.addEventListener('click', () => go(idx + 1, true));
+
+    playBtn?.addEventListener('click', () => {
+      playing = !playing;
+      playBtn.classList.toggle('is-paused', !playing);
+      playBtn.setAttribute('aria-pressed', String(playing));
+      playBtn.setAttribute('aria-label', playing ? 'Pause slideshow' : 'Play slideshow');
+      if (playing) { start(); restartBar(); }
+      else { stop(); bar?.classList.remove('is-running'); }
+    });
+
+    ['mouseenter', 'focusin'].forEach(ev =>
+      slideshow.addEventListener(ev, () => slideshow.classList.add('is-paused')));
+    ['mouseleave', 'focusout'].forEach(ev =>
+      slideshow.addEventListener(ev, () => slideshow.classList.remove('is-paused')));
+
+    slideshow.setAttribute('tabindex', '0');
+    slideshow.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') go(idx - 1, true);
+      if (e.key === 'ArrowRight') go(idx + 1, true);
+    });
+
+    if (reduce) {
+      playBtn?.classList.add('is-paused');
+      playBtn?.setAttribute('aria-pressed', 'false');
+      playBtn?.setAttribute('aria-label', 'Play slideshow');
+    }
+
+    render();
+    start();
+  }
+
+  /* =====================================================================
+     Forms — validation + delivery
+  ===================================================================== */
+  const emailOk = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+  const phoneOk = v => v.trim().replace(/\D/g, '').length >= 7;
+
+  const wireForm = ({ form, note, rules, onSend }) => {
+    if (!form) return;
+
+    const setError = (id, message) => {
       const input = document.getElementById(id);
-      input.addEventListener('blur', () => {
-        const result = validators[id](input.value);
-        setFieldError(id, result === true ? '' : result);
+      if (!input) return;
+      input.closest('.form-row')?.classList.toggle('has-error', !!message);
+      const slot = form.querySelector(`.field-error[data-for="${id}"]`);
+      if (slot) slot.textContent = message || '';
+    };
+
+    Object.keys(rules).forEach(id => {
+      const input = document.getElementById(id);
+      if (!input) return;
+      const evt = input.type === 'file' ? 'change' : 'blur';
+      input.addEventListener(evt, () => {
+        const result = rules[id](input.value);
+        setError(id, result === true ? '' : result);
       });
     });
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      let hasError = false;
+      let bad = false;
 
-      Object.keys(validators).forEach(id => {
+      Object.keys(rules).forEach(id => {
         const input = document.getElementById(id);
-        const result = validators[id](input.value);
-        if (result !== true) {
-          setFieldError(id, result);
-          hasError = true;
-        } else {
-          setFieldError(id, '');
-        }
+        if (!input) return;
+        const result = rules[id](input.value);
+        if (result !== true) { setError(id, result); bad = true; }
+        else setError(id, '');
       });
 
-      if (hasError) {
-        formNote.textContent = 'Please fix the highlighted fields.';
-        formNote.classList.add('is-error');
+      if (bad) {
+        note.classList.add('is-error');
+        note.textContent = 'Please fix the highlighted fields.';
+        form.querySelector('.has-error input, .has-error select, .has-error textarea')?.focus();
         return;
       }
 
-      formNote.classList.remove('is-error');
-      const submitBtnWrap = form.querySelector('button[type="submit"]');
-      const submitBtn = submitBtnWrap.querySelector('.btn-label');
-      const originalLabel = submitBtn.textContent;
-      submitBtn.textContent = 'Sending…';
-      submitBtnWrap.disabled = true;
+      const button = form.querySelector('button[type="submit"]');
+      const label = button.querySelector('.btn-label');
+      const original = label.textContent;
+      label.textContent = 'Sending…';
+      button.disabled = true;
+      note.classList.remove('is-error');
+      note.textContent = '';
 
-      const finishSuccess = (message) => {
-        submitBtn.textContent = originalLabel;
-        submitBtnWrap.disabled = false;
-        submitBtnWrap.classList.add('is-success');
-        setTimeout(() => submitBtnWrap.classList.remove('is-success'), 1000);
-        formNote.classList.remove('is-error');
-        formNote.textContent = message;
+      const succeed = (message) => {
+        label.textContent = original;
+        button.disabled = false;
+        button.classList.add('is-success');
+        setTimeout(() => button.classList.remove('is-success'), 1200);
+        note.classList.remove('is-error');
+        note.textContent = message;
         form.reset();
+        if (fileDrop && fileDropLabel) {
+          fileDrop.classList.remove('has-file');
+          fileDropLabel.textContent = RESUME_PLACEHOLDER;
+        }
+      };
+      const fail = (message) => {
+        label.textContent = original;
+        button.disabled = false;
+        note.classList.add('is-error');
+        note.textContent = message;
       };
 
-      const finishError = (message) => {
-        submitBtn.textContent = originalLabel;
-        submitBtnWrap.disabled = false;
-        formNote.classList.add('is-error');
-        formNote.textContent = message;
-      };
+      onSend(succeed, fail);
+    });
+  };
 
+  /* Contact form */
+  wireForm({
+    form: $('#contactForm'),
+    note: $('#formNote'),
+    rules: {
+      fName:    v => v.trim().length > 1 || 'Enter your name.',
+      fCompany: v => v.trim().length > 1 || 'Enter a company or site name.',
+      fEmail:   v => emailOk(v) || 'Enter a valid email address.',
+      fPhone:   v => phoneOk(v) || 'Enter a valid phone number.',
+      fAsset:   v => v.trim().length > 0 || 'Select an equipment type.',
+      fMsg:     v => v.trim().length > 8 || 'Give a few more details on the situation.'
+    },
+    onSend: (succeed, fail) => {
+      const form = $('#contactForm');
       if (isEmailJsConfigured()) {
         emailjs.sendForm(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.contactTemplateId, form)
-          .then(() => finishSuccess('Inquiry received — for urgent outages, call the 24/7 hotline directly.'))
-          .catch(() => finishError('Something went wrong sending your inquiry. Please email us directly at ' + ADMIN_EMAILS.contact + '.'));
+          .then(() => succeed('Inquiry received — for urgent outages, call the 24/7 hotline directly.'))
+          .catch(() => fail('Could not send. Please email us directly at ' + ADMIN_EMAILS.contact + '.'));
       } else {
-        openMailtoFallback(ADMIN_EMAILS.contact, `Outage inquiry — ${document.getElementById('fName').value}`, [
-          ['Name', document.getElementById('fName').value],
-          ['Company / Site', document.getElementById('fCompany').value],
-          ['Email', document.getElementById('fEmail').value],
-          ['Phone', document.getElementById('fPhone').value],
-          ['Asset / Equipment', document.getElementById('fAsset').value],
-          ['Message', document.getElementById('fMsg').value]
+        openMailtoFallback(ADMIN_EMAILS.contact, `Outage inquiry — ${$('#fName').value}`, [
+          ['Name', $('#fName').value],
+          ['Company / Site', $('#fCompany').value],
+          ['Email', $('#fEmail').value],
+          ['Phone', $('#fPhone').value],
+          ['Asset / Equipment', $('#fAsset').value],
+          ['Message', $('#fMsg').value]
         ]);
-        finishSuccess('Your email app should now be open with your inquiry pre-filled — just hit send.');
+        succeed('Your email app should now be open with the inquiry pre-filled — just hit send.');
       }
-    });
-  }
+    }
+  });
+
+  /* Application form */
+  wireForm({
+    form: $('#applyForm'),
+    note: $('#applyFormNote'),
+    rules: {
+      aName:     v => v.trim().length > 1 || 'Enter your full name.',
+      aEmail:    v => emailOk(v) || 'Enter a valid email address.',
+      aPhone:    v => phoneOk(v) || 'Enter a valid phone number.',
+      aBase:     v => v.trim().length > 0 || 'Select a preferred base.',
+      aPosition: v => v.trim().length > 0 || 'Select a position.',
+      aExp:      v => (v.trim().length > 0 && Number(v) >= 0) || 'Enter years of experience.',
+      aResume:   () => (resumeInput?.files?.length > 0) || 'Attach your resume or CV.'
+    },
+    onSend: (succeed, fail) => {
+      const form = $('#applyForm');
+      if (isEmailJsConfigured()) {
+        emailjs.sendForm(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.applyTemplateId, form)
+          .then(() => succeed('Application received — our HR team will reach out if there\'s a fit.'))
+          .catch(() => fail('Could not send. Please email us directly at ' + ADMIN_EMAILS.apply + '.'));
+      } else {
+        openMailtoFallback(ADMIN_EMAILS.apply, `Job application — ${$('#aPosition').value}`, [
+          ['Name', $('#aName').value],
+          ['Email', $('#aEmail').value],
+          ['Phone', $('#aPhone').value],
+          ['Preferred base', $('#aBase').value],
+          ['Position', $('#aPosition').value],
+          ['Years of experience', $('#aExp').value],
+          ['Message', $('#aMsg').value]
+        ]);
+        succeed('Your email app should now be open with your application pre-filled — attach your resume and hit send. (Resumes can\'t travel through mailto links.)');
+      }
+    }
+  });
+
 })();

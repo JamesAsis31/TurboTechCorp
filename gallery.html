@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gallery — Turbo Tech Synergies Inc.</title>
-<meta name="description" content="A look inside Turbo Tech Synergies Inc. — field operations, outage execution, crews and facilities across our Manila and Doha bases.">
+<meta name="description" content="A look inside Turbo Tech Synergies Inc. — field operations, outage execution, crews and facilities across our Manila, Pampanga and Doha bases.">
+<meta name="theme-color" content="#06080B">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -21,56 +22,38 @@
 </head>
 <body>
 
+<!-- ============ PRELOADER ============ -->
+<div class="preloader" id="preloader">
+  <svg class="preload-mark" viewBox="0 0 400 400" aria-hidden="true">
+    <g data-blades="15" data-blade="M190,152 L194,72 Q194.5,65 200,65 Q205.5,65 206,72 L210,152 Z" class="pl-blade"></g>
+    <circle cx="200" cy="200" r="58" class="pl-hub"></circle>
+  </svg>
+  <div class="preload-bar"><i id="preloadBar"></i></div>
+  <p class="preload-text">Spinning up</p>
+</div>
+
+<!-- ============ AMBIENT BACKGROUND ============ -->
+<div class="bg-layers" aria-hidden="true">
+  <div class="bg-aurora"><span></span><span></span><span></span></div>
+  <div class="bg-grid"></div>
+  <div class="bg-noise"></div>
+</div>
+
 <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" id="scrollProgressBar"></div></div>
 
-<!-- ============ NAV ============ -->
+<!-- ============ HEADER ============ -->
 <header class="site-header" id="siteHeader">
   <div class="wrap header-inner">
-    <a href="index.html" class="brand">
+    <a href="index.html" class="brand" aria-label="Turbo Tech Synergies — home">
       <span class="brand-wordmark">
         <span class="brand-word brand-word-turbo">TURBO</span>
-        <svg viewBox="0 0 400 400" class="brand-wheel rig-rotor" aria-hidden="true">
-          <circle cx="200" cy="200" r="150" class="rig-ring rig-ring-outer"></circle>
-          <circle cx="200" cy="200" r="118" class="rig-ring rig-ring-tick"></circle>
-          <g class="rig-blades">
-            <g class="rig-blade-group">
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(0 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(16.3636 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(32.7273 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(49.0909 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(65.4545 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(81.8182 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(98.1818 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(114.5455 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(130.9091 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(147.2727 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(163.6364 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(180 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(196.3636 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(212.7273 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(229.0909 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(245.4545 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(261.8182 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(278.1818 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(294.5455 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(310.9091 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(327.2727 200 200)"></path>
-              <path d="M192,144 L189,60 Q189,54 200,54 Q211,54 211,60 L208,144 Z" transform="rotate(343.6364 200 200)"></path>
-            </g>
+        <svg viewBox="0 0 400 400" class="brand-wheel" aria-hidden="true">
+          <g class="brand-wheel-spin">
+            <g data-blades="15" data-blade="M190,152 L194,72 Q194.5,65 200,65 Q205.5,65 206,72 L210,152 Z" class="bw-blade"></g>
+            <circle cx="200" cy="200" r="137" class="bw-rim"></circle><circle cx="200" cy="200" r="62" class="bw-plate"></circle>
+            <g data-bolts="8" data-bolt-radius="44" data-bolt-size="5.5" class="bw-bolt"></g>
+            <circle cx="200" cy="200" r="27" class="bw-hub"></circle>
           </g>
-          <circle cx="200" cy="200" r="57" class="rig-hub-plate"></circle>
-          <g class="rig-bolts">
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(0 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(45 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(90 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(135 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(180 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(225 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(270 200 200)"></circle>
-            <circle cx="200" cy="158" r="4.5" class="rig-bolt" transform="rotate(315 200 200)"></circle>
-          </g>
-          <circle cx="200" cy="200" r="34" class="rig-hub"></circle>
-          <circle cx="200" cy="200" r="34" class="rig-hub-ring"></circle>
         </svg>
         <span class="brand-word brand-word-tech">TECH</span>
       </span>
@@ -80,17 +63,17 @@
 
     <nav class="main-nav" id="mainNav" aria-label="Primary">
       <div class="main-nav-head">
-        <span class="main-nav-tag mono">NAVIGATION</span>
+        <span class="main-nav-tag">Navigation</span>
         <button class="main-nav-close" id="mainNavClose" aria-label="Close menu">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 2.5l9 9M11.5 2.5l-9 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 2.5l9 9M11.5 2.5l-9 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         </button>
       </div>
-      <a href="index.html#services" class="nav-link">Services</a>
-      <a href="index.html#process" class="nav-link">Process</a>
-      <a href="index.html#locations" class="nav-link">Locations</a>
-      <a href="careers.html" class="nav-link">Careers</a>
-      <a href="gallery.html" class="nav-link is-active">Gallery</a>
-      <a href="index.html#contact" class="nav-link">Contact</a>
+      <a href="index.html#services" class="nav-link"><span>Services</span></a>
+      <a href="index.html#process" class="nav-link"><span>Process</span></a>
+      <a href="index.html#locations" class="nav-link"><span>Locations</span></a>
+      <a href="careers.html" class="nav-link"><span>Careers</span></a>
+      <a href="gallery.html" class="nav-link is-active"><span>Gallery</span></a>
+      <a href="index.html#contact" class="nav-link"><span>Contact</span></a>
       <div class="main-nav-foot">
         <a href="tel:+639156443000" class="main-nav-hotline">
           <span class="pulse-dot" aria-hidden="true"></span>
@@ -109,7 +92,10 @@
       </button>
       <a href="tel:+639156443000" class="hotline-chip">
         <span class="pulse-dot" aria-hidden="true"></span>
-        <span class="hotline-text"><span class="hotline-label">24/7 Hotline</span><span class="hotline-number">+63 915 644 3000</span></span>
+        <span class="hotline-text">
+          <span class="hotline-label">24/7 Hotline</span>
+          <span class="hotline-number">+63 915 644 3000</span>
+        </span>
       </a>
       <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Toggle menu">
         <span></span><span></span><span></span>
@@ -120,89 +106,90 @@
 
 <main id="top">
 
-  <!-- ============ GALLERY HERO ============ -->
-  <section class="careers-hero">
-    <div class="wrap careers-hero-inner">
-      <p class="eyebrow"><span class="eyebrow-tag">ASSET&nbsp;TAG&nbsp;·&nbsp;GAL-01</span>INSIDE TURBOTECH</p>
-      <h1 class="hero-title reveal">
+  <!-- ============ HERO ============ -->
+  <section class="page-hero">
+    <div class="wrap page-hero-inner">
+      <div class="hero-status reveal">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span data-scramble>Inside Turbotech · Field archive</span>
+      </div>
+      <h1 class="hero-title reveal" data-split>
         What it looks like<br>
-        <span class="hero-title-accent">on site and on the floor.</span>
+        <em>on the floor.</em>
       </h1>
       <p class="hero-sub reveal">
         Field operations, outage crews, workshop facilities and the bases behind them —
-        a look at the people and equipment that keep rotating assets running.
+        the people and equipment that keep rotating assets running.
       </p>
     </div>
   </section>
 
-  <!-- ============ FEATURED SLIDESHOW ============ -->
-  <section class="slideshow-section reveal">
+  <!-- ============ SLIDESHOW ============ -->
+  <section class="slideshow-section">
     <div class="wrap">
-      <div class="slideshow" id="slideshow" aria-roledescription="carousel" aria-label="Featured photos, auto-advancing">
-        <div class="slideshow-track" id="slideshowTrack">
-          <div class="slide is-active">
-            <img src="images/img1.jpg" alt="Field technicians working on rotating equipment">
-            <div class="slide-caption">
-              <span class="gallery-cat">Field Operations</span>
-              <span class="gallery-title">On-site mechanical work</span>
-            </div>
+      <div class="slideshow reveal-scale" id="slideshow" aria-roledescription="carousel" aria-label="Featured photos, auto-advancing">
+        <div class="slide is-active">
+          <img src="images/img1.jpg" alt="Steam turbine rotor exposed during an overhaul in the workshop">
+          <div class="slide-caption">
+            <span class="shot-cat">Field Operations</span>
+            <span class="shot-title">Turbine rotor overhaul</span>
           </div>
-          <div class="slide">
-            <img src="images/img2.jpg" alt="Crew executing a planned outage">
-            <div class="slide-caption">
-              <span class="gallery-cat">Outage Execution</span>
-              <span class="gallery-title">Planned turnaround in progress</span>
-            </div>
+        </div>
+        <div class="slide">
+          <img src="images/img2.jpg" alt="Crew executing a planned outage on rotating equipment" loading="lazy">
+          <div class="slide-caption">
+            <span class="shot-cat">Outage Execution</span>
+            <span class="shot-title">Planned turnaround in progress</span>
           </div>
-          <div class="slide">
-            <img src="images/img4.jpg" alt="Crew rigging a turbine rotor with an overhead crane">
-            <div class="slide-caption">
-              <span class="gallery-cat">Field Operations</span>
-              <span class="gallery-title">Rotor rigging and lift</span>
-            </div>
+        </div>
+        <div class="slide">
+          <img src="images/img4.jpg" alt="Crew rigging a rotor with an overhead crane" loading="lazy">
+          <div class="slide-caption">
+            <span class="shot-cat">Field Operations</span>
+            <span class="shot-title">Rotor rigging and lift</span>
           </div>
-          <div class="slide">
-            <img src="images/img10.jpg" alt="Turbotech workshop facility">
-            <div class="slide-caption">
-              <span class="gallery-cat">Facilities</span>
-              <span class="gallery-title">Pampanga workshop floor</span>
-            </div>
+        </div>
+        <div class="slide">
+          <img src="images/img10.jpg" alt="Turbotech workshop floor in Pampanga" loading="lazy">
+          <div class="slide-caption">
+            <span class="shot-cat">Facilities</span>
+            <span class="shot-title">Pampanga workshop floor</span>
           </div>
-          <div class="slide">
-            <img src="images/img8.jpg" alt="Power plant facility along the coastline">
-            <div class="slide-caption">
-              <span class="gallery-cat">Facilities</span>
-              <span class="gallery-title">Power plant worksite</span>
-            </div>
+        </div>
+        <div class="slide">
+          <img src="images/img8.jpg" alt="Coastal power plant worksite" loading="lazy">
+          <div class="slide-caption">
+            <span class="shot-cat">Facilities</span>
+            <span class="shot-title">Power plant worksite</span>
           </div>
-          <div class="slide">
-            <img src="images/img6.jpg" alt="Team during a training session">
-            <div class="slide-caption">
-              <span class="gallery-cat">Crew &amp; Team</span>
-              <span class="gallery-title">OEM-aligned training</span>
-            </div>
+        </div>
+        <div class="slide">
+          <img src="images/img6.jpg" alt="Turbotech crew during an OEM-aligned training session" loading="lazy">
+          <div class="slide-caption">
+            <span class="shot-cat">Crew &amp; Team</span>
+            <span class="shot-title">OEM-aligned training</span>
           </div>
-          <div class="slide">
-            <img src="images/img9.jpg" alt="Doha branch office">
-            <div class="slide-caption">
-              <span class="gallery-cat">Facilities</span>
-              <span class="gallery-title">Doha, Qatar base</span>
-            </div>
+        </div>
+        <div class="slide">
+          <img src="images/img9.jpg" alt="Turbotech Doha, Qatar base" loading="lazy">
+          <div class="slide-caption">
+            <span class="shot-cat">Facilities</span>
+            <span class="shot-title">Doha, Qatar base</span>
           </div>
         </div>
 
-        <button class="slideshow-arrow slideshow-prev" id="slideshowPrev" aria-label="Previous slide">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 3.5L5 9l6 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button class="ss-btn ss-arrow ss-prev" id="slideshowPrev" aria-label="Previous slide">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 3.5 5 9l6 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <button class="slideshow-arrow slideshow-next" id="slideshowNext" aria-label="Next slide">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 3.5l6 5.5-6 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button class="ss-btn ss-arrow ss-next" id="slideshowNext" aria-label="Next slide">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 3.5 13 9l-6 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <button class="slideshow-playpause" id="slideshowPlayPause" aria-label="Pause slideshow" aria-pressed="true">
-          <svg class="icon-pause" width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3.5" y="2.5" width="3" height="11" rx="1" fill="currentColor"/><rect x="9.5" y="2.5" width="3" height="11" rx="1" fill="currentColor"/></svg>
-          <svg class="icon-play" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.5 2.8v10.4a.6.6 0 0 0 .92.5l8.2-5.2a.6.6 0 0 0 0-1l-8.2-5.2a.6.6 0 0 0-.92.5Z" fill="currentColor"/></svg>
+        <button class="ss-btn ss-play" id="slideshowPlayPause" aria-label="Pause slideshow" aria-pressed="true">
+          <svg class="icon-pause" width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="3.5" y="2.5" width="3" height="11" rx="1" fill="currentColor"/><rect x="9.5" y="2.5" width="3" height="11" rx="1" fill="currentColor"/></svg>
+          <svg class="icon-play" width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4.5 2.8v10.4a.6.6 0 0 0 .92.5l8.2-5.2a.6.6 0 0 0 0-1l-8.2-5.2a.6.6 0 0 0-.92.5Z" fill="currentColor"/></svg>
         </button>
-        <div class="slideshow-dots" id="slideshowDots" role="tablist" aria-label="Choose slide"></div>
-        <div class="slideshow-progress"><div class="slideshow-progress-bar" id="slideshowProgressBar"></div></div>
+        <div class="ss-dots" id="slideshowDots" role="tablist" aria-label="Choose slide"></div>
+        <div class="ss-progress"><i id="slideshowProgressBar"></i></div>
       </div>
     </div>
   </section>
@@ -210,6 +197,11 @@
   <!-- ============ GALLERY GRID ============ -->
   <section class="gallery-section">
     <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Photo Archive</p>
+        <h2 class="section-title" data-split>Browse the archive</h2>
+      </div>
+
       <div class="filter-bar reveal" role="group" aria-label="Filter gallery by category">
         <button class="filter-chip is-active" data-filter="all">All photos</button>
         <button class="filter-chip" data-filter="field">Field Operations</button>
@@ -220,97 +212,111 @@
 
       <div class="gallery-grid" id="galleryGrid">
 
-        <figure class="gallery-card reveal gallery-card-tall" data-cat="field">
-          <img src="images/img1.jpg" alt="Field technicians working on rotating equipment" loading="lazy">
+        <figure class="gcard gallery-card gcard-tall reveal" data-cat="field">
+          <img src="images/img1.jpg" alt="Steam turbine rotor exposed during an overhaul in the workshop" loading="lazy">
+          <span class="gcard-zoom" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.5"/><path d="m10.6 10.6 3 3M7 5.2v3.6M5.2 7h3.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
           <figcaption>
-            <span class="gallery-cat">Field Operations</span>
-            <span class="gallery-title">On-site mechanical work</span>
+            <span class="shot-cat">Field Operations</span>
+            <span class="shot-title">Turbine rotor overhaul</span>
           </figcaption>
         </figure>
 
-        <figure class="gallery-card reveal" data-cat="outage">
-          <img src="images/img2.jpg" alt="Crew executing a planned outage" loading="lazy">
+        <figure class="gcard gallery-card reveal" data-cat="outage">
+          <img src="images/img2.jpg" alt="Crew executing a planned outage on rotating equipment" loading="lazy">
+          <span class="gcard-zoom" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.5"/><path d="m10.6 10.6 3 3M7 5.2v3.6M5.2 7h3.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
           <figcaption>
-            <span class="gallery-cat">Outage Execution</span>
-            <span class="gallery-title">Planned turnaround in progress</span>
+            <span class="shot-cat">Outage Execution</span>
+            <span class="shot-title">Planned turnaround in progress</span>
           </figcaption>
         </figure>
 
-        <figure class="gallery-card reveal" data-cat="team">
-          <img src="images/img3.jpg" alt="Turbotech crew and team" loading="lazy">
+        <figure class="gcard gallery-card reveal" data-cat="team">
+          <img src="images/img3.jpg" alt="Turbotech crew working together on site" loading="lazy">
+          <span class="gcard-zoom" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.5"/><path d="m10.6 10.6 3 3M7 5.2v3.6M5.2 7h3.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
           <figcaption>
-            <span class="gallery-cat">Crew &amp; Team</span>
-            <span class="gallery-title">The team behind the tools</span>
+            <span class="shot-cat">Crew &amp; Team</span>
+            <span class="shot-title">The team behind the tools</span>
           </figcaption>
         </figure>
 
-        <figure class="gallery-card reveal gallery-card-tall" data-cat="facility">
-          <img src="images/img10.jpg" alt="Turbotech workshop facility" loading="lazy">
+        <figure class="gcard gallery-card gcard-tall reveal" data-cat="facility">
+          <img src="images/img10.jpg" alt="Turbotech workshop floor in Pampanga" loading="lazy">
+          <span class="gcard-zoom" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.5"/><path d="m10.6 10.6 3 3M7 5.2v3.6M5.2 7h3.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
           <figcaption>
-            <span class="gallery-cat">Facilities</span>
-            <span class="gallery-title">Pampanga workshop floor</span>
-          </figcaption>
-        </figure>
-        <figure class="gallery-card reveal gallery-card-tall" data-cat="facility">
-          <img src="images/img11.jpg" alt="Turbotech workshop facility" loading="lazy">
-          <figcaption>
-            <span class="gallery-cat">Facilities</span>
-            <span class="gallery-title">Limay, Bataan</span>
+            <span class="shot-cat">Facilities</span>
+            <span class="shot-title">Pampanga workshop floor</span>
           </figcaption>
         </figure>
 
-        <figure class="gallery-card reveal" data-cat="field">
-          <img src="images/img7.jpg" alt="Close-up of a rotor during balancing" loading="lazy">
+        <figure class="gcard gallery-card gcard-tall reveal" data-cat="facility">
+          <img src="images/img11.jpg" alt="Turbotech facility at Limay, Bataan" loading="lazy">
+          <span class="gcard-zoom" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.5"/><path d="m10.6 10.6 3 3M7 5.2v3.6M5.2 7h3.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
           <figcaption>
-            <span class="gallery-cat">Field Operations</span>
-            <span class="gallery-title">In-situ balancing close-up</span>
+            <span class="shot-cat">Facilities</span>
+            <span class="shot-title">Limay, Bataan</span>
           </figcaption>
         </figure>
 
-        <figure class="gallery-card reveal" data-cat="team">
-          <img src="images/img6.jpg" alt="Team during a training session" loading="lazy">
+        <figure class="gcard gallery-card reveal" data-cat="field">
+          <img src="images/img7.jpg" alt="Close-up of a rotor during in-situ balancing" loading="lazy">
+          <span class="gcard-zoom" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.5"/><path d="m10.6 10.6 3 3M7 5.2v3.6M5.2 7h3.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
           <figcaption>
-            <span class="gallery-cat">Crew &amp; Team</span>
-            <span class="gallery-title">OEM-aligned training</span>
+            <span class="shot-cat">Field Operations</span>
+            <span class="shot-title">In-situ balancing close-up</span>
           </figcaption>
         </figure>
 
-        <figure class="gallery-card reveal" data-cat="facility">
-          <img src="images/img9.jpg" alt="Doha branch office" loading="lazy">
+        <figure class="gcard gallery-card reveal" data-cat="team">
+          <img src="images/img6.jpg" alt="Turbotech crew during an OEM-aligned training session" loading="lazy">
+          <span class="gcard-zoom" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.5"/><path d="m10.6 10.6 3 3M7 5.2v3.6M5.2 7h3.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
           <figcaption>
-            <span class="gallery-cat">Facilities</span>
-            <span class="gallery-title">Doha, Qatar base</span>
-          </figcaption>
-        </figure>
-        <figure class="gallery-card reveal" data-cat="facility">
-          <img src="images/img13.jpg" alt="Doha branch office" loading="lazy">
-          <figcaption>
-            <span class="gallery-cat">Facilities</span>
-            <span class="gallery-title">Doha, Qatar base</span>
+            <span class="shot-cat">Crew &amp; Team</span>
+            <span class="shot-title">OEM-aligned training</span>
           </figcaption>
         </figure>
 
-        <figure class="gallery-card reveal gallery-card-tall" data-cat="outage">
-          <img src="images/img3.jpg" alt="Crew and tooling mobilization" loading="lazy">
+        <figure class="gcard gallery-card reveal" data-cat="facility">
+          <img src="images/img9.jpg" alt="Turbotech Doha, Qatar base" loading="lazy">
+          <span class="gcard-zoom" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.5"/><path d="m10.6 10.6 3 3M7 5.2v3.6M5.2 7h3.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
           <figcaption>
-            <span class="gallery-cat">Outage Execution</span>
-            <span class="gallery-title">Crew &amp; tooling mobilization</span>
+            <span class="shot-cat">Facilities</span>
+            <span class="shot-title">Doha, Qatar base</span>
           </figcaption>
         </figure>
 
-        <figure class="gallery-card reveal gallery-card-tall" data-cat="field">
-          <img src="images/img4.jpg" alt="Crew rigging a turbine rotor with an overhead crane" loading="lazy">
+        <figure class="gcard gallery-card reveal" data-cat="facility">
+          <img src="images/img13.jpg" alt="Turbotech Doha, Qatar branch exterior" loading="lazy">
+          <span class="gcard-zoom" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.5"/><path d="m10.6 10.6 3 3M7 5.2v3.6M5.2 7h3.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
           <figcaption>
-            <span class="gallery-cat">Field Operations</span>
-            <span class="gallery-title">Rotor rigging and lift</span>
+            <span class="shot-cat">Facilities</span>
+            <span class="shot-title">Doha branch</span>
           </figcaption>
         </figure>
 
-        <figure class="gallery-card reveal" data-cat="facility">
-          <img src="images/img8.jpg" alt="Power plant facility along the coastline" loading="lazy">
+        <figure class="gcard gallery-card gcard-tall reveal" data-cat="outage">
+          <img src="images/img3.jpg" alt="Crew and tooling mobilization ahead of an outage" loading="lazy">
+          <span class="gcard-zoom" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.5"/><path d="m10.6 10.6 3 3M7 5.2v3.6M5.2 7h3.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
           <figcaption>
-            <span class="gallery-cat">Facilities</span>
-            <span class="gallery-title">Power plant worksite</span>
+            <span class="shot-cat">Outage Execution</span>
+            <span class="shot-title">Crew &amp; tooling mobilization</span>
+          </figcaption>
+        </figure>
+
+        <figure class="gcard gallery-card gcard-tall reveal" data-cat="field">
+          <img src="images/img4.jpg" alt="Crew rigging a rotor with an overhead crane" loading="lazy">
+          <span class="gcard-zoom" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.5"/><path d="m10.6 10.6 3 3M7 5.2v3.6M5.2 7h3.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+          <figcaption>
+            <span class="shot-cat">Field Operations</span>
+            <span class="shot-title">Rotor rigging and lift</span>
+          </figcaption>
+        </figure>
+
+        <figure class="gcard gallery-card reveal" data-cat="facility">
+          <img src="images/img8.jpg" alt="Coastal power plant worksite" loading="lazy">
+          <span class="gcard-zoom" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.5"/><path d="m10.6 10.6 3 3M7 5.2v3.6M5.2 7h3.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+          <figcaption>
+            <span class="shot-cat">Facilities</span>
+            <span class="shot-title">Power plant worksite</span>
           </figcaption>
         </figure>
 
@@ -320,14 +326,17 @@
     </div>
   </section>
 
-  <!-- ============ CTA BANNER ============ -->
-  <section class="cta-banner reveal">
+  <!-- ============ CTA ============ -->
+  <section class="cta">
     <div class="wrap cta-inner">
-      <div>
-        <p class="section-eyebrow section-eyebrow-light">Want to see it firsthand?</p>
+      <div class="reveal">
+        <p class="eyebrow">Want to see it firsthand?</p>
         <h2>Talk to us about your next outage window.</h2>
       </div>
-      <a href="index.html#contact" class="btn btn-primary btn-large">Get in touch</a>
+      <a href="index.html#contact" class="btn btn-large reveal" data-magnetic>
+        <span>Get in touch</span>
+        <svg width="17" height="17" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
     </div>
   </section>
 
@@ -335,21 +344,21 @@
 
 <!-- ============ LIGHTBOX ============ -->
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
-  <button class="lightbox-close" id="lightboxClose" aria-label="Close photo viewer">
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+  <button class="lightbox-btn lightbox-close" id="lightboxClose" aria-label="Close photo viewer">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
   </button>
-  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous photo">
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M14 4l-8 7 8 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <button class="lightbox-btn lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous photo">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M14 4l-8 7 8 7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
   <figure class="lightbox-figure">
     <img id="lightboxImg" src="" alt="">
     <figcaption>
-      <span class="gallery-cat" id="lightboxCat"></span>
-      <span class="gallery-title" id="lightboxTitle"></span>
+      <span class="shot-cat" id="lightboxCat"></span>
+      <span class="shot-title" id="lightboxTitle"></span>
     </figcaption>
   </figure>
-  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next photo">
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M8 4l8 7-8 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <button class="lightbox-btn lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next photo">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M8 4l8 7-8 7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
 </div>
 
@@ -357,19 +366,18 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div class="footer-brand">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 48 48" class="rotor-icon rotor-icon-static">
-          <g class="rotor-icon-blades">
-            <path d="M24 24 L24 4 A20 20 0 0 1 41.3 14 Z"></path>
-            <path d="M24 24 L41.3 14 A20 20 0 0 1 41.3 34 Z"></path>
-            <path d="M24 24 L41.3 34 A20 20 0 0 1 24 44 Z"></path>
-            <path d="M24 24 L24 44 A20 20 0 0 1 6.7 34 Z"></path>
-            <path d="M24 24 L6.7 34 A20 20 0 0 1 6.7 14 Z"></path>
-            <path d="M24 24 L6.7 14 A20 20 0 0 1 24 4 Z"></path>
-          </g><circle cx="24" cy="24" r="5.5" class="rotor-hub"></circle>
+      <span class="brand-wordmark">
+        <span class="brand-word brand-word-turbo">TURBO</span>
+        <svg viewBox="0 0 400 400" class="brand-wheel" aria-hidden="true">
+          <g>
+            <g data-blades="15" data-blade="M190,152 L194,72 Q194.5,65 200,65 Q205.5,65 206,72 L210,152 Z" class="bw-blade"></g>
+            <circle cx="200" cy="200" r="137" class="bw-rim"></circle><circle cx="200" cy="200" r="62" class="bw-plate"></circle>
+            <circle cx="200" cy="200" r="27" class="bw-hub"></circle>
+          </g>
         </svg>
+        <span class="brand-word brand-word-tech">TECH</span>
       </span>
-      <p>Turbo Tech Synergies Inc.<br><span class="mono footer-tagline">MRO &amp; Outage Execution for Rotating Equipment</span></p>
+      <p>Rotating equipment MRO, outage execution and in-situ precision balancing across power generation, oil &amp; gas, marine and industrial sectors.</p>
     </div>
 
     <div class="footer-col">
@@ -384,12 +392,15 @@
 
     <div class="footer-col">
       <h4>Manila</h4>
+      <span class="mono">Taft Ave, Malate</span>
       <a href="tel:+639156443000" class="mono">+63 915 644 3000</a>
+      <a href="tel:+639288909131" class="mono">+63 928 890 9131</a>
       <a href="mailto:tech@turbotechcorp.com" class="mono">tech@turbotechcorp.com</a>
     </div>
 
     <div class="footer-col">
       <h4>Doha, Qatar</h4>
+      <span class="mono">Najma, Doha City</span>
       <a href="tel:+639156443000" class="mono">+63 915 644 3000</a>
       <a href="mailto:info.qatar@turbotechcorp.com" class="mono">info.qatar@turbotechcorp.com</a>
     </div>
@@ -401,7 +412,7 @@
 </footer>
 
 <button class="back-to-top" id="backToTop" aria-label="Back to top">
-  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 14V3M4 8l5-5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 14V3M4 8l5-5 5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
 </button>
 
 <script src="script.js"></script>
