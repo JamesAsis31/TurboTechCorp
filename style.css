@@ -476,6 +476,33 @@ svg.brand-wheel{
 .nav-backdrop.is-open{ opacity:1; visibility:visible; transition-delay:0s; }
 
 /* ==========================================================================
+   Build stage - the pinned hero
+   --------------------------------------------------------------------------
+   The machine has to finish assembling before the page moves, and the honest
+   way to buy that scroll is a spacer under a sticky hero rather than
+   swallowing wheel events: native scrolling, the scrollbar, keyboard paging
+   and momentum all keep working, and the reader can leave whenever they like.
+
+   .build-run is that spacer. It is zero-height until scene.js confirms a
+   first rendered frame, so a browser with no WebGL - or anyone on reduced
+   motion - never pays a screenful of scrolling for a build that is not going
+   to happen.
+   ========================================================================== */
+.build-stage{ position:relative; }
+.build-run{ height:0; }
+
+[data-webgl="on"] .build-stage > .hero{ position:sticky; top:0; }
+[data-webgl="on"] .build-run{ height:90vh; }
+
+@media (max-width: 760px){
+  [data-webgl="on"] .build-run{ height:68vh; }
+}
+@media (prefers-reduced-motion: reduce){
+  [data-webgl="on"] .build-stage > .hero{ position:static; }
+  [data-webgl="on"] .build-run{ height:0; }
+}
+
+/* ==========================================================================
    Motion primitives
    ========================================================================== */
 .reveal{ opacity:0; transform:translateY(26px); transition:opacity .85s var(--ease), transform .85s var(--ease); }

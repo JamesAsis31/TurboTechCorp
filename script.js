@@ -384,6 +384,7 @@
   window.addEventListener('resize', measureDepth);
   window.addEventListener('load', measureDepth);
 
+
   /* =====================================================================
      Header state, scroll progress, back-to-top, 3D depth, timeline
   ===================================================================== */
@@ -435,6 +436,13 @@
   window.addEventListener('scroll', requestScroll, { passive: true });
   window.addEventListener('resize', requestScroll);
   onScroll();
+
+  /* the WebGL scene's hero pin only gets a height once its first frame is on
+     screen, which makes the document taller than it was when anything measured */
+  window.addEventListener('rotor:ready', () => {
+    measureDepth();
+    requestScroll();
+  }, { once: true });
 
   backToTop?.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });

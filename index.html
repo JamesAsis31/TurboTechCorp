@@ -107,114 +107,121 @@
 <main id="top">
 
   <!-- ============ HERO ============ -->
-  <section class="hero">
-    <div class="wrap hero-inner">
-      <div class="hero-copy">
-        <div class="hero-status reveal">
-          <span class="pulse-dot" aria-hidden="true"></span>
-          <span data-scramble>Crews mobilizing · Manila &amp; Doha</span>
+  <!-- The hero is pinned while the machine assembles: .build-run is the
+       scroll that pin consumes, and it collapses to nothing unless the
+       WebGL scene is actually running, so a browser without it loses no
+       scrolling to a build that is never going to happen. -->
+  <div class="build-stage">
+    <section class="hero">
+      <div class="wrap hero-inner">
+        <div class="hero-copy">
+          <div class="hero-status reveal">
+            <span class="pulse-dot" aria-hidden="true"></span>
+            <span data-scramble>Crews mobilizing · Manila &amp; Doha</span>
+          </div>
+          <h1 class="hero-title reveal" data-split>
+            We put rotating<br>
+            assets <em>back online.</em>
+          </h1>
+          <p class="hero-sub reveal">
+            Turbo Tech Synergies Inc. is a field-proven rotating equipment MRO and outage
+            execution specialist — delivering OEM-aligned manpower, tooling and mechanical
+            discipline from minor interventions to full-scope major outages.
+          </p>
+          <div class="hero-actions reveal">
+            <a href="#contact" class="btn btn-primary" data-magnetic>
+              <span>Book an outage team</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="tel:+639156443000" class="btn btn-ghost" data-magnetic>
+              <span>Call the 24/7 hotline</span>
+            </a>
+          </div>
+          <div class="scroll-cue reveal">
+            <span class="scroll-cue-track" aria-hidden="true"></span>
+            <span>Scroll to explore</span>
+          </div>
         </div>
-        <h1 class="hero-title reveal" data-split>
-          We put rotating<br>
-          assets <em>back online.</em>
-        </h1>
-        <p class="hero-sub reveal">
-          Turbo Tech Synergies Inc. is a field-proven rotating equipment MRO and outage
-          execution specialist — delivering OEM-aligned manpower, tooling and mechanical
-          discipline from minor interventions to full-scope major outages.
-        </p>
-        <div class="hero-actions reveal">
-          <a href="#contact" class="btn btn-primary" data-magnetic>
-            <span>Book an outage team</span>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <a href="tel:+639156443000" class="btn btn-ghost" data-magnetic>
-            <span>Call the 24/7 hotline</span>
-          </a>
-        </div>
-        <div class="scroll-cue reveal">
-          <span class="scroll-cue-track" aria-hidden="true"></span>
-          <span>Scroll to explore</span>
+
+        <div class="hero-visual reveal-scale" aria-hidden="true">
+          <div class="hero-visual-glow"></div>
+          <div class="rotor-3d" data-depth="rotor">
+            <svg viewBox="0 0 400 400" class="rotor">
+              <defs>
+                <!-- one directional light source across the whole wheel, so blades
+                     on the lit side read brighter than those in shadow -->
+                <linearGradient id="steelBlade" gradientUnits="userSpaceOnUse" x1="70" y1="40" x2="330" y2="360">
+                  <stop offset="0%"   class="steel-hi"></stop>
+                  <stop offset="48%"  class="steel-mid"></stop>
+                  <stop offset="100%" class="steel-lo"></stop>
+                </linearGradient>
+                <radialGradient id="steelPlate" cx="40%" cy="32%" r="76%">
+                  <stop offset="0%"   class="steel-hi"></stop>
+                  <stop offset="58%"  class="steel-mid"></stop>
+                  <stop offset="100%" class="steel-lo"></stop>
+                </radialGradient>
+                <radialGradient id="steelBoss" cx="38%" cy="30%" r="74%">
+                  <stop offset="0%"   class="steel-hi"></stop>
+                  <stop offset="62%"  class="steel-mid"></stop>
+                  <stop offset="100%" class="steel-lo"></stop>
+                </radialGradient>
+              </defs>
+
+              <circle cx="200" cy="200" r="186" class="rotor-ring"></circle>
+              <circle cx="200" cy="200" r="172" class="rotor-ring-dash"></circle>
+              <circle cx="200" cy="200" r="194" class="rotor-ring-arc" stroke-dasharray="150 1066"></circle>
+
+              <!-- 24 swept, cambered blades — leading edge curves out, tip cut on an angle -->
+              <g class="rotor-blades">
+                <g data-blades="24" data-blade="M193,152 C185,116 195,74 227,44 L243,56 C224,86 213,118 209,152 Z"></g>
+              </g>
+
+              <!-- hub disc covers the blade roots, with a machined step and centre boss -->
+              <circle cx="200" cy="200" r="58" class="rotor-plate"></circle>
+              <circle cx="200" cy="200" r="50" class="rotor-plate-step"></circle>
+              <circle cx="200" cy="200" r="22" class="rotor-boss"></circle>
+              <circle cx="200" cy="200" r="13" class="rotor-boss-step"></circle>
+              <circle cx="200" cy="200" r="4"  class="rotor-boss-centre"></circle>
+
+              <circle cx="200" cy="200" r="40" class="rotor-pulse"></circle>
+            </svg>
+          </div>
+          <div class="rotor-readout">
+            <span class="pulse-dot"></span>
+            <span class="rotor-readout-label">Rotor status</span>
+            <span class="rotor-readout-value">ONLINE</span>
+          </div>
+          <div class="hero-spec hero-spec-1">Balancing <b>Multi-ton</b></div>
+          <div class="hero-spec hero-spec-2">Tooling <b>OEM-aligned</b></div>
+          <div class="hero-spec hero-spec-3">Response <b>24/7</b></div>
         </div>
       </div>
 
-      <div class="hero-visual reveal-scale" aria-hidden="true">
-        <div class="hero-visual-glow"></div>
-        <div class="rotor-3d" data-depth="rotor">
-          <svg viewBox="0 0 400 400" class="rotor">
-            <defs>
-              <!-- one directional light source across the whole wheel, so blades
-                   on the lit side read brighter than those in shadow -->
-              <linearGradient id="steelBlade" gradientUnits="userSpaceOnUse" x1="70" y1="40" x2="330" y2="360">
-                <stop offset="0%"   class="steel-hi"></stop>
-                <stop offset="48%"  class="steel-mid"></stop>
-                <stop offset="100%" class="steel-lo"></stop>
-              </linearGradient>
-              <radialGradient id="steelPlate" cx="40%" cy="32%" r="76%">
-                <stop offset="0%"   class="steel-hi"></stop>
-                <stop offset="58%"  class="steel-mid"></stop>
-                <stop offset="100%" class="steel-lo"></stop>
-              </radialGradient>
-              <radialGradient id="steelBoss" cx="38%" cy="30%" r="74%">
-                <stop offset="0%"   class="steel-hi"></stop>
-                <stop offset="62%"  class="steel-mid"></stop>
-                <stop offset="100%" class="steel-lo"></stop>
-              </radialGradient>
-            </defs>
-
-            <circle cx="200" cy="200" r="186" class="rotor-ring"></circle>
-            <circle cx="200" cy="200" r="172" class="rotor-ring-dash"></circle>
-            <circle cx="200" cy="200" r="194" class="rotor-ring-arc" stroke-dasharray="150 1066"></circle>
-
-            <!-- 24 swept, cambered blades — leading edge curves out, tip cut on an angle -->
-            <g class="rotor-blades">
-              <g data-blades="24" data-blade="M193,152 C185,116 195,74 227,44 L243,56 C224,86 213,118 209,152 Z"></g>
-            </g>
-
-            <!-- hub disc covers the blade roots, with a machined step and centre boss -->
-            <circle cx="200" cy="200" r="58" class="rotor-plate"></circle>
-            <circle cx="200" cy="200" r="50" class="rotor-plate-step"></circle>
-            <circle cx="200" cy="200" r="22" class="rotor-boss"></circle>
-            <circle cx="200" cy="200" r="13" class="rotor-boss-step"></circle>
-            <circle cx="200" cy="200" r="4"  class="rotor-boss-centre"></circle>
-
-            <circle cx="200" cy="200" r="40" class="rotor-pulse"></circle>
-          </svg>
-        </div>
-        <div class="rotor-readout">
-          <span class="pulse-dot"></span>
-          <span class="rotor-readout-label">Rotor status</span>
-          <span class="rotor-readout-value">ONLINE</span>
-        </div>
-        <div class="hero-spec hero-spec-1">Balancing <b>Multi-ton</b></div>
-        <div class="hero-spec hero-spec-2">Tooling <b>OEM-aligned</b></div>
-        <div class="hero-spec hero-spec-3">Response <b>24/7</b></div>
-      </div>
-    </div>
-
-    <div class="hero-stats reveal">
-      <div class="wrap">
-        <div class="hero-stats-inner" data-depth="panel">
-          <div class="stat">
-            <div class="stat-value"><span data-count="24">0</span><em>/7</em></div>
-            <div class="stat-label">Hotline response, every day of the year</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value"><span data-count="2">0</span><em>+</em></div>
-            <div class="stat-label">Regional bases — Philippines &amp; Qatar</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value"><em>OEM</em></div>
-            <div class="stat-label">Aligned manpower, method &amp; tooling</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value"><span data-count="4">0</span></div>
-            <div class="stat-label">Sectors: power, oil &amp; gas, marine, industrial</div>
+      <div class="hero-stats reveal">
+        <div class="wrap">
+          <div class="hero-stats-inner">
+            <div class="stat">
+              <div class="stat-value"><span data-count="24">0</span><em>/7</em></div>
+              <div class="stat-label">Hotline response, every day of the year</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value"><span data-count="2">0</span><em>+</em></div>
+              <div class="stat-label">Regional bases — Philippines &amp; Qatar</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value"><em>OEM</em></div>
+              <div class="stat-label">Aligned manpower, method &amp; tooling</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value"><span data-count="4">0</span></div>
+              <div class="stat-label">Sectors: power, oil &amp; gas, marine, industrial</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+    <div class="build-run" aria-hidden="true"></div>
+  </div>
 
   <!-- ============ MARQUEE ============ -->
   <section class="marquee-band" aria-label="Sectors served" data-depth="belt">

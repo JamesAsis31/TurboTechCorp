@@ -2,19 +2,22 @@
    WebGL machine scene
    ---------------------------------------------------------------------
    The unit in images/img7.jpg, modelled procedurally and rendered behind
-   the page: a skid-mounted axial blower - polished bellmouth intake, bar
-   guard, vaned impeller on a domed hub, finned casing barrel stepping
-   down to a finned rear section and end cover, with lifting hoop,
-   mounting lugs and a fabricated steel base under it all.
+   the page: a lathed bellmouth intake with a rolled chrome bead, a bar
+   guard on its own ring, a vaned impeller on an ogive hub, a strut
+   spider behind it, a finned casing barrel between bolted flange
+   collars, a finned rear section and end cover, terminal box, lifting
+   hoop, mounting lugs, a discharge volute and a fabricated steel skid.
 
-   Scroll runs it through one overhaul. The page opens on the unit in
-   pieces; the first screenful builds it up, the middle of the page walks
-   the camera around and through the finished machine, and the last
-   stretch strips it back down in reverse.
+   Scroll runs it through one overhaul. index.html pins the hero for a
+   screenful of scrolling, so the machine assembles under the reader's own
+   scroll before the page moves at all; the middle of the page walks the
+   camera around and through the finished unit; the last stretch strips it
+   back down in reverse.
 
    All of this is an enhancement. No WebGL, no ES module support, reduced
    motion, or a throw anywhere in here, and the page keeps exactly the SVG
-   wheel it already had. Nothing else on the page waits on this file.
+   wheel it already had, with the pin collapsing to nothing. Nothing else
+   on the page waits on this file.
    ===================================================================== */
 
 /* three.js is vendored rather than pulled from a CDN: this site is served to
@@ -137,6 +140,28 @@ function dotTexture() {
   return new THREE.CanvasTexture(c);
 }
 
+/* Fine directional streaks, used as a roughness map. Perfectly even roughness
+   is most of what makes procedural metal read as plastic; breaking it up
+   costs one small canvas and does the work of a real material map. */
+function brushedTexture() {
+  const c = document.createElement('canvas');
+  c.width = 256;
+  c.height = 256;
+  const g = c.getContext('2d');
+  g.fillStyle = '#8a8a8a';
+  g.fillRect(0, 0, 256, 256);
+  for (let i = 0; i < 4200; i++) {
+    const v = Math.round(96 + hash(i * 1.7) * 76);
+    g.fillStyle = 'rgba(' + v + ',' + v + ',' + v + ',.45)';
+    g.fillRect(hash(i) * 256, hash(i * 3.1) * 256, 6 + hash(i * 5.3) * 54, 1);
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = THREE.RepeatWrapping;
+  t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(5, 3);
+  return t;
+}
+
 /* a hand-drawn equirectangular strip is environment enough for metal to have
    something to reflect, with no HDR to download. The photograph is lit by a
    hard window throwing slats across a dark room, so the strip is mostly dark
@@ -198,26 +223,35 @@ function boot() {
 
   /* ---- proportions, taken off the photograph ---------------------------- */
   const R = 4.0;                    // casing barrel radius
-  const RR = 3.4;                   // rear section radius
+  const RR = 3.35;                  // rear section radius
+  const MOUTH = 5.25;               // bellmouth outer radius
+  const SEG = narrow ? 48 : 96;     // segments round a full turn
   const VANES = narrow ? 9 : 12;
   const BARS = narrow ? 8 : 11;
-  const FINS = narrow ? 9 : 14;
-  const REAR_FINS = narrow ? 6 : 9;
+  const FINS = narrow ? 9 : 15;
+  const REAR_FINS = narrow ? 6 : 10;
+  const STRUTS = 6;
 
   scene.environment = new THREE.PMREMGenerator(renderer)
     .fromEquirectangular(skyTexture()).texture;
 
   /* ---- materials, read off the photograph ------------------------------- */
+  const brushed = brushedTexture();
   const chrome = new THREE.MeshStandardMaterial({
-    color: 0xd9dfe8, metalness: 1, roughness: 0.09,
-    side: THREE.DoubleSide, envMapIntensity: 1.6,
+    color: 0xdbe1ea, metalness: 1, roughness: 0.07,
+    side: THREE.DoubleSide, envMapIntensity: 1.7,
   });
   const steel = new THREE.MeshStandardMaterial({
-    color: 0x9aa4b2, metalness: 0.95, roughness: 0.26,
-    side: THREE.DoubleSide, envMapIntensity: 1.2,
+    color: 0x9aa4b2, metalness: 0.95, roughness: 0.24,
+    side: THREE.DoubleSide, envMapIntensity: 1.25,
   });
   const shell = new THREE.MeshStandardMaterial({
-    color: 0x23282f, metalness: 0.86, roughness: 0.52, envMapIntensity: 0.85,
+    color: 0x23282f, metalness: 0.88, roughness: 0.5,
+    roughnessMap: brushed, envMapIntensity: 0.9,
+  });
+  const machined = new THREE.MeshStandardMaterial({
+    color: 0x8d959f, metalness: 0.93, roughness: 0.3,
+    roughnessMap: brushed, envMapIntensity: 1.15,
   });
   const frameMat = new THREE.MeshStandardMaterial({
     color: 0x6d757f, metalness: 0.72, roughness: 0.42, envMapIntensity: 1,
@@ -249,6 +283,9 @@ function boot() {
   const size = new THREE.Vector3();
   const off = new THREE.Vector3();
   const axis = new THREE.Vector3(0, 0, 1);
+  const zAxis = new THREE.Vector3(0, 0, 1);
+  const yAxis = new THREE.Vector3(0, 1, 0);
+  const xAxis = new THREE.Vector3(1, 0, 0);
   let tumbleAmt = 0;
 
   /* index < 0 means a plain Mesh rather than one instance of an InstancedMesh;
@@ -272,6 +309,26 @@ function boot() {
     tumbleAmt = spin || 0;
     axis.set(ax === undefined ? 0 : ax, ay === undefined ? 0 : ay,
              az === undefined ? 1 : az).normalize();
+  };
+
+  /* Every hex head on the machine, in one instanced draw. The allocation is
+     deliberately generous and .count is trimmed to what was actually placed
+     once the model is built - an InstancedMesh renders its whole allocation,
+     so a spare instance is a bolt sitting at the origin. */
+  const bolts = new THREE.InstancedMesh(
+    zTo(new THREE.CylinderGeometry(0.115, 0.115, 0.13, 6)), machined, 128,
+  );
+  machine.add(bolts);
+  let boltN = 0;
+
+  const boltRing = (count, radius, z, cue, oz) => {
+    for (let i = 0; i < count; i++) {
+      const a = (i / count) * Math.PI * 2;
+      rot.identity();
+      place(Math.cos(a) * radius, Math.sin(a) * radius, z, 1);
+      flyFrom(0, 0, oz, 0.8, 0.4, 0.5, 0.3);
+      part(bolts, boltN++, cue);
+    }
   };
 
   /* ---- the base: fabricated channel skid, which lands first ------------- */
@@ -298,36 +355,84 @@ function boot() {
         part(box, n++, 0.00);
       }
     }
+
+    // four hold-down bolts per foot pad, heads up
+    for (const z of [2.4, -2.9]) {
+      for (const x of [-3.5, 3.5]) {
+        for (const d of [[-0.5, -0.55], [0.5, -0.55], [-0.5, 0.55], [0.5, 0.55]]) {
+          rot.setFromAxisAngle(xAxis, Math.PI / 2);
+          place(x + d[0], -6.34, z + d[1], 1);
+          flyFrom(0, -15, 0, 0.6, 1, 0, 0);
+          part(bolts, boltN++, 0.03);
+        }
+      }
+    }
   }
 
-  /* ---- the casing: main barrel, the step down, the end cover ------------ */
+  /* ---- the casing: barrel, flange collars, rear section, end cover ------ */
   {
-    const barrel = new THREE.Mesh(zTo(new THREE.CylinderGeometry(R, R, 4.2, 64)), shell);
+    const barrel = new THREE.Mesh(zTo(new THREE.CylinderGeometry(R, R, 4.2, SEG)), shell);
     machine.add(barrel);
     rot.identity();
     place(0, 0, 0.4, 1);
     flyFrom(0, 13, 0, 0.5, 1, 0, 0);
     part(barrel, -1, 0.08);
 
-    const rear = new THREE.Mesh(zTo(new THREE.CylinderGeometry(RR, RR, 3.0, 56)), shell);
+    const rear = new THREE.Mesh(zTo(new THREE.CylinderGeometry(RR, RR, 3.0, SEG)), shell);
     machine.add(rear);
     place(0, 0, -3.2, 1);
     flyFrom(0, 0, -16, 0.4, 1, 0, 0);
     part(rear, -1, 0.20);
 
+    // a machined step where the barrel necks down to the rear section
+    const step = new THREE.Mesh(
+      zTo(new THREE.CylinderGeometry(RR + 0.05, R, 0.55, SEG)), machined,
+    );
+    machine.add(step);
+    place(0, 0, -1.85, 1);
+    flyFrom(0, 0, -13, 0.5, 1, 0, 0);
+    part(step, -1, 0.18);
+
     const cap = new THREE.Mesh(
-      zTo(new THREE.CylinderGeometry(RR * 0.99, RR * 0.72, 0.9, 56)), shell,
+      zTo(new THREE.CylinderGeometry(RR * 0.99, RR * 0.7, 0.95, SEG)), shell,
     );
     machine.add(cap);
-    place(0, 0, -5.1, 1);
+    place(0, 0, -5.15, 1);
     flyFrom(0, 0, -19, 0.9, 0.4, 0.2, 1);
     part(cap, -1, 0.30);
+
+    const boss = new THREE.Mesh(
+      zTo(new THREE.CylinderGeometry(0.75, 0.75, 0.5, 32)), machined,
+    );
+    machine.add(boss);
+    place(0, 0, -5.75, 1);
+    flyFrom(0, 0, -21, 1.6, 0, 1, 0);
+    part(boss, -1, 0.32);
+
+    /* raised collars at each joint, each with its own ring of hex heads -
+       the detail that stops a plain cylinder reading as a plain cylinder */
+    const collar = (z, radius, cue, oz) => {
+      const c = new THREE.Mesh(
+        zTo(new THREE.CylinderGeometry(radius + 0.22, radius + 0.22, 0.36, SEG)), machined,
+      );
+      machine.add(c);
+      rot.identity();
+      place(0, 0, z, 1);
+      flyFrom(0, 0, oz, 0.5, 1, 0.2, 0);
+      part(c, -1, cue);
+    };
+    collar(2.42, R, 0.12, 11);
+    collar(-1.72, R, 0.16, -12);
+    collar(-4.62, RR, 0.28, -17);
+    boltRing(24, R + 0.3, 2.42, 0.13, 11);
+    boltRing(24, R + 0.3, -1.72, 0.17, -12);
+    boltRing(18, RR + 0.3, -4.62, 0.29, -17);
   }
 
   /* ---- cooling fins: rings that shrink onto the barrels ------------------ */
   {
     const ring = new THREE.InstancedMesh(
-      new THREE.TorusGeometry(1, 0.014, 6, 76), shell, FINS + REAR_FINS,
+      new THREE.TorusGeometry(1, 0.013, 6, SEG), shell, FINS + REAR_FINS,
     );
     machine.add(ring);
     let n = 0;
@@ -335,12 +440,47 @@ function boot() {
     flyFrom(0, 0, 0, 0);
 
     for (let i = 0; i < FINS; i++) {
-      place(0, 0, 2.3 - (i / (FINS - 1)) * 3.9, R + 0.13);
-      part(ring, n++, 0.14 + i * 0.004, 1.65);
+      place(0, 0, 2.1 - (i / (FINS - 1)) * 3.6, R + 0.12);
+      part(ring, n++, 0.14 + i * 0.004, 1.7);
     }
     for (let i = 0; i < REAR_FINS; i++) {
-      place(0, 0, -1.9 - (i / (REAR_FINS - 1)) * 2.6, RR + 0.12);
-      part(ring, n++, 0.24 + i * 0.004, 1.65);
+      place(0, 0, -2.15 - (i / (REAR_FINS - 1)) * 2.3, RR + 0.11);
+      part(ring, n++, 0.24 + i * 0.004, 1.7);
+    }
+  }
+
+  /* ---- the discharge volute tucked under the barrel ---------------------- */
+  {
+    const volute = new THREE.Mesh(
+      new THREE.TorusGeometry(2.4, 0.9, 16, 44, Math.PI * 0.85), shell,
+    );
+    machine.add(volute);
+    rot.setFromAxisAngle(yAxis, Math.PI / 2);
+    place(0, -2.7, -0.2, 1);
+    flyFrom(0, -11, 0, 0.7, 1, 0, 0);
+    part(volute, -1, 0.10);
+  }
+
+  /* ---- terminal box on the flank ---------------------------------------- */
+  {
+    const body = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.5, 2.4), shell);
+    machine.add(body);
+    rot.identity();
+    place(R - 0.1, 1.1, -0.5, 1);
+    flyFrom(9, 3, 0, 1.0, 0.2, 1, 0.2);
+    part(body, -1, 0.36);
+
+    const lid = new THREE.Mesh(new THREE.BoxGeometry(0.26, 1.25, 2.0), machined);
+    machine.add(lid);
+    place(R + 0.85, 1.1, -0.5, 1);
+    flyFrom(11, 3, 0, 1.2, 0.2, 1, 0.2);
+    part(lid, -1, 0.38);
+
+    for (const d of [[-0.5, -0.8], [0.5, -0.8], [-0.5, 0.8], [0.5, 0.8]]) {
+      rot.setFromAxisAngle(yAxis, Math.PI / 2);
+      place(R + 1.0, 1.1 + d[0], -0.5 + d[1], 1);
+      flyFrom(12, 3, 0, 0.9, 0.2, 1, 0.2);
+      part(bolts, boltN++, 0.39);
     }
   }
 
@@ -348,7 +488,6 @@ function boot() {
   {
     const lug = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), frameMat, 4);
     machine.add(lug);
-    const zAxis = new THREE.Vector3(0, 0, 1);
     const seats = [
       [0, R + 0.2, 1.6, 0],
       [0, R + 0.2, -1.4, 0],
@@ -358,7 +497,7 @@ function boot() {
     let n = 0;
     for (const seat of seats) {
       rot.setFromAxisAngle(zAxis, seat[3]);
-      place(seat[0], seat[1], seat[2], 1.5, 0.34, 1.5);
+      place(seat[0], seat[1], seat[2], 1.55, 0.34, 1.55);
       off.set(seat[0], seat[1], seat[2]).normalize().multiplyScalar(7);
       tumbleAmt = 1.1;
       axis.set(0.3, 1, 0.2).normalize();
@@ -366,21 +505,46 @@ function boot() {
     }
 
     const hoop = new THREE.Mesh(
-      new THREE.TorusGeometry(1.7, 0.11, 8, 40, Math.PI), frameMat,
+      new THREE.TorusGeometry(1.7, 0.12, 10, 48, Math.PI), frameMat,
     );
     machine.add(hoop);
-    rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+    rot.setFromAxisAngle(yAxis, Math.PI / 2);
     place(0, R + 0.15, 0.2, 1);
     flyFrom(0, 8, 0, 1.4, 1, 0.3, 0);
     part(hoop, -1, 0.40);
   }
 
-  /* ---- the impeller: vanes on a domed hub, and the shaft nut ------------- */
+  /* ---- the strut spider carrying the bearing housing --------------------- */
+  {
+    const strut = new THREE.InstancedMesh(
+      new THREE.BoxGeometry(1, 1, 1), machined, STRUTS,
+    );
+    machine.add(strut);
+    for (let i = 0; i < STRUTS; i++) {
+      const a = (i / STRUTS) * Math.PI * 2 + 0.26;
+      const mid = (1.1 + R * 0.95) / 2;
+      rot.setFromAxisAngle(zAxis, a + Math.PI / 2);
+      place(Math.cos(a) * mid, Math.sin(a) * mid, 1.5, 0.34, R * 0.95 - 1.1, 0.9);
+      flyFrom(Math.cos(a) * 8, Math.sin(a) * 8, 0, 0.8, 0, 0, 1);
+      part(strut, i, 0.42 + (i / STRUTS) * 0.03);
+    }
+
+    const housing = new THREE.Mesh(
+      zTo(new THREE.CylinderGeometry(1.15, 1.15, 1.5, 40)), machined,
+    );
+    machine.add(housing);
+    rot.identity();
+    place(0, 0, 1.5, 1);
+    flyFrom(0, 0, -9, 1.3, 0.4, 1, 0);
+    part(housing, -1, 0.44);
+  }
+
+  /* ---- the impeller: vanes on an ogive hub, and the shaft nut ------------ */
   {
     const vanes = new THREE.InstancedMesh(
       vaneGeometry({
-        stations: narrow ? 11 : 15,
-        chordPts: narrow ? 13 : 17,
+        stations: narrow ? 11 : 17,
+        chordPts: narrow ? 13 : 19,
         hubR: 0.85,
         tipR: 3.3,
         chordRoot: 2.9,
@@ -393,7 +557,6 @@ function boot() {
       steel, VANES,
     );
     spinner.add(vanes);
-    const zAxis = new THREE.Vector3(0, 0, 1);
 
     for (let b = 0; b < VANES; b++) {
       const phi = (b / VANES) * Math.PI * 2;
@@ -408,56 +571,80 @@ function boot() {
       part(vanes, b, 0.46 + (b / VANES) * 0.06);
     }
 
-    const dome = new THREE.Mesh(
-      zTo(new THREE.SphereGeometry(0.98, 32, 20, 0, Math.PI * 2, 0, Math.PI * 0.62)),
+    const ogive = new THREE.Mesh(
+      zTo(new THREE.SphereGeometry(0.98, 40, 24, 0, Math.PI * 2, 0, Math.PI * 0.62)),
       chrome,
     );
-    dome.geometry.scale(1, 1, 1.5);       // ogive rather than hemisphere
-    spinner.add(dome);
+    ogive.geometry.scale(1, 1, 1.5);
+    spinner.add(ogive);
     rot.identity();
     place(0, 0, 2.5, 1);
-    flyFrom(0.8, 2.6, 7.5, 1.2, 1, 0.2, 0);
-    part(dome, -1, 0.56);
+    flyFrom(3.2, 2.2, 5.0, 1.2, 1, 0.2, 0);
+    part(ogive, -1, 0.56);
 
-    const nut = new THREE.Mesh(zTo(new THREE.CylinderGeometry(0.2, 0.2, 0.34, 6)), chrome);
+    const collar = new THREE.Mesh(
+      zTo(new THREE.CylinderGeometry(0.42, 0.42, 0.3, 24)), machined,
+    );
+    spinner.add(collar);
+    place(0, 0, 3.32, 1);
+    flyFrom(3.4, 2.6, 4.6, 1.8, 0, 0, 1);
+    part(collar, -1, 0.58);
+
+    const nut = new THREE.Mesh(zTo(new THREE.CylinderGeometry(0.22, 0.22, 0.34, 6)), chrome);
     spinner.add(nut);
-    place(0, 0, 3.45, 1);
-    flyFrom(1.4, 3.4, 6.5, 2.4, 0, 0, 1);
+    place(0, 0, 3.55, 1);
+    flyFrom(3.6, 3.0, 4.4, 2.4, 0, 0, 1);
     part(nut, -1, 0.60);
   }
 
-  /* ---- the guard: straight bars across the intake ------------------------ */
+  /* ---- the guard: straight bars in their own ring frame ------------------ */
   {
+    const reach = R * 0.94;
+    const guardRing = new THREE.Mesh(
+      new THREE.TorusGeometry(reach, 0.07, 10, SEG), darkMat,
+    );
+    machine.add(guardRing);
+    rot.identity();
+    place(0, 0, 3.95, 1);
+    flyFrom(3.4, 2.2, 4.4, 0.5, 1, 0, 0);
+    part(guardRing, -1, 0.61);
+
     const bars = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), darkMat, BARS);
     machine.add(bars);
-    const reach = R * 0.94;
-    rot.identity();
     for (let i = 0; i < BARS; i++) {
       const x = ((i + 0.5) / BARS - 0.5) * 2 * reach;
       const half = Math.sqrt(Math.max(reach * reach - x * x, 0.01));
-      place(x, 0, 4.0, 0.15, half * 2, 0.13);
-      flyFrom(x * 0.55, 2.4, 6.0, 0.5, 0, 1, 0);
+      place(x, 0, 3.95, 0.14, half * 2, 0.12);
+      flyFrom(3.0 + x * 0.35, 2.0, 4.2, 0.5, 0, 1, 0);
       part(bars, i, 0.62 + i * 0.004);
     }
   }
 
-  /* ---- the bellmouth: the chrome the whole photograph hangs on ----------- */
+  /* ---- the bellmouth: the chrome the whole photograph hangs on -----------
+     A lathed trumpet rather than a cone: the flare is what carries the light
+     right across the front of the machine in the photograph. */
   {
-    const skirt = new THREE.Mesh(
-      zTo(new THREE.CylinderGeometry(R * 1.06, R, 1.5, 64, 1, true)), chrome,
-    );
-    machine.add(skirt);
+    const profile = [];
+    const STEPS = 22;
+    for (let i = 0; i <= STEPS; i++) {
+      const t = i / STEPS;
+      profile.push(new THREE.Vector2(R + (MOUTH - R) * t * t, t * 2.2));
+    }
+    const flare = new THREE.Mesh(zTo(new THREE.LatheGeometry(profile, SEG)), chrome);
+    machine.add(flare);
     rot.identity();
-    place(0, 0, 3.2, 1);
-    flyFrom(0.5, -3.4, 7.5, 0.5, 1, 0, 0);
-    part(skirt, -1, 0.70);
+    place(0, 0, 2.5, 1);
+    flyFrom(4.2, -2.2, 4.0, 0.5, 1, 0, 0);
+    part(flare, -1, 0.70);
 
-    const lip = new THREE.Mesh(new THREE.TorusGeometry(R * 1.02, 0.74, 20, 76), chrome);
-    machine.add(lip);
-    place(0, 0, 4.15, 1);
-    flyFrom(1.2, 4.2, 9.5, 0.7, 1, 0.2, 0);
-    part(lip, -1, 0.76);
+    const bead = new THREE.Mesh(new THREE.TorusGeometry(MOUTH, 0.44, 22, SEG), chrome);
+    machine.add(bead);
+    place(0, 0, 4.7, 1);
+    flyFrom(4.8, 2.6, 5.2, 0.7, 1, 0.2, 0);
+    part(bead, -1, 0.76);
   }
+
+  bolts.count = boltN;      // only draw the heads that were actually placed
 
   /* ---- dust in the flow path -------------------------------------------- */
   const dust = (() => {
@@ -534,7 +721,7 @@ function boot() {
   const eyeCurve = path([
     [13.5, 5.5, 21.0],
     [6.5, -2.0, 18.0],
-    [1.8, 0.6, 10.0],
+    [1.8, 0.6, 10.5],
     [14.0, 1.0, 3.0],
     [17.0, 5.0, -12.0],
     [2.0, 9.5, -24.0],
@@ -550,13 +737,6 @@ function boot() {
     [0.0, -1.0, 0.0],
   ]);
 
-  /* The page runs the unit through one overhaul: built in the first
-     screenful, walked around through the middle, stripped again at the end.
-     Scrolling back up plays whichever phase you are in backwards. */
-  const ASSEMBLE = 0.13;
-  const STRIP_FROM = 0.74;
-  const STRIP_TO = 0.96;
-
   /* how much of the page the scene is allowed to own: the build and the
      strip-down are its moments, the reading sections are not */
   const PRESENCE = [[0, 1], [0.15, 1], [0.26, 0.48], [0.66, 0.48], [0.80, 0.9], [1, 0.9]];
@@ -568,9 +748,24 @@ function boot() {
      it away once the page has scrolled past the hero. */
   const VIEW_SHIFT = [[0, 0.23], [0.16, 0.23], [0.42, 0], [1, 0]];
 
-  const scrollFraction = () => {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    return max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+  const STRIP_FROM = 0.74;
+  const STRIP_TO = 0.96;
+
+  /* ---- how scroll maps onto the overhaul --------------------------------
+     The build is measured in pixels rather than as a fraction of the page: on
+     index.html a .build-run spacer sits under a sticky hero, so those pixels
+     are exactly the stretch where the page holds still and the machine puts
+     itself together under the reader's own scrolling. A page with no spacer
+     falls back to giving the build the first stretch of ordinary scroll. */
+  let runPx = 1;
+  let maxPx = 1;
+
+  const measure = () => {
+    const doc = document.documentElement;
+    maxPx = Math.max(doc.scrollHeight - window.innerHeight, 1);
+    const spacer = document.querySelector('.build-run');
+    const h = spacer ? spacer.offsetHeight : 0;
+    runPx = h > 40 ? h : Math.max(Math.min(maxPx * 0.13, window.innerHeight * 0.9), 1);
   };
 
   /* ---- theme ------------------------------------------------------------
@@ -582,15 +777,16 @@ function boot() {
     scene.fog.color.set(cssVar('--bg') || (light ? '#f4f6f8' : '#06080b'));
     scene.fog.density = light ? 0.015 : 0.0095;
     renderer.toneMappingExposure = light ? 1.4 : 1.05;
-    ambient.color.set(light ? 0xdae4f2 : 0x131c2a);
-    ambient.intensity = light ? 3.4 : 1.2;
+    ambient.color.set(light ? 0xdae4f2 : 0x1b2432);
+    ambient.intensity = light ? 3.4 : 1.9;
     key.intensity = light ? 4.6 : 4.2;
     fill.intensity = light ? 2.2 : 1.5;
     core.intensity = light ? 32 : 55;
     deep.intensity = light ? 26 : 42;
-    chrome.color.set(light ? 0xb9c2ce : 0xd9dfe8);
+    chrome.color.set(light ? 0xbcc5d1 : 0xdbe1ea);
     steel.color.set(light ? 0x7c8798 : 0x9aa4b2);
     shell.color.set(light ? 0x767e88 : 0x23282f);
+    machined.color.set(light ? 0x9aa2ac : 0x8d959f);
     frameMat.color.set(light ? 0x98a1ab : 0x6d757f);
     darkMat.color.set(light ? 0x59606a : 0x14181d);
     dust.material.color.set(light ? 0x6c7b90 : 0xbcd0ea);
@@ -621,9 +817,11 @@ function boot() {
     camera.updateProjectionMatrix();
     shifted = -1;                           // the offset is in pixels: redo it
     renderer.setSize(vw, vh, false);
+    measure();
   };
   resize();
   window.addEventListener('resize', resize);
+  window.addEventListener('load', measure);
 
   say('Spinning up');
 
@@ -633,7 +831,7 @@ function boot() {
   let raf = 0;
   let last = performance.now();
   let spin = 0;
-  let prog = scrollFraction();
+  let px = window.scrollY;
   let shown = -1;
   let ready = false;
   let held = -1;
@@ -643,24 +841,25 @@ function boot() {
     const dt = Math.min((now - last) / 1000, 0.05);
     last = now;
 
-    const target = scrollFraction();
-    prog += (target - prog) * Math.min(1, dt * 4.2);      // damped follow
+    const targetPx = window.scrollY;
+    px += (targetPx - px) * Math.min(1, dt * 4.2);        // damped follow
 
-    const build = clamp01(prog / ASSEMBLE);
+    const build = clamp01(px / runPx);
+    const prog = clamp01(px / maxPx);
     const strip = clamp01((prog - STRIP_FROM) / (STRIP_TO - STRIP_FROM));
     const whole = Math.min(build, 1 - strip);   // 1 when the unit is together
-    const journey = Math.max((prog - ASSEMBLE) / (1 - ASSEMBLE), 0);
+    const journey = clamp01((px - runPx) / Math.max(maxPx - runPx, 1));
 
     if (whole !== held) {
       assemble(whole);
       held = whole;
     }
 
-    /* the gap between where the camera is and where the scroll wants it is a
-       free read on scroll speed - spin the impeller up while the page moves. A
-       half-built unit barely turns; it comes up to speed as it closes, and
-       runs back down as it is stripped. */
-    const boost = Math.min(Math.abs(target - prog) * 16, 4.5);
+    /* how far the damped follow is behind the scrollbar is a free read on
+       scroll speed - spin the impeller up while the page moves. A half-built
+       unit barely turns; it comes up to speed as it closes, and runs back down
+       as it is stripped. */
+    const boost = Math.min(Math.abs(targetPx - px) / 90, 4.5);
     spin += dt * (0.05 + 0.55 * whole + boost * whole);
     spinner.rotation.z = spin;
     dust.rotation.z = spin * -0.03;
@@ -692,7 +891,12 @@ function boot() {
     if (!ready) {
       ready = true;
       document.documentElement.dataset.webgl = 'on';
+      /* the pin only has a height once data-webgl is set, so the document just
+         got taller. script.js re-measures its own scroll caches off this event
+         - faking a window resize instead also re-runs the renderer's resize
+         path, and that turned out to disturb the page's own layout. */
       window.dispatchEvent(new Event('rotor:ready'));
+      measure();
     }
   };
 
