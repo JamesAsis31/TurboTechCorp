@@ -173,8 +173,15 @@
   ===================================================================== */
   const preloader = $('#preloader');
   const preloadBar = $('#preloadBar');
+  const preloadText = $('#preloadText');
 
   let loadFinished = false;
+
+  /* scene.js narrates its own build, so the loader says what is actually
+     happening instead of counting to 100 on its own */
+  window.addEventListener('rotor:stage', (e) => {
+    if (preloadText && !loadFinished) preloadText.textContent = e.detail;
+  });
   const finishLoading = () => {
     if (loadFinished) return;          // `load` and the timeout ceiling can both fire
     loadFinished = true;
@@ -195,9 +202,17 @@
     }, 130);
 
     const done = () => { clearInterval(tick); finishLoading(); };
+
     if (document.readyState === 'complete') setTimeout(done, 420);
     else window.addEventListener('load', () => setTimeout(done, 320));
-    setTimeout(done, 3600); // hard ceiling so a slow image never traps the page
+
+    /* the rotor's first frame is the better cue to open on when it gets there
+       first. It usually does: a module script holds `load` until its imports
+       have run, so the scene is normally built by then anyway - and if the
+       scene never arrives at all, nothing here waits a moment longer for it */
+    window.addEventListener('rotor:ready', () => setTimeout(done, 180), { once: true });
+
+    setTimeout(done, 3600); // hard ceiling so a slow asset never traps the page
   } else {
     preloader?.classList.add('is-done');
     startReveals();

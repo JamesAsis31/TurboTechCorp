@@ -189,6 +189,23 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible{
 @keyframes drift-b{ 50%{ transform:translate3d(-11vw,-6vh,0) scale(1.1); } }
 @keyframes drift-c{ 50%{ transform:translate3d(6vw,-9vh,0) scale(1.2); } }
 
+/* The WebGL rotor sits above the aurora and below the grid and noise, so the
+   scene picks up the same texture treatment as everything else. It fades in
+   only once the first frame is on screen - scene.js sets data-webgl then - and
+   its opacity from that point on is driven per frame from scroll depth. */
+.bg-webgl{
+  position:absolute; inset:0; width:100%; height:100%; display:block;
+  opacity:0; transition:opacity 1.2s var(--ease);
+}
+[data-webgl="on"] .bg-aurora{ opacity:.42; }
+
+/* the flat nameplate wheel is the fallback for the real thing: once the scene
+   is live it would only compete with the rotor behind it */
+[data-webgl="on"] .rotor-3d{
+  opacity:0; visibility:hidden; transition:opacity .8s var(--ease);
+}
+[data-webgl="on"] .hero-visual-glow{ opacity:.5; }
+
 .bg-grid{
   position:absolute; inset:0;
   background-image:

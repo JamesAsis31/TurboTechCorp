@@ -29,12 +29,13 @@
     <circle cx="200" cy="200" r="76" class="pl-plate"></circle><circle cx="200" cy="200" r="33" class="pl-boss"></circle>
   </svg>
   <div class="preload-bar"><i id="preloadBar"></i></div>
-  <p class="preload-text">Spinning up</p>
+  <p class="preload-text" id="preloadText">Loading experience</p>
 </div>
 
 <!-- ============ AMBIENT BACKGROUND ============ -->
 <div class="bg-layers" aria-hidden="true">
   <div class="bg-aurora"><span></span><span></span><span></span></div>
+  <canvas class="bg-webgl" id="bgWebgl"></canvas>
   <div class="bg-grid"></div>
   <div class="bg-noise"></div>
 </div>
@@ -634,5 +635,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="script.js"></script>
+<script type="module" src="scene.js"></script>
 </body>
 </html>
