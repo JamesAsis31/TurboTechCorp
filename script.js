@@ -269,7 +269,108 @@
   }
 
   /* =====================================================================
-     Header state, scroll progress, back-to-top, parallax, timeline
+     Scroll-driven 3D depth
+     ---------------------------------------------------------------------
+     Elements marked [data-depth] sit on a plane that is turned in 3D
+     against their own position in the viewport, so the motion tracks the
+     scrollbar the whole way past instead of firing once on entry.
+
+     Positions come from the offsetTop chain rather than
+     getBoundingClientRect: the rect of an element we are translating
+     already includes that translation, so reading it would feed our own
+     output back in as the next frame's input. offsetTop/offsetHeight are
+     layout values that ignore transforms, which also keeps this off the
+     per-frame layout-read path entirely.
+  ===================================================================== */
+  const DEPTH_PRESETS = {
+    //       lay back    turn    spin   drift  push back  shrink
+    soft:  { rx:  6, ry:  0, rz:  0, y:  12, z:  90, s:  .02 },
+    panel: { rx:  9, ry:  0, rz:  0, y:  18, z: 150, s:  .04 },
+    deck:  { rx: 13, ry:  0, rz:  0, y:  26, z: 300, s:  .06 },
+    belt:  { rx: 16, ry:  0, rz:  0, y:   0, z:   0, s: -.06 },
+    rotor: { rx: 17, ry: 12, rz: 55, y: -34, z: 180, s:  .05 },
+  };
+
+  /* Within this much of the settle line an element is left with no
+     transform at all, so anything sitting comfortably on screen renders
+     through no 3D projection and keeps its text pixel-crisp. */
+  const DEPTH_DEAD = .18;
+
+  const depthItems = new Map();
+  $$('[data-depth]').forEach(el => {
+    depthItems.set(el, {
+      cfg: DEPTH_PRESETS[el.dataset.depth] || DEPTH_PRESETS.panel,
+      top: 0, height: 0, last: '', hot: false,
+    });
+  });
+
+  const depthOn = !reduce && depthItems.size > 0;
+  let depthScale = 1;
+
+  const measureDepth = () => {
+    if (!depthOn) return;
+    depthScale = window.innerWidth <= 760 ? .55 : 1;   // gentler on a phone
+    depthItems.forEach((item, el) => {
+      let y = 0;
+      for (let n = el; n; n = n.offsetParent) y += n.offsetTop;
+      item.top = y;
+      item.height = el.offsetHeight;
+    });
+  };
+
+  const updateDepth = (scrollY) => {
+    if (!depthOn) return;
+
+    const vh = window.innerHeight;
+    const line = vh * .55;          // the height at which a plane settles flat
+
+    depthItems.forEach((item, el) => {
+      const elTop = item.top - scrollY;
+      const elBottom = elTop + item.height;
+
+      /* nothing off screen is worth transforming, and a compositor layer is
+         only worth holding while the element is somewhere near one */
+      const near = elBottom > -vh * .35 && elTop < vh * 1.35;
+      if (near !== item.hot) {
+        item.hot = near;
+        el.style.willChange = near ? 'transform' : '';
+      }
+
+      /* an element straddling the settle line counts as arrived whatever its
+         height, so a list taller than the screen sits flat while you read it
+         and only turns on the way in and the way back out */
+      let p = 0;
+      if (elTop > line) p = (elTop - line) / (vh - line);
+      else if (elBottom < line) p = (elBottom - line) / line;
+
+      const sign = p < 0 ? -1 : 1;
+      const away = Math.min(Math.max((Math.abs(p) - DEPTH_DEAD) / (1 - DEPTH_DEAD), 0), 1);
+
+      if (!near || away === 0) {
+        if (item.last !== '') { el.style.transform = ''; item.last = ''; }
+        return;
+      }
+
+      const q = sign * away * away * depthScale;   // eased, sign preserved
+      const mag = Math.abs(q);
+      const c = item.cfg;
+
+      const t =
+        'perspective(1500px) translate3d(0, ' + (c.y * q).toFixed(1) + 'px, ' +
+        (-c.z * mag).toFixed(0) + 'px) rotateX(' + (-c.rx * q).toFixed(2) +
+        'deg) rotateY(' + (c.ry * q).toFixed(2) + 'deg) rotateZ(' +
+        (c.rz * q).toFixed(2) + 'deg) scale(' + (1 - c.s * mag).toFixed(4) + ')';
+
+      if (t !== item.last) { el.style.transform = t; item.last = t; }
+    });
+  };
+
+  measureDepth();
+  window.addEventListener('resize', measureDepth);
+  window.addEventListener('load', measureDepth);
+
+  /* =====================================================================
+     Header state, scroll progress, back-to-top, 3D depth, timeline
   ===================================================================== */
   const header      = $('#siteHeader');
   const backToTop   = $('#backToTop');
@@ -277,7 +378,6 @@
   const timeline    = $('#timeline');
   const timelineFill= $('#timelineFill');
   const steps       = $$('.step');
-  const parallaxEls = $$('[data-parallax]');
 
   let ticking = false;
 
@@ -293,15 +393,7 @@
       progressBar.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
     }
 
-    if (!reduce) {
-      parallaxEls.forEach(el => {
-        const r = el.getBoundingClientRect();
-        if (r.bottom < 0 || r.top > window.innerHeight) return;
-        const amount = parseFloat(el.dataset.parallax) || 14;
-        const mid = (r.top + r.height / 2 - window.innerHeight / 2) / window.innerHeight;
-        el.style.transform = `translate3d(0, ${(-mid * amount).toFixed(2)}px, 0)`;
-      });
-    }
+    updateDepth(y);
 
     if (timeline && timelineFill) {
       const r = timeline.getBoundingClientRect();
@@ -529,6 +621,7 @@
         if (match) shown++;
       });
       if (noResults) noResults.hidden = shown !== 0;
+      measureDepth();   // filtering changes the height of everything below it
     });
   });
 
@@ -580,6 +673,7 @@
           if (match) shown++;
         });
         if (galleryNoResults) galleryNoResults.hidden = shown !== 0;
+        measureDepth();   // filtering changes the height of everything below it
       });
     });
   }

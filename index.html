@@ -139,45 +139,47 @@
 
       <div class="hero-visual reveal-scale" aria-hidden="true">
         <div class="hero-visual-glow"></div>
-        <svg viewBox="0 0 400 400" class="rotor" data-parallax="18">
-          <defs>
-            <!-- one directional light source across the whole wheel, so blades
-                 on the lit side read brighter than those in shadow -->
-            <linearGradient id="steelBlade" gradientUnits="userSpaceOnUse" x1="70" y1="40" x2="330" y2="360">
-              <stop offset="0%"   class="steel-hi"></stop>
-              <stop offset="48%"  class="steel-mid"></stop>
-              <stop offset="100%" class="steel-lo"></stop>
-            </linearGradient>
-            <radialGradient id="steelPlate" cx="40%" cy="32%" r="76%">
-              <stop offset="0%"   class="steel-hi"></stop>
-              <stop offset="58%"  class="steel-mid"></stop>
-              <stop offset="100%" class="steel-lo"></stop>
-            </radialGradient>
-            <radialGradient id="steelBoss" cx="38%" cy="30%" r="74%">
-              <stop offset="0%"   class="steel-hi"></stop>
-              <stop offset="62%"  class="steel-mid"></stop>
-              <stop offset="100%" class="steel-lo"></stop>
-            </radialGradient>
-          </defs>
+        <div class="rotor-3d" data-depth="rotor">
+          <svg viewBox="0 0 400 400" class="rotor">
+            <defs>
+              <!-- one directional light source across the whole wheel, so blades
+                   on the lit side read brighter than those in shadow -->
+              <linearGradient id="steelBlade" gradientUnits="userSpaceOnUse" x1="70" y1="40" x2="330" y2="360">
+                <stop offset="0%"   class="steel-hi"></stop>
+                <stop offset="48%"  class="steel-mid"></stop>
+                <stop offset="100%" class="steel-lo"></stop>
+              </linearGradient>
+              <radialGradient id="steelPlate" cx="40%" cy="32%" r="76%">
+                <stop offset="0%"   class="steel-hi"></stop>
+                <stop offset="58%"  class="steel-mid"></stop>
+                <stop offset="100%" class="steel-lo"></stop>
+              </radialGradient>
+              <radialGradient id="steelBoss" cx="38%" cy="30%" r="74%">
+                <stop offset="0%"   class="steel-hi"></stop>
+                <stop offset="62%"  class="steel-mid"></stop>
+                <stop offset="100%" class="steel-lo"></stop>
+              </radialGradient>
+            </defs>
 
-          <circle cx="200" cy="200" r="186" class="rotor-ring"></circle>
-          <circle cx="200" cy="200" r="172" class="rotor-ring-dash"></circle>
-          <circle cx="200" cy="200" r="194" class="rotor-ring-arc" stroke-dasharray="150 1066"></circle>
+            <circle cx="200" cy="200" r="186" class="rotor-ring"></circle>
+            <circle cx="200" cy="200" r="172" class="rotor-ring-dash"></circle>
+            <circle cx="200" cy="200" r="194" class="rotor-ring-arc" stroke-dasharray="150 1066"></circle>
 
-          <!-- 24 swept, cambered blades — leading edge curves out, tip cut on an angle -->
-          <g class="rotor-blades">
-            <g data-blades="24" data-blade="M193,152 C185,116 195,74 227,44 L243,56 C224,86 213,118 209,152 Z"></g>
-          </g>
+            <!-- 24 swept, cambered blades — leading edge curves out, tip cut on an angle -->
+            <g class="rotor-blades">
+              <g data-blades="24" data-blade="M193,152 C185,116 195,74 227,44 L243,56 C224,86 213,118 209,152 Z"></g>
+            </g>
 
-          <!-- hub disc covers the blade roots, with a machined step and centre boss -->
-          <circle cx="200" cy="200" r="58" class="rotor-plate"></circle>
-          <circle cx="200" cy="200" r="50" class="rotor-plate-step"></circle>
-          <circle cx="200" cy="200" r="22" class="rotor-boss"></circle>
-          <circle cx="200" cy="200" r="13" class="rotor-boss-step"></circle>
-          <circle cx="200" cy="200" r="4"  class="rotor-boss-centre"></circle>
+            <!-- hub disc covers the blade roots, with a machined step and centre boss -->
+            <circle cx="200" cy="200" r="58" class="rotor-plate"></circle>
+            <circle cx="200" cy="200" r="50" class="rotor-plate-step"></circle>
+            <circle cx="200" cy="200" r="22" class="rotor-boss"></circle>
+            <circle cx="200" cy="200" r="13" class="rotor-boss-step"></circle>
+            <circle cx="200" cy="200" r="4"  class="rotor-boss-centre"></circle>
 
-          <circle cx="200" cy="200" r="40" class="rotor-pulse"></circle>
-        </svg>
+            <circle cx="200" cy="200" r="40" class="rotor-pulse"></circle>
+          </svg>
+        </div>
         <div class="rotor-readout">
           <span class="pulse-dot"></span>
           <span class="rotor-readout-label">Rotor status</span>
@@ -191,7 +193,7 @@
 
     <div class="hero-stats reveal">
       <div class="wrap">
-        <div class="hero-stats-inner">
+        <div class="hero-stats-inner" data-depth="panel">
           <div class="stat">
             <div class="stat-value"><span data-count="24">0</span><em>/7</em></div>
             <div class="stat-label">Hotline response, every day of the year</div>
@@ -214,7 +216,7 @@
   </section>
 
   <!-- ============ MARQUEE ============ -->
-  <section class="marquee-band" aria-label="Sectors served">
+  <section class="marquee-band" aria-label="Sectors served" data-depth="belt">
     <div class="marquee" data-marquee>
       <div class="marquee-track">
         <span>Power Generation</span><i>◆</i>
@@ -247,7 +249,7 @@
         <p class="section-sub">Every crew we mobilize is scoped, tooled and OEM-aligned before it ever reaches your gate.</p>
       </div>
 
-      <div class="bento">
+      <div class="bento" data-depth="deck">
         <article class="svc svc-lg reveal" data-tilt>
           <div class="svc-top">
             <span class="svc-icon">
@@ -393,7 +395,7 @@
 
         <div class="step reveal">
           <div class="step-dot">01</div>
-          <div class="step-body">
+          <div class="step-body" data-depth="soft">
             <h3>Contact &amp; scope the call</h3>
             <p>Reach the 24/7 hotline or send the outage details — asset type, symptoms, target dates. We confirm scope within hours, not days.</p>
             <span class="step-meta">Response in hours</span>
@@ -402,7 +404,7 @@
 
         <div class="step reveal">
           <div class="step-dot">02</div>
-          <div class="step-body">
+          <div class="step-body" data-depth="soft">
             <h3>Mobilize crew &amp; tooling</h3>
             <p>We size the crew to the job, pull OEM-aligned tooling, and lock mobilization from our Manila or Doha base.</p>
             <span class="step-meta">Manila · Pampanga · Doha</span>
@@ -411,7 +413,7 @@
 
         <div class="step reveal">
           <div class="step-dot">03</div>
-          <div class="step-body">
+          <div class="step-body" data-depth="soft">
             <h3>Execute on site</h3>
             <p>Mechanical discipline on the floor — repair, overhaul or in-situ balancing — integrated with your site safety and shift plan.</p>
             <span class="step-meta">Safety-integrated</span>
@@ -420,7 +422,7 @@
 
         <div class="step reveal">
           <div class="step-dot">04</div>
-          <div class="step-body">
+          <div class="step-body" data-depth="soft">
             <h3>Restart &amp; handover</h3>
             <p>Asset restarted, readings verified, documentation handed over. Your rotating equipment, back online and accounted for.</p>
             <span class="step-meta">Documented handover</span>
@@ -438,7 +440,7 @@
         <h2 class="section-title" data-split>Positioned where the assets are</h2>
       </div>
 
-      <div class="loc-grid">
+      <div class="loc-grid" data-depth="deck">
         <article class="loc reveal" data-tilt>
           <div class="loc-head">
             <span class="loc-flag">PH</span>
@@ -486,7 +488,7 @@
 
   <!-- ============ CTA ============ -->
   <section class="cta">
-    <div class="wrap cta-inner">
+    <div class="wrap cta-inner" data-depth="panel">
       <div class="reveal">
         <p class="eyebrow">Stop downtime</p>
         <h2>Secure the right team before the outage window closes.</h2>
@@ -579,7 +581,7 @@
 
 <!-- ============ FOOTER ============ -->
 <footer class="site-footer">
-  <div class="wrap footer-inner">
+  <div class="wrap footer-inner" data-depth="soft">
     <div class="footer-brand">
       <span class="brand-wordmark">
         <span class="brand-word brand-word-turbo">TURBO</span>
