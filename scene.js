@@ -34,6 +34,17 @@ const atCurve = (keys, x) => {
   return keys[keys.length - 1][1];
 };
 
+const easeOut = (t) => 1 - (1 - t) ** 3;
+
+const clamp01 = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
+
+/* deterministic scatter: the exploded view has to look the same on every load
+   and on every frame, so nothing here may call Math.random at draw time */
+const hash = (k) => {
+  const x = Math.sin(k * 12.9898 + 4.1414) * 43758.5453;
+  return x - Math.floor(x);
+};
+
 /* NACA 4-digit thickness distribution: a rounded leading edge running to a
    fine trailing edge, which is most of what makes a blade read as a blade */
 const halfThickness = (t, thick) =>
@@ -236,56 +247,108 @@ function boot() {
   );
   rotor.add(blades);
 
+  /* ---- the casing: rings the camera threads between, which do not spin -- */
+  const RINGS = STAGES * 2;
+  /* the instance scale multiplies the tube radius too, so the unit torus has
+     to be built thin enough to survive being blown up ~6x */
+  const casingRings = new THREE.InstancedMesh(
+    new THREE.TorusGeometry(1, 0.011, 6, 84), casing, RINGS,
+  );
+  scene.add(casingRings);
+
+  /* ---- assembly ---------------------------------------------------------
+     At the top of the page the rotor is an exploded view: blades standing off
+     on their own radii, hubs and casing clear of the shaft. Scrolling draws it
+     together a part at a time - shaft, then the stages front to back, then the
+     casing and the spinner - and only once it is whole does the camera set off
+     down the shaft.
+
+     Each piece records where it ends up, the offset it flies in from and its
+     slot in the sequence, so a frame of assembly is one pass of compose() over
+     a flat list rather than any rebuilding of geometry. */
+  const SPAN = 0.34;                    // how long one part takes to land
+  const parts = [];
+
+  const part = (mesh, index, at, rot, size, from, off, tumbleAxis, tumble, cue) =>
+    parts.push({
+      mesh, index, size, from, tumble, cue,
+      at: at.clone(), rot: rot.clone(), off: off.clone(), axis: tumbleAxis.clone(),
+    });
+
   {
-    const m = new THREE.Matrix4();
-    const q = new THREE.Quaternion();
-    const axis = new THREE.Vector3(0, 0, 1);
+    const zAxis = new THREE.Vector3(0, 0, 1);
     const at = new THREE.Vector3();
-    const size = new THREE.Vector3();
+    const q = new THREE.Quaternion();
+    const off = new THREE.Vector3();
+    const axis = new THREE.Vector3();
     let n = 0;
 
     for (let st = 0; st < STAGES; st++) {
-      const grow = 1 + st * 0.12;           // stages get bigger downstream
+      const grow = 1 + st * 0.12;         // stages get bigger downstream
       at.set(0, 0, -st * GAP);
-      size.set(grow, grow, grow);
 
+      // hubs thread onto the shaft from the front, front stage first
       q.identity();
-      m.compose(at, q, size);
-      hubs.setMatrixAt(st, m);
+      off.set(0, 0, 15 + st * 4);
+      part(hubs, st, at, q, grow, 0.85, off, zAxis, 0.9, 0.05 + st * 0.05);
 
       for (let b = 0; b < BLADES; b++) {
-        q.setFromAxisAngle(axis, (b / BLADES) * Math.PI * 2 + st * 0.31);
-        m.compose(at, q, size);
-        blades.setMatrixAt(n++, m);
+        const phi = (b / BLADES) * Math.PI * 2 + st * 0.31;
+        q.setFromAxisAngle(zAxis, phi);
+
+        /* a blade's root is +Y in its own frame, so once it is turned to its
+           azimuth it flies in along exactly the line it will sit on */
+        const spread = 4.2 + hash(n) * 2.4;
+        off.set(-Math.sin(phi) * spread, Math.cos(phi) * spread, (hash(n + 7) - 0.5) * 5);
+        axis.set(hash(n + 3) - 0.5, hash(n + 11) - 0.5, hash(n + 19) - 0.5).normalize();
+
+        part(blades, n, at, q, grow, 0.85, off, axis, 0.55,
+             0.14 + st * 0.09 + (b / BLADES) * 0.05);
+        n++;
       }
+    }
+
+    // the casing closes in from a wider radius once the stack is standing
+    q.identity();
+    off.set(0, 0, 0);
+    for (let i = 0; i < RINGS; i++) {
+      const f = i / (RINGS - 1);
+      at.set(0, 0, GAP * 0.5 + f * (TAIL - GAP));
+      part(casingRings, i, at, q, (TIP + 1.1) * (1 + f * 0.55), 1.85,
+           off, zAxis, 0, 0.42 + f * 0.20);
+    }
+  }
+
+  const noseSeatZ = nose.position.z;
+
+  const aPos = new THREE.Vector3();
+  const aQuat = new THREE.Quaternion();
+  const aTumble = new THREE.Quaternion();
+  const aScale = new THREE.Vector3();
+  const aMat = new THREE.Matrix4();
+
+  const assemble = (a) => {
+    for (let i = 0; i < parts.length; i++) {
+      const t = parts[i];
+      const e = easeOut(clamp01((a - t.cue) / SPAN));
+      aPos.copy(t.at).addScaledVector(t.off, 1 - e);
+      aTumble.setFromAxisAngle(t.axis, t.tumble * (1 - e));
+      aQuat.copy(t.rot).multiply(aTumble);
+      aScale.setScalar(t.size * (t.from + (1 - t.from) * e));
+      aMat.compose(aPos, aQuat, aScale);
+      t.mesh.setMatrixAt(t.index, aMat);
     }
     hubs.instanceMatrix.needsUpdate = true;
     blades.instanceMatrix.needsUpdate = true;
-  }
+    casingRings.instanceMatrix.needsUpdate = true;
 
-  /* ---- the casing: static rings the camera threads between ------------- */
-  {
-    const rings = STAGES * 2;
-    /* the instance scale multiplies the tube radius too, so the unit torus has
-       to be built thin enough to survive being blown up ~6x */
-    const mesh = new THREE.InstancedMesh(
-      new THREE.TorusGeometry(1, 0.011, 6, 84), casing, rings,
-    );
-    const m = new THREE.Matrix4();
-    const q = new THREE.Quaternion();
-    const at = new THREE.Vector3();
-    const size = new THREE.Vector3();
-    for (let i = 0; i < rings; i++) {
-      const f = i / (rings - 1);
-      const r = (TIP + 1.1) * (1 + f * 0.55);
-      at.set(0, 0, GAP * 0.5 + f * (TAIL - GAP));
-      size.set(r, r, r);
-      m.compose(at, q, size);
-      mesh.setMatrixAt(i, m);
-    }
-    mesh.instanceMatrix.needsUpdate = true;
-    scene.add(mesh);
-  }
+    // the shaft and the spinner are plain meshes, not instances
+    const eShaft = easeOut(clamp01(a / SPAN));
+    shaft.scale.z = 0.04 + 0.96 * eShaft;
+    const eNose = easeOut(clamp01((a - 0.62) / SPAN));
+    nose.position.z = noseSeatZ + (1 - eNose) * 24;
+    nose.scale.setScalar(0.35 + 0.65 * eNose);
+  };
 
   /* ---- dust in the flow path ------------------------------------------- */
   const dust = (() => {
@@ -356,9 +419,14 @@ function boot() {
      it away once the page has scrolled past the hero. */
   const VIEW_SHIFT = [[0, 0.23], [0.16, 0.23], [0.42, 0], [1, 0]];
 
-  /* how much of the page the scene is allowed to own: the hero is its
-     moment, the reading sections are not */
-  const PRESENCE = [[0, 1], [0.10, 1], [0.21, 0.46], [0.70, 0.46], [0.87, 0.88], [1, 0.88]];
+  /* The first slice of the page is the build: the camera holds off while the
+     rotor draws itself together, and the run down the shaft starts from there.
+     Roughly one screenful of scrolling on a page this long. */
+  const ASSEMBLE = 0.13;
+
+  /* how much of the page the scene is allowed to own: the build and the hero
+     are its moment, the reading sections are not */
+  const PRESENCE = [[0, 1], [0.15, 1], [0.26, 0.46], [0.70, 0.46], [0.87, 0.88], [1, 0.88]];
 
   const scrollFraction = () => {
     const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -429,6 +497,8 @@ function boot() {
   let prog = scrollFraction();
   let shown = -1;
   let ready = false;
+  let built = -1;
+  const back = new THREE.Vector3();
 
   const frame = (now) => {
     raf = requestAnimationFrame(frame);
@@ -438,18 +508,37 @@ function boot() {
     const target = scrollFraction();
     prog += (target - prog) * Math.min(1, dt * 4.2);      // damped follow
 
+    const build = Math.min(prog / ASSEMBLE, 1);
+    const journey = Math.max((prog - ASSEMBLE) / (1 - ASSEMBLE), 0);
+
+    /* keep driving the assembly for a frame past completion so the parts land
+       exactly on their seats, then leave the instance matrices alone */
+    if (build < 1 || built < 1) {
+      assemble(build);
+      built = build;
+    }
+
     /* the gap between where the camera is and where the scroll wants it is a
-       free read on scroll speed - spin the rotor up while the page moves */
+       free read on scroll speed - spin the rotor up while the page moves. A
+       half-built rotor barely turns; it comes up to speed as it closes. */
     const boost = Math.min(Math.abs(target - prog) * 16, 4.5);
-    spin += dt * (0.34 + boost);
+    spin += dt * (0.05 + 0.29 * build + boost * build);
     rotor.rotation.z = spin;
     dust.rotation.z = spin * -0.04;
 
-    eyeCurve.getPoint(prog, eye);
-    aimCurve.getPoint(prog, aim);
+    eyeCurve.getPoint(journey, eye);
+    aimCurve.getPoint(journey, aim);
+
+    /* stand well back while the parts are still spread out, and close in as
+       they seat, so the build stays framed and the camera arrives with it */
+    if (build < 1) {
+      back.subVectors(eye, aim).normalize();
+      eye.addScaledVector(back, (1 - build) * 16);
+    }
+
     camera.position.copy(eye);
     camera.lookAt(aim);
-    camera.rotateZ(Math.sin(prog * Math.PI * 1.7) * 0.09);
+    camera.rotateZ(Math.sin(journey * Math.PI * 1.7) * 0.09);
 
     project(prog);
 
