@@ -287,16 +287,32 @@ function boot() {
   const yAxis = new THREE.Vector3(0, 1, 0);
   const xAxis = new THREE.Vector3(1, 0, 0);
   let tumbleAmt = 0;
+  let driftAmt = 1;
 
   /* index < 0 means a plain Mesh rather than one instance of an InstancedMesh;
      `from` is the scale it starts at, so a ring can shrink onto a barrel
      instead of flying at it */
   const part = (mesh, index, cue, from) => {
     if (index >= 0) instanced.add(mesh);
+    const k = parts.length;
     parts.push({
       mesh, index, cue, from: from === undefined ? 0.86 : from,
       at: at.clone(), rot: rot.clone(), size: size.clone(),
       off: off.clone(), axis: axis.clone(), tumble: tumbleAmt,
+      /* While a part is off the machine it drifts: its standoff orbits the
+         shaft axis, breathes in and out, rises and falls, and the part keeps
+         turning on its own axis. Every term is scaled by how loose the part
+         still is, so the motion unwinds to nothing as it seats and a finished
+         machine is perfectly rigid. driftAmt keeps the skid and the casing
+         near-still while small parts swarm - a base frame doing laps of the
+         machine it is supposed to carry looks like a mistake. */
+      orbit: (0.15 + hash(k) * 0.07) * driftAmt,
+      sway: 0.35 + hash(k + 31) * 0.55,
+      reach: (0.05 + hash(k + 17) * 0.09) * driftAmt,
+      lift: (0.3 + hash(k + 53) * 0.9) * driftAmt,
+      selfSpin: (0.12 + hash(k + 71) * 0.30) * driftAmt
+                * (hash(k + 13) < 0.5 ? -1 : 1),
+      phase: hash(k + 97) * Math.PI * 2,
     });
   };
 
@@ -322,6 +338,7 @@ function boot() {
   let boltN = 0;
 
   const boltRing = (count, radius, z, cue, oz) => {
+    driftAmt = 1.25;      // loose bolts swarm
     for (let i = 0; i < count; i++) {
       const a = (i / count) * Math.PI * 2;
       rot.identity();
@@ -336,6 +353,7 @@ function boot() {
     const box = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), frameMat, 12);
     machine.add(box);
     let n = 0;
+    driftAmt = 0.18;      // the skid barely stirs
     rot.identity();
     flyFrom(0, -15, 0, 0);
 
@@ -371,6 +389,7 @@ function boot() {
 
   /* ---- the casing: barrel, flange collars, rear section, end cover ------ */
   {
+    driftAmt = 0.35;      // heavy castings drift slowly
     const barrel = new THREE.Mesh(zTo(new THREE.CylinderGeometry(R, R, 4.2, SEG)), shell);
     machine.add(barrel);
     rot.identity();
@@ -436,6 +455,7 @@ function boot() {
     );
     machine.add(ring);
     let n = 0;
+    driftAmt = 1;
     rot.identity();
     flyFrom(0, 0, 0, 0);
 
@@ -451,6 +471,7 @@ function boot() {
 
   /* ---- the discharge volute tucked under the barrel ---------------------- */
   {
+    driftAmt = 0.45;
     const volute = new THREE.Mesh(
       new THREE.TorusGeometry(2.4, 0.9, 16, 44, Math.PI * 0.85), shell,
     );
@@ -463,6 +484,7 @@ function boot() {
 
   /* ---- terminal box on the flank ---------------------------------------- */
   {
+    driftAmt = 0.7;
     const body = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.5, 2.4), shell);
     machine.add(body);
     rot.identity();
@@ -486,6 +508,7 @@ function boot() {
 
   /* ---- mounting lugs and the lifting hoop -------------------------------- */
   {
+    driftAmt = 0.85;
     const lug = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), frameMat, 4);
     machine.add(lug);
     const seats = [
@@ -516,6 +539,7 @@ function boot() {
 
   /* ---- the strut spider carrying the bearing housing --------------------- */
   {
+    driftAmt = 0.9;
     const strut = new THREE.InstancedMesh(
       new THREE.BoxGeometry(1, 1, 1), machined, STRUTS,
     );
@@ -541,6 +565,7 @@ function boot() {
 
   /* ---- the impeller: vanes on an ogive hub, and the shaft nut ------------ */
   {
+    driftAmt = 1;
     const vanes = new THREE.InstancedMesh(
       vaneGeometry({
         stations: narrow ? 11 : 17,
@@ -599,6 +624,7 @@ function boot() {
 
   /* ---- the guard: straight bars in their own ring frame ------------------ */
   {
+    driftAmt = 0.95;
     const reach = R * 0.94;
     const guardRing = new THREE.Mesh(
       new THREE.TorusGeometry(reach, 0.07, 10, SEG), darkMat,
@@ -624,6 +650,7 @@ function boot() {
      A lathed trumpet rather than a cone: the flare is what carries the light
      right across the front of the machine in the photograph. */
   {
+    driftAmt = 0.4;       // the chrome is the big calm mass out front
     const profile = [];
     const STEPS = 22;
     for (let i = 0; i <= STEPS; i++) {
@@ -674,12 +701,31 @@ function boot() {
   const aScale = new THREE.Vector3();
   const aMat = new THREE.Matrix4();
 
-  const assemble = (a) => {
+  const assemble = (a, clock) => {
     for (let i = 0; i < parts.length; i++) {
       const t = parts[i];
       const e = easeOut(clamp01((a - t.cue) / SPAN));
-      aPos.copy(t.at).addScaledVector(t.off, 1 - e);
-      aTumble.setFromAxisAngle(t.axis, t.tumble * (1 - e));
+      const loose = 1 - e;
+
+      if (loose > 0.0015) {
+        /* swing the standoff round the shaft axis, breathe it in and out and
+           bob it along the shaft: the part circles the machine it came off
+           rather than hanging in the air waiting to be scrolled back on */
+        const ang = clock * t.orbit;
+        const c = Math.cos(ang);
+        const sn = Math.sin(ang);
+        const pulse = 1 + Math.sin(clock * t.sway + t.phase) * t.reach;
+        const ox = (t.off.x * c - t.off.y * sn) * pulse;
+        const oy = (t.off.x * sn + t.off.y * c) * pulse;
+        const oz = t.off.z * pulse + Math.sin(clock * t.sway * 0.7 + t.phase) * t.lift;
+        aPos.set(t.at.x + (ox + driftBias) * loose, t.at.y + oy * loose,
+                 t.at.z + oz * loose);
+        aTumble.setFromAxisAngle(t.axis, (t.tumble + clock * t.selfSpin) * loose);
+      } else {
+        aPos.copy(t.at);
+        aTumble.setFromAxisAngle(t.axis, t.tumble * loose);
+      }
+
       aQuat.copy(t.rot).multiply(aTumble);
       aScale.copy(t.size).multiplyScalar(t.from + (1 - t.from) * e);
 
@@ -800,6 +846,10 @@ function boot() {
   let vw = window.innerWidth;
   let vh = window.innerHeight;
   let shifted = -1;
+  /* Orbiting the standoffs about the shaft swings parts through the side the
+     hero copy is on. On a two-column layout the whole drifting cloud is
+     pushed clear of that column; in portrait there is no column to clear. */
+  let driftBias = 0;
 
   const project = (p) => {
     const s = vw / vh < 1 ? 0 : atCurve(VIEW_SHIFT, p);  // one column: nothing to clear
@@ -816,6 +866,7 @@ function boot() {
     camera.fov = vw / vh < 1 ? 68 : 52;     // portrait needs a wider cone
     camera.updateProjectionMatrix();
     shifted = -1;                           // the offset is in pixels: redo it
+    driftBias = vw / vh < 1 ? 0 : 1.6;
     renderer.setSize(vw, vh, false);
     measure();
   };
@@ -850,8 +901,11 @@ function boot() {
     const whole = Math.min(build, 1 - strip);   // 1 when the unit is together
     const journey = clamp01((px - runPx) / Math.max(maxPx - runPx, 1));
 
-    if (whole !== held) {
-      assemble(whole);
+    /* Anything less than fully together has parts drifting, so the matrices
+       have to be rebuilt every frame. A finished machine is rigid: one last
+       pass when it seats, then nothing until the scroll moves again. */
+    if (whole !== held || whole < 1) {
+      assemble(whole, now * 0.001);
       held = whole;
     }
 
@@ -871,7 +925,7 @@ function boot() {
        seat, so both the build and the strip-down stay framed */
     if (whole < 1) {
       back.subVectors(eye, aim).normalize();
-      eye.addScaledVector(back, (1 - whole) * 15);
+      eye.addScaledVector(back, (1 - whole) * 19);
     }
 
     camera.position.copy(eye);
