@@ -851,22 +851,36 @@ function boot() {
      pushed clear of that column; in portrait there is no column to clear. */
   let driftBias = 0;
 
+  /* A phone has no side column to put the machine in, so it lands squarely
+     behind the copy. Three things pull it off the text there: it is held
+     further away so it does not fill a tall screen, it is lifted into the
+     band the hero reserves for it above the headline, and it is rendered
+     fainter throughout. */
+  let portraitBack = 0;
+  let portraitLift = 0;
+  let presenceScale = 1;
+
   const project = (p) => {
     const s = vw / vh < 1 ? 0 : atCurve(VIEW_SHIFT, p);  // one column: nothing to clear
     if (Math.abs(s - shifted) < 0.002) return;
     shifted = s;
-    if (s > 0.001) camera.setViewOffset(vw, vh, -s * vw, 0, vw, vh);
-    else camera.clearViewOffset();
+    if (s > 0.001 || portraitLift > 0.001) {
+      camera.setViewOffset(vw, vh, -s * vw, portraitLift * vh, vw, vh);
+    } else camera.clearViewOffset();
   };
 
   const resize = () => {
     vw = window.innerWidth;
     vh = window.innerHeight;
+    const portrait = vw / vh < 1;
     camera.aspect = vw / vh;
-    camera.fov = vw / vh < 1 ? 68 : 52;     // portrait needs a wider cone
+    camera.fov = portrait ? 68 : 52;        // portrait needs a wider cone
     camera.updateProjectionMatrix();
     shifted = -1;                           // the offset is in pixels: redo it
-    driftBias = vw / vh < 1 ? 0 : 1.6;
+    driftBias = portrait ? 0 : 1.6;
+    portraitBack = portrait ? 15 : 0;
+    portraitLift = portrait ? 0.17 : 0;
+    presenceScale = portrait ? 0.6 : 1;
     renderer.setSize(vw, vh, false);
     measure();
   };
@@ -923,9 +937,9 @@ function boot() {
 
     /* stand well back while the parts are spread out and close in as they
        seat, so both the build and the strip-down stay framed */
-    if (whole < 1) {
+    if (whole < 1 || portraitBack > 0) {
       back.subVectors(eye, aim).normalize();
-      eye.addScaledVector(back, (1 - whole) * 19);
+      eye.addScaledVector(back, (1 - whole) * 19 + portraitBack);
     }
 
     camera.position.copy(eye);
@@ -934,7 +948,7 @@ function boot() {
 
     project(prog);
 
-    const presence = atCurve(PRESENCE, prog);
+    const presence = atCurve(PRESENCE, prog) * presenceScale;
     if (Math.abs(presence - shown) > 0.004) {
       canvas.style.opacity = presence.toFixed(3);
       shown = presence;

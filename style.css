@@ -1242,6 +1242,14 @@ section{ position:relative; padding:130px 0; }
 @media (max-width:900px){
   .hero-inner{ grid-template-columns:1fr; min-height:auto; gap:52px; padding-top:14px; }
   .hero-visual{ max-width:380px; order:-1; }
+
+  /* With the scene running the flat wheel is hidden, which leaves .hero-visual
+     as an empty 380px square sitting above the copy - most of a phone screen
+     given to nothing at all. Collapse it to a band that reserves the machine
+     somewhere to sit above the headline, and drop the readout chip that would
+     otherwise be left floating in the middle of it. */
+  [data-webgl="on"] .hero-visual{ aspect-ratio:auto; height:32vh; max-width:none; }
+  [data-webgl="on"] .rotor-readout{ display:none; }
   .hero-spec-1{ left:0; } .hero-spec-2{ right:0; } .hero-spec-3{ left:0; }
   .loc-grid{ grid-template-columns:1fr; }
   .scroll-cue{ display:none; }
@@ -1257,6 +1265,11 @@ section{ position:relative; padding:130px 0; }
      flow space; a fixed one does not, so body compensates with its height. */
   .site-header{ position:fixed; top:0; left:0; right:0; }
   body{ padding-top:82px; }
+
+  /* The fixed header does not occupy flow space, so body pads for it and the
+     hero starts 82px down. Pinning at that same offset holds it exactly where
+     it already is - at top:0 it would slide up under the header first. */
+  [data-webgl="on"] .build-stage > .hero{ top:82px; }
 
   /* Mobile drawer */
   .main-nav{
