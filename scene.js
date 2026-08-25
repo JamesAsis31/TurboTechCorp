@@ -814,6 +814,26 @@ function boot() {
     runPx = h > 40 ? h : Math.max(Math.min(maxPx * 0.13, window.innerHeight * 0.9), 1);
   };
 
+  /* ---- portrait ---------------------------------------------------------
+     A phone has no side column to put the machine in, so it lands squarely
+     behind the copy. It is held further away so it does not fill a tall
+     screen, lifted into the band the hero reserves for it above the
+     headline, and faded so body copy still reads over it.
+
+     Those first two both cost contrast, and between them they were leaving
+     the metal pale and flat. Holding the camera back puts the machine deeper
+     into an exponential fog that was tuned for the desktop distance, and
+     fading the layer compresses the whole image toward the page behind it -
+     which takes the highlights out of chrome, not just its prominence. So
+     the fog is thinned by roughly what the extra distance adds back, and
+     exposure is lifted to return the specular punch the fade removes. The
+     blacks are unaffected either way: they fade toward a near-black page. */
+  let portraitBack = 0;
+  let portraitLift = 0;
+  let presenceScale = 1;
+  let fogScale = 1;
+  let exposureScale = 1;
+
   /* ---- theme ------------------------------------------------------------
      The page can be flipped to light at any moment, and a scene lit for a
      near-black background reads as a smudge on near-white. Fog takes its
@@ -821,8 +841,8 @@ function boot() {
   const paint = () => {
     const light = document.documentElement.getAttribute('data-theme') === 'light';
     scene.fog.color.set(cssVar('--bg') || (light ? '#f4f6f8' : '#06080b'));
-    scene.fog.density = light ? 0.015 : 0.0095;
-    renderer.toneMappingExposure = light ? 1.4 : 1.05;
+    scene.fog.density = (light ? 0.015 : 0.0095) * fogScale;
+    renderer.toneMappingExposure = (light ? 1.4 : 1.05) * exposureScale;
     ambient.color.set(light ? 0xdae4f2 : 0x1b2432);
     ambient.intensity = light ? 3.4 : 1.9;
     key.intensity = light ? 4.6 : 4.2;
@@ -851,15 +871,6 @@ function boot() {
      pushed clear of that column; in portrait there is no column to clear. */
   let driftBias = 0;
 
-  /* A phone has no side column to put the machine in, so it lands squarely
-     behind the copy. Three things pull it off the text there: it is held
-     further away so it does not fill a tall screen, it is lifted into the
-     band the hero reserves for it above the headline, and it is rendered
-     fainter throughout. */
-  let portraitBack = 0;
-  let portraitLift = 0;
-  let presenceScale = 1;
-
   const project = (p) => {
     const s = vw / vh < 1 ? 0 : atCurve(VIEW_SHIFT, p);  // one column: nothing to clear
     if (Math.abs(s - shifted) < 0.002) return;
@@ -880,7 +891,10 @@ function boot() {
     driftBias = portrait ? 0 : 1.6;
     portraitBack = portrait ? 15 : 0;
     portraitLift = portrait ? 0.17 : 0;
-    presenceScale = portrait ? 0.6 : 1;
+    presenceScale = portrait ? 0.72 : 1;
+    fogScale = portrait ? 0.6 : 1;          // the camera sits ~15 units further out
+    exposureScale = portrait ? 1.5 : 1;     // claw back what the fade takes off
+    paint();                                // fog and exposure just changed
     renderer.setSize(vw, vh, false);
     measure();
   };
