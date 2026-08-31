@@ -17,6 +17,8 @@
 
   /* Surfaces */
   --bg:           #06080B;
+  /* the process section is laid over the WebGL scene rather than hiding it */
+  --bg-veil:      rgba(6,8,11,.80);
   --bg-2:         #090C11;
   --surface:      #0E1218;
   --surface-2:    #141922;
@@ -75,6 +77,7 @@
   --danger:       #C22B2B;
 
   --bg:           #F4F6F8;
+  --bg-veil:      rgba(244,246,248,.84);
   --bg-2:         #EDF0F4;
   --surface:      #FFFFFF;
   --surface-2:    #F5F7FA;
@@ -771,7 +774,15 @@ section{ position:relative; padding:130px 0; }
 /* ==========================================================================
    Process — timeline
    ========================================================================== */
-.process{ background:var(--bg); }
+/* The timeline is the one section below the hero whose layout leaves real
+   space - a left-hand rail and column, with the whole right half free. Every
+   other section down here is full-bleed and opaque, which is why the machine
+   simply was not in the page between the hero and the contact form. Veiling
+   this one turns that free half into a window onto it: the rail and the copy
+   still sit on their own ground, and the machine stands off to the right of
+   them. Keep the framing keyframes in scene.js in step with this - the
+   timeline entry is the one that puts it there. */
+.process{ background:var(--bg-veil); }
 .timeline{ position:relative; padding-left:0; }
 .timeline-rail{
   position:absolute; left:37px; top:12px; bottom:12px; width:2px;

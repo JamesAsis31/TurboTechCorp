@@ -757,45 +757,94 @@ function boot() {
   scene.add(ambient, key, fill, rim, core, deep);
 
   /* ---- where the camera goes -------------------------------------------
-     An inspection walk: the three-quarter view the photograph is shot from,
-     down low across the intake, in through the bellmouth, round to the side
-     and the back, then out wide and high for the strip-down. */
+     One slow orbit of the machine, opening on the three-quarter view the
+     photograph is shot from and coming back round to it high and wide for the
+     strip-down. The aim never leaves the machine - an earlier version walked
+     the camera past it and down the shaft, which meant that from the process
+     section onwards it was pointed at empty space and the page had a 3D
+     backdrop with nothing in it. Framing within the shot is the frustum
+     shift's job, not the camera's; this curve only decides which side of the
+     machine you are looking at. */
   const path = (pts) => new THREE.CatmullRomCurve3(
     pts.map((p) => new THREE.Vector3(p[0], p[1], p[2])), false, 'catmullrom', 0.5,
   );
 
   const eyeCurve = path([
-    [13.5, 5.5, 21.0],
-    [6.5, -2.0, 18.0],
-    [1.8, 0.6, 10.5],
-    [14.0, 1.0, 3.0],
-    [17.0, 5.0, -12.0],
-    [2.0, 9.5, -24.0],
-    [-7.0, 12.0, 25.0],
+    [ 14.0,  5.0,  20.0],   // the three-quarter view off the photograph
+    [ 16.0,  1.5,  10.0],   // round onto the flank
+    [ 15.0, -3.0,  -6.0],   // low, behind the shoulder
+    [ -6.0,  2.5, -17.0],   // three-quarter astern, over the fins
+    [-17.0,  2.0,  -1.0],   // out onto the far flank
+    [-17.0,  3.0,   6.0],   // back round the front, other hand
+    [ -6.0,  9.0,  22.0],   // high and wide for the strip-down
   ]);
   const aimCurve = path([
-    [0.0, -0.5, 1.0],
-    [0.0, 0.0, 1.5],
-    [0.0, 0.0, -3.0],
-    [0.0, -0.8, -0.5],
+    [0.0, -0.5,  1.0],
+    [0.0, -0.5,  0.0],
     [0.0, -0.5, -1.0],
+    [0.0, -0.5, -2.0],
     [0.0, -0.5, -1.0],
-    [0.0, -1.0, 0.0],
+    [0.0, -0.5,  0.0],
+    [0.0, -0.8,  0.5],
   ]);
 
-  /* how much of the page the scene is allowed to own: the build and the
-     strip-down are its moments, the reading sections are not */
-  const PRESENCE = [[0, 1], [0.15, 1], [0.26, 0.48], [0.66, 0.48], [0.80, 0.9], [1, 0.9]];
+  /* ---- how the machine is framed against the page ------------------------
+     Only two places in this layout actually have room for a machine: the hero,
+     which is a two-column split with an empty right-hand side, and the foot of
+     the page, where the strip-down plays out over a call to action. Everything
+     between them is full-bleed - a four-card grid, a timeline, a pair of
+     location cards - with no column to park anything in. Letting the camera
+     wander through that stretch is what put the machine broadside across the
+     marquee band and behind the service cards.
 
-  /* The head-on view of the intake is the striking one, but it wants the unit
-     off to one side so the hero column stays readable. Aiming the camera
-     sideways to do that would skew the whole machine, so shift the projection
-     frustum laterally instead - same view, moved across the frame - and taper
-     it away once the page has scrolled past the hero. */
-  const VIEW_SHIFT = [[0, 0.23], [0.16, 0.23], [0.42, 0], [1, 0]];
+     So the framing is written against those sections rather than against the
+     camera path. In the hero the machine holds the right-hand column at full
+     size. Through the reading sections it is pushed out to a frame edge,
+     alternating sides, held well back and faded down, so it reads as the unit
+     standing off beyond the page rather than something buried behind it. At
+     the foot it comes back to the middle at full size for the strip-down.
 
-  const STRIP_FROM = 0.74;
-  const STRIP_TO = 0.96;
+     The three curves are keyed to the same section boundaries and want to be
+     edited together: shifting the machine somewhere new without also giving it
+     the right distance and weight there is how it ended up in the way. */
+
+  /* The keyframes below are the measured scroll fractions of this page's own
+     sections, not round numbers: hero 0-0.20, services grid 0.26-0.40,
+     showcase and carousel 0.40-0.55, the process timeline 0.55-0.73,
+     locations 0.73-0.85, then the closing stretch. Re-measure them if the
+     page gains or loses a section, or the machine will drift out of step. */
+
+  /* lateral framing: + parks it right of centre, - parks it left */
+  const VIEW_SHIFT = [
+    [0.00,  0.23], [0.19,  0.23],   // hero: the empty right-hand column
+    [0.27,  0.46], [0.40,  0.46],   // the card grid is full-bleed: right edge
+    [0.47, -0.46], [0.53, -0.46],   // showcase: left edge, clear of the carousel
+    [0.60,  0.26], [0.72,  0.26],   // timeline: into its free right half
+    [0.80,  0.44], [0.86,  0.44],   // locations pair: out to the edge again
+    [0.92,  0.02], [1.00,  0.02],   // strip-down: centre frame
+  ];
+
+  /* distance held at each of those, so it is a small thing at the edge rather
+     than a large one that happens to be off to one side */
+  const RECEDE = [
+    [0.00, 0],  [0.19, 0],
+    [0.27, 30], [0.53, 30],
+    [0.60, 6],  [0.72, 6],
+    [0.80, 30], [0.86, 30],
+    [0.93, 0],  [1.00, 0],
+  ];
+
+  /* and how much of the page it is allowed to own there */
+  const PRESENCE = [
+    [0.00, 1],    [0.19, 1],
+    [0.28, 0.30], [0.53, 0.30],
+    [0.60, 0.78], [0.72, 0.78],     // read through the veil, so pitched up
+    [0.80, 0.32], [0.87, 0.32],
+    [0.93, 0.92], [1.00, 0.92],
+  ];
+
+  const STRIP_FROM = 0.80;
+  const STRIP_TO = 0.985;
 
   /* ---- how scroll maps onto the overhaul --------------------------------
      The build is measured in pixels rather than as a fraction of the page: on
@@ -951,9 +1000,10 @@ function boot() {
 
     /* stand well back while the parts are spread out and close in as they
        seat, so both the build and the strip-down stay framed */
-    if (whole < 1 || portraitBack > 0) {
+    const recede = atCurve(RECEDE, prog);
+    if (whole < 1 || portraitBack > 0 || recede > 0) {
       back.subVectors(eye, aim).normalize();
-      eye.addScaledVector(back, (1 - whole) * 19 + portraitBack);
+      eye.addScaledVector(back, (1 - whole) * 19 + portraitBack + recede);
     }
 
     camera.position.copy(eye);
